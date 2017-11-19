@@ -1,0 +1,103 @@
+have_header: checking for unistd.h... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby  -lgmp -ldl -lm   -lc"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return 0;
+6: }
+/* end */
+
+"aarch64-linux-android-cpp -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC  conftest.c -o conftest.i"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <unistd.h>
+/* end */
+
+--------------------
+
+have_header: checking for sys/select.h... -------------------- yes
+
+"aarch64-linux-android-cpp -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC  conftest.c -o conftest.i"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <sys/select.h>
+/* end */
+
+--------------------
+
+have_header: checking for poll.h... -------------------- yes
+
+"aarch64-linux-android-cpp -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC  conftest.c -o conftest.i"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <poll.h>
+/* end */
+
+--------------------
+
+have_header: checking for sys/epoll.h... -------------------- yes
+
+"aarch64-linux-android-cpp -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC  conftest.c -o conftest.i"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <sys/epoll.h>
+/* end */
+
+--------------------
+
+have_header: checking for sys/event.h... -------------------- no
+
+"aarch64-linux-android-cpp -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC  conftest.c -o conftest.i"
+conftest.c:3:23: fatal error: sys/event.h: No such file or directory
+ #include <sys/event.h>
+                       ^
+compilation terminated.
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <sys/event.h>
+/* end */
+
+--------------------
+
+have_header: checking for port.h... -------------------- no
+
+"aarch64-linux-android-cpp -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC  conftest.c -o conftest.i"
+conftest.c:3:18: fatal error: port.h: No such file or directory
+ #include <port.h>
+                  ^
+compilation terminated.
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <port.h>
+/* end */
+
+--------------------
+
+have_header: checking for sys/resource.h... -------------------- yes
+
+"aarch64-linux-android-cpp -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC  conftest.c -o conftest.i"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <sys/resource.h>
+/* end */
+
+--------------------
+

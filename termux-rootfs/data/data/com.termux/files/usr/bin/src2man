@@ -1,0 +1,169 @@
+#!/data/data/com.termux/files/usr/bin/sh
+# Extract manpages from C source files.
+
+# Copyright (C) 2006 Marc Vertes
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+
+# release 1.5.6
+
+print_help() {
+    echo
+    echo " Usage: src2man [-h] [-n] [-d date] [-v vol]"
+    echo "                [-r rel] [infile ...]"
+    echo
+    echo " Extract man(7) pages from source files."
+    echo
+    echo " Options:"
+    echo "  -h       Print this help."
+    echo
+    echo "  -d date  Set the date of the man pages. Defaults to"
+    echo "           current date."
+    echo
+    echo "  -n       No man page is created. The name of the"
+    echo "           manpages that would be created are printed."
+    echo
+    echo "  -v vol   Specify the name of the volume to be"
+    echo "           printed in center header of generated"
+    echo "           manpages."
+    echo
+    echo "  -r rel   Specify the project name and release number"
+    echo "           for the generated manpage."
+    echo
+}
+
+nogen=0
+release=unknown
+while getopts :d:hnr:v: opt; do
+    case $opt in
+        (d) date="$OPTARG";;
+        (n) nogen=1;;
+        (v) volume="$OPTARG";;
+        (r) release="$OPTARG";;
+        (h) print_help; exit 0;;
+        (*) print_help; exit 1;;
+    esac
+done
+shift $(($OPTIND - 1))
+date=${date:-$(date +'%d %B %Y')}
+
+#
+# Extract manpages from source files. Man page content is enclosed in
+# commment blocks starting by "/** sectnum"
+#
+awk -v release="$release" -v volume="$volume" -v nogen=$nogen '
+$1 == "/**" && $2 ~ /^[0-9]/ {
+    sect = $2
+    getline
+    sub(/^ *\* */, "  ")
+    title = $1
+    line1_after_comment = 0
+    in_struct = 0
+    name = $0
+    inc = FILENAME
+    sub(/.[cS]$/, ".h", inc)
+    found = ""
+    grep_cmd = "test -f " inc " && grep -wq " title "  " inc " \
+        2>/dev/null && echo ok || echo nok"
+    grep_cmd | getline found
+    # description section extraction.
+    in_synop = 0
+    synop = ""
+
+    while (getline) {
+        if ($0 ~ / *\*\//) { # end of comment block
+            sub(/ *\*\//, "")
+            line1_after_comment = 1
+            break
+        }
+
+        sub(/^ \* /, "")
+        sub(/^ \*/, "")
+        if ($1 ~ /^[A-Z ]+$/ && $1 != "SYNOPSIS")
+            in_synop = 0
+        if ($1 == "SYNOPSIS") {
+            in_synop = 1
+            continue
+        }
+
+        if ($1 == "DESCRIPTION")
+            continue
+
+        if (in_synop)
+            synop = synop (synop ? "\n" : "") $0
+        else
+            desc = desc (desc ? "\n" : "") $0
+    }
+	# function prototype or struct extraction for synopsis.
+    if (! synop) {
+        while (getline) {
+            if (line1_after_comment) {
+                line1_after_comment = 0
+
+                if (NF == 0)
+                    break
+
+                split(name, tname)
+            }
+
+            if ((!in_struct && $1 == "struct" && $2 == tname[1]) ||
+                (!in_struct && $2 == "struct" && $3 == tname[1])) {
+                    in_struct = 1
+                    synop = synop (synop ? "\n" : "") $0
+                    continue
+            }
+
+            synop = synop (synop ? "\n" : "") $0
+
+            if (in_struct) {
+                if ($0 ~ " *" tname[1] "[; ][*]*") break
+                continue
+            }
+
+            if ($0 !~ /\)$/) {
+                getline
+                synop = synop " " $0
+            }
+
+            if ($0 ~/\)[ \t{}\;]*$/) {
+                sub(/{[^}]}/, "", synop)
+                sub(/[ \t]*$/, "", synop)
+
+                if (found == "ok")
+                    synop = "#include \"" inc "\"\n" synop
+
+                if (synop !~ /\;$/)
+                    synop = synop ";"
+                break
+            }
+        }
+    }
+
+    print title "." sect > "/dev/stderr"
+
+    if (nogen) {
+        name = synop = desc = sect = ""
+        next
+    }
+
+    print "NAME\n" name (synop ? "\nSYNOPSIS\n  " synop : "") \
+          "\nDESCRIPTION\n" desc "\nFILE\n  " FILENAME | \
+          "{ echo '\''.\\\" Extracted by src2man from " FILENAME "'\''; \
+          txt2man -d \"$date\" -v \"" volume "\" -r " release \
+          " -s " sect " -t " title "; } >" title "." sect
+    name = synop = desc = sect = ""
+}
+' $*

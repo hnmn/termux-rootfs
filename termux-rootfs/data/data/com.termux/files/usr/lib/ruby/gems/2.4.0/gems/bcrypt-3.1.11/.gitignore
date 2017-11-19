@@ -1,0 +1,8 @@
+doc
+pkg
+tmp
+*.o
+*.bundle
+*.jar
+.DS_Store
+.rbenv-gemsets

@@ -1,0 +1,6 @@
+Name: libssh_threads
+Description: The SSH Library Thread Extension
+Version: 0.7.5
+Libs: -L/data/data/com.termux/files/usr/lib -lssh_threads
+Cflags: -I/data/data/com.termux/files/usr/include
+

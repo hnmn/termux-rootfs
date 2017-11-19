@@ -1,0 +1,172 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##  Setup and run isolated Termux environment
+##
+
+ARCH="aarch64"
+BOOTSTRAP_ARCHIVE="${PREFIX}/share/termux-bootstrap/bootstrap-${ARCH}.tar.gz"
+
+usage()
+{
+    echo
+    echo " Usage: termux-container [-h|--help] [PATH]"
+    echo
+    echo " Setup and run an isolated Termux environment at"
+    echo " specified path."
+    echo
+    echo " If you want to have access for files that exists on"
+    echo " host (Termux home and sdcard), then you need to set"
+    echo " environment variable 'MOUNT_HOST_FS'."
+    echo
+}
+
+## Disable LD_PRELOAD in prooted environment
+unset LD_PRELOAD
+
+## Set right temporary directory for proot
+export PROOT_TMP_DIR="${TMPDIR}"
+
+if [[ $(getenforce | tr '[[:upper:]]' '[[:lower:]]') = "enforcing" ]]; then
+    export PROOT_NO_SECCOMP=1
+    export USE_LINK2SYMLINK=1
+fi
+
+if [ ! -z "${1}" ]; then
+    if [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
+        usage
+        exit 0
+    fi
+
+    ROOTFS="${1}"
+
+    if grep -qP '^-.*$' <<< "${ROOTFS}"; then
+        echo "[!] Directory name cannot begin with '-'."
+        usage
+        exit 1
+    fi
+
+    if [ ! -e "${ROOTFS}" ]; then
+        mkdir -p "${ROOTFS}"
+    fi
+
+    if [ ! -d "${ROOTFS}" ]; then
+        echo "[!] Not a directory '${ROOTFS}'."
+        usage
+        exit 1
+    fi
+else
+    usage
+    exit 1
+fi
+
+BASEDIR="${ROOTFS}/data/data/com.termux/files"
+
+if [ ! -e "${BASEDIR}/home" ]; then
+    echo -n "[*] Creating home directory... "
+    if mkdir -p "${BASEDIR}/home" > /dev/null 2>&1; then
+        echo "OK"
+    else
+        echo "FAIL"
+        exit 1
+    fi
+fi
+
+if [ ! -e "${BASEDIR}/usr" ]; then
+    echo -n "[*] Creating prefix... "
+    if mkdir -p "${BASEDIR}/usr" > /dev/null 2>&1; then
+        echo "OK"
+    else
+        echo "FAIL"
+        exit 1
+    fi
+fi
+
+if [ ! -e "${BASEDIR}/usr/bin/busybox" ]; then
+    echo -n "[*] Unpacking bootstrap archive... "
+    if tar xf "${BOOTSTRAP_ARCHIVE}" -C "${BASEDIR}/usr" > /dev/null 2>&1; then
+        echo "OK"
+    else
+        echo "FAIL"
+        exit 1
+    fi
+fi
+
+## Determine path to shell
+if [ -e "${ROOTFS}/data/data/com.termux/files/usr/bin/login" ]; then
+    TARGET_SHELL="/data/data/com.termux/files/usr/bin/login"
+elif [ -e "${ROOTFS}/data/data/com.termux/files/usr/bin/bash" ]; then
+    TARGET_SHELL="/data/data/com.termux/files/usr/bin/bash"
+elif [ -e "${ROOTFS}/data/data/com.termux/files/usr/bin/applets/ash" ]; then
+    TARGET_SHELL="/data/data/com.termux/files/usr/bin/applets/ash"
+else
+    TARGET_SHELL="/system/bin/sh"
+fi
+set -- "${TARGET_SHELL}"
+
+## Prepend 'env -i {ENVIRONMENT}' to target command
+set -- "PATH=/data/data/com.termux/files/usr/bin:/data/data/com.termux/files/usr/bin/applets" "${@}"
+set -- "LD_LIBRARY_PATH=/data/data/com.termux/files/usr/lib" "${@}"
+set -- "TMPDIR=/data/data/com.termux/files/usr/tmp" "${@}"
+set -- "PREFIX=/data/data/com.termux/files/usr" "${@}"
+set -- "HOME=/data/data/com.termux/files/home" "${@}"
+set -- "TERM=xterm-256color" "${@}"
+set -- "EXTERNAL_STORAGE=/sdcard" "${@}"
+set -- "LANG=en_US.UTF-8" "${@}"
+set -- "BOOTCLASSPATH=${BOOTCLASSPATH}" "${@}"
+set -- "ANDROID_ROOT=/system" "${@}"
+set -- "ANDROID_DATA=/data" "${@}"
+set -- "/data/data/com.termux/files/usr/bin/env" '-i' "${@}"
+
+## Path to new root filesystem directory
+set -- '-r' "${ROOTFS}" "${@}"
+
+## Android filesystems
+set -- '-b' "/dev:/dev" "${@}"
+set -- '-b' "/proc/self/fd:/dev/fd" "${@}"
+set -- '-b' "/proc/self/fd/0:/dev/stdin" "${@}"
+set -- '-b' "/proc/self/fd/1:/dev/stdout" "${@}"
+set -- '-b' "/proc/self/fd/2:/dev/stderr" "${@}"
+set -- '-b' "/etc:/etc" "${@}"
+set -- '-b' "/proc:/proc" "${@}"
+set -- '-b' "/sys:/sys" "${@}"
+set -- '-b' "/system:/system" "${@}"
+set -- '-b' "/vendor:/vendor" "${@}"
+
+if [ ! -z "${MOUNT_HOST_FS}" ]; then
+    set -- '-b' "/data/data/com.termux/files/home:/data/data/com.termux/files/home/host-home" "${@}"
+    set -- '-b' "/mnt:/mnt" "${@}"
+    set -- '-b' "/sdcard:/sdcard" "${@}"
+    set -- '-b' "/storage:/storage" "${@}"
+fi
+
+## Set current working directory to container's home
+set -- '--cwd=/data/data/com.termux/files/home' "${@}"
+
+## Use link2symlink on SELinux-enabled devices
+[ ! -z "${USE_LINK2SYMLINK}" ] && set -- '--link2symlink' "${@}"
+
+## Exit if container is running
+if [ -e "${ROOTFS}/.running" ]; then
+    echo
+    echo "Possible, that this Termux container is already running."
+    echo "If not, delete file '${ROOTFS}/.running' and try again."
+    echo
+    exit 1
+fi
+
+## Create lock file to avoid running a multiple instances of 'proot' on
+## the same rootfs directory
+if ! touch "${ROOTFS}/.running" > /dev/null 2>&1; then
+    echo "[!] Failed to create lock file"
+fi
+
+## Remove lock file on exit
+on_exit()
+{
+    rm -f "${ROOTFS}/.running" > /dev/null 2>&1
+}
+trap on_exit SIGHUP SIGINT SIGQUIT SIGTERM
+
+echo "[*] Starting Termux environment..."
+proot --kill-on-exit "${@}"
+on_exit

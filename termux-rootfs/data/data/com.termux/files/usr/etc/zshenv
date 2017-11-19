@@ -1,0 +1,8 @@
+###############################################################
+##
+##  Environment for zsh
+##
+###############################################################
+
+## source basic environment (do not remove this line)
+source "${PREFIX}/etc/basic_environment.sh"

@@ -1,0 +1,8 @@
+prefix=/data/data/com.termux/files/usr
+libdir=/data/data/com.termux/files/usr/lib
+includedir=/data/data/com.termux/files/usr/include
+
+Name: poppler-cairo
+Description: Cairo backend for Poppler PDF rendering library
+Version: 0.61.1
+Requires: poppler = 0.61.1 cairo >= 1.10.0

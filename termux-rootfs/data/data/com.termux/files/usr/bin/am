@@ -1,0 +1,6 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+unset LD_LIBRARY_PATH
+unset LD_PRELOAD
+export PATH=/system/bin
+exec /system/bin/am "$@"

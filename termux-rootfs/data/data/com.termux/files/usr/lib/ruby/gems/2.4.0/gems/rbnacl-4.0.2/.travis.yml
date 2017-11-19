@@ -1,0 +1,25 @@
+language: ruby
+sudo: false
+cache: bundler
+script: bundle exec rake ci
+bundler_args: --without development
+
+branches:
+  only:
+    - master
+
+rvm:
+  - jruby-9.1.6.0
+  - 2.2.6
+  - 2.3.3
+  - 2.4.0
+
+env:
+  - LIBSODIUM_VERSION=1.0.0  # Minimum supported
+  - LIBSODIUM_VERSION=1.0.11 # Latest released
+
+matrix:
+  fast_finish: true
+
+notifications:
+  irc: "irc.freenode.org#cryptosphere"

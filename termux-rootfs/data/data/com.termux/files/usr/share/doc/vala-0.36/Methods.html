@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8" />
+<title>Methods - Vala Reference Manual</title>
+<link rel="stylesheet" type="text/css" href="default.css"><meta name="viewport" content="initial-scale=1">
+</head>
+<body>
+<div class="o-fixedtop c-navbar"><div class="o-navbar">
+<span class="c-pageturner u-float-left"><a href="index.html">Contents</a></span><span>Vala Reference Manual</span><div class="u-float-right">
+<span class="c-pageturner o-inlinewidth-4"><a href="Namespaces.html">Prev</a></span><span class="c-pageturner o-inlinewidth-4"><a href="Delegates.html">Next</a></span>
+</div>
+</div></div>
+<h2>7. Methods</h2>
+<ul class="page_toc">
+<li><a href="Methods.html#Parameter_directions">7.1 Parameter directions</a></li>
+<li><a href="Methods.html#Method_declaration">7.2 Method declaration</a></li>
+<li><a href="Methods.html#Invocation">7.3 Invocation</a></li>
+<li><a href="Methods.html#Scope">7.4 Scope</a></li>
+<li><a href="Methods.html#Lambdas">7.5 Lambdas</a></li>
+<li><a href="Methods.html#Contract_programming">7.6 Contract programming</a></li>
+<li><a href="Methods.html#Examples">7.7 Examples</a></li>
+</ul>
+<p>TODO: Do we really need this discussion? Are we introducing Vala, or general programming? </p>
+<p>A method is an executable statement block that can be identified in one or more ways (i.e. by a name, or any number of delegate instances). A method can be invoked with an optional number of parameters, and may return a value. When invoked, the method's body will be executed with the parameters set to the values given by the invoker.  The body is run in sequence until the end is reached, or a return statement is encountered, resulting in a return of control (and possibly some value, in the case of a return) to the invoker. </p>
+<p>There are various contexts that may contain method declarations (see <a href="Namespaces.html#">Namespaces</a>, <a href="Classes.html#">Classes</a>, <a href="Interfaces.html#">Interfaces</a>, <a href="Structs.html#">Structs</a>).  A method is always declared inside one of these other declarations, and that declaration will mark the parent scope that the method will be executed within.  See <a href="Concepts.html#Scope_and_naming">Concepts/Scope and naming</a>. </p>
+<p>The <a href="Classes.html#">Classes</a> section of this documentation talks about both methods and abstract methods.  It should be noted that the latter are not truly methods, as they cannot be invoked.  Instead, they provide a mechanism for declaring how other methods should be defined.  See <a href="Classes.html#">Classes</a> for a description of abstract methods and how they are used. </p>
+<p>The syntax for invoking a method is described on the expressions page (see <a href="Expressions.html#Invocation_expressions">Expressions/Invocation expressions</a>). </p>
+
+<h3 id="Parameter_directions">7.1 Parameter directions</h3>
+<p>The basics of method parameter semantics are described on the concepts page (see <a href="Concepts.html#Variables,_fields_and_parameters">Concepts/Variables, fields and parameters</a>).  This basic form of parameter is technically an "in" parameter, which is used to pass data needed for the method to operate.  If the parameter is of a reference type, the method may change the fields of the type instance it receives, but assignments to the parameter itself will not be visible to the invoking code.  If the parameter is of a value type, which is not a fundamental type, the same rules apply as for a reference type.  If the parameter is of a fundamental type, then the parameter will contain a copy of the value, and no changes made to it will be visible to the invoking code. </p>
+<p>If the method wishes to return more than one value to the invoker, it should use "out" parameters.  Out parameters do not pass any data to the method - instead the method may assign a value to the parameter that will be visible to the invoking code after the method has executed, stored in the variable passed to the method.  If a method is invoked passing a variable which has already been assigned to as an out parameter, then the value of that variable will be dereferenced or freed as appropriate.  If the method does not assign a value to the parameter, then the invoker's variable will end with a value of "null". </p>
+<p>The third parameter type is a "ref" argument (equivalent to "inout" in some other languages.)  This allows the method to receive data from the invoker, and also to assign another value to the parameter in a way that will be visible to the invoker.  This functions similarly to "out" parameters, except that if the method does not assign to the parameter, the same value is left in the invoker's variable. </p>
+
+<h3 id="Method_declaration">7.2 Method declaration</h3>
+<p>The syntax for declaring a method changes slightly based on what sort of method is being declared.  This section shows the form for a namespace method, Vala's closest equivalent to a global method in C.  Many of the parts of the declaration are common to all types, so sections from here are referenced from class methods, interface  methods, etc. </p>
+<blockquote class="o-box c-rules">method-declaration:
+	[ access-modifier ] return-type qualified-method-name ( [ params-list ] ) [ <span class="literal">throws</span> error-list ] method-contracts <span class="literal">{</span> statement-list <span class="literal">}</span>
+
+return-type:
+	type
+	<span class="literal">void</span>
+
+qualified-method-name:
+	[ qualified-namespace-name <span class="literal">.</span> ] method-name
+
+method-name:
+	identifier
+
+params-list:
+	parameter [ <span class="literal">,</span> params-list ]
+
+parameter:
+	[ parameter-direction ] type identifier
+
+parameter-direction:
+	<span class="literal">ref</span>
+	<span class="literal">out</span>
+
+error-list:
+	qualified-error-domain [ <span class="literal">,</span> error-list ]
+
+method-contracts:
+	[ <span class="literal">requires</span><span class="literal">(</span> expression <span class="literal">)</span> ] [ <span class="literal">ensures</span><span class="literal">(</span> expression <span class="literal">)</span> ]
+
+</blockquote>
+<p>For more details see , and <a href="Errors.html#">Errors</a>. </p>
+
+<h3 id="Invocation">7.3 Invocation</h3>
+<p>See <a href="Expressions.html#Invocation_expressions">Expressions/Invocation expressions</a>. </p>
+
+<h3 id="Scope">7.4 Scope</h3>
+<p>The execution of a method happens in a scope created for each invocation, which ceases to exist after execution is complete. The parent scope of this transient scope is always the scope the method was declared in, regardless of where it is invoked from. </p>
+<p>Parameters and local variables exist in the invocation's transient scope.  For more on scoping see <a href="Concepts.html#Scope_and_naming">Concepts/Scope and naming</a>. </p>
+
+<h3 id="Lambdas">7.5 Lambdas</h3>
+<p>As Vala supports delegates, it is possible to have a method that is identified by a variable (or field, or parameter.)  This section discusses a Vala syntax for defining inline methods and directly assigning them to an identifier.  This syntax does not add any new features to Vala, but it is a lot more succinct than the alternative (defining all methods normally, in order to assign them to variables at runtime). See <a href="Delegates.html#">Delegates</a>. </p>
+<p>Declaring an inline method must be done with relation to a delegate or signal, so that the method signature is already defined.  Parameter and return types are then learned from the signature.  A lambda definition is an expression that returns an instance of a particular delegate type, and so can be assigned to a variable declared for the same type.  Each time that the lambda expression is evaluated it will return a reference to exactly the same method, even though this is never an issue as methods are immutable in Vala. </p>
+<blockquote class="o-box c-rules">lambda-declaration:
+	<span class="literal">(</span> [ lambda-params-list ] <span class="literal">)</span><span class="literal">=&gt;</span><span class="literal">{</span> statement-list <span class="literal">}</span>
+
+lambda-params-list:
+	identifier [ <span class="literal">,</span> lambda-params-list ]
+
+</blockquote>
+<p>An example of lambda use: </p>
+<pre class="o-box c-program"><span class="c-program-token">delegate</span> <span class="c-program-token">int</span> <span class="c-program-methodname">DelegateType</span> (<span class="c-program-token">int</span> <span class="c-program-methodname">a</span>, <span class="c-program-token">string</span> <span class="c-program-methodname">b</span>);
+
+<span class="c-program-token">int</span> <span class="c-program-methodname">use_delegate</span> (<span class="c-program-methodname">DelegateType</span> <span class="c-program-methodname">d</span>, <span class="c-program-token">int</span> <span class="c-program-methodname">a</span>, <span class="c-program-token">string</span> <span class="c-program-methodname">b</span>) {
+        <span class="c-program-token">return</span> <span class="c-program-methodname">d</span> (<span class="c-program-methodname">a</span>, <span class="c-program-methodname">b</span>);
+}
+
+<span class="c-program-token">int</span> <span class="c-program-methodname">make_delegate</span> () {
+        <span class="c-program-methodname">DelegateType</span> <span class="c-program-methodname">d</span> = (<span class="c-program-methodname">a</span>, <span class="c-program-methodname">b</span>) =&gt; {
+                <span class="c-program-token">return</span> <span class="c-program-methodname">a</span>;
+        };
+        <span class="c-program-methodname">use_delegate</span>(<span class="c-program-methodname">d</span>, 5, <span class="c-program-phrase">"</span><span class="c-program-phrase">test</span><span class="c-program-phrase">"</span>);
+}
+</pre>
+
+<h3 id="Contract_programming">7.6 Contract programming</h3>
+<p>TODO: requires, ensures. </p>
+<p>requires ( ... ) Denotes things that must be true to start execution. </p>
+<p>ensures ( ... ) Denotes things that must be true to end execution. </p>
+
+<h3 id="Examples">7.7 Examples</h3>
+<p>TODO: write examples. </p>
+</body>
+</html>

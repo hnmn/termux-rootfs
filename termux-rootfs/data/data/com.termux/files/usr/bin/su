@@ -1,0 +1,104 @@
+#!/data/data/com.termux/files/usr/bin/sh
+##
+##  Run login shell or single command as root
+##
+
+SCRIPT_NAME="$(basename $0)"
+TERMUX_HOME="/data/data/com.termux/files/home"
+ROOT_HOME="/data/data/com.termux/files/root"
+GO_TO_ROOT_HOME=false
+unset LD_PRELOAD
+
+usage()
+{
+    echo
+    if [ "${SCRIPT_NAME}" = "sudo" ]; then
+        echo " Usage: sudo [-h|--help] COMMAND"
+        echo
+        echo " Execute specified command as root."
+    else
+        echo " Usage: su [-h|--help] [-l]"
+        echo
+        echo " Spawn root shell. If option '-l' is set,"
+        echo " then root shell will be started in root"
+        echo " home directory instead of current."
+    fi
+    echo
+}
+
+if grep -qP '^-.*$' <<< "${1}"; then
+    if [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
+        usage
+        exit 0
+    elif [ "${1}" = "-l" ] && [ "${SCRIPT_NAME}" = "su" ]; then
+        GO_TO_ROOT_HOME=true
+    else
+        echo "[!] Invalid option '${1}'."
+        usage
+        exit 1
+    fi
+fi
+
+if [ -x "/su/bin/su" ]; then
+    SU_EXEC="/su/bin/su"
+elif [ -x "/system/bin/su" ]; then
+    SU_EXEC="/system/bin/su"
+elif [ -x "/system/xbin/su" ]; then
+    SU_EXEC="/system/xbin/su"
+else
+    echo "[!] Possible that device is not rooted."
+    exit 1
+fi
+
+[ -f "/.termux-chroot" ] && export PWD=${ROOT_HOME}
+CMDLINE="export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}; export PATH=${PATH}; export HOME=${ROOT_HOME}; export TERM=${TERM}; export PWD=${PWD}; export OLDPWD=${OLDPWD}; export USER=root;"
+${GO_TO_ROOT_HOME} && CMDLINE+=" cd; unset PWD; unset OLDPWD;"
+
+if [ ! -e "${ROOT_HOME}" ]; then
+    echo "[*] Preparing home for root..."
+    "${SU_EXEC}" --preserve-environment -c "${CMDLINE} ${PREFIX}/libexec/termux-prepare-root-home"
+    echo "[*] Done."
+fi
+
+if [ "${SCRIPT_NAME}" = "su" ]; then
+    SHELL="${PREFIX}/libexec/default_shell"
+
+    if [ "$(id -u)" != "0" ]; then
+        "${SU_EXEC}" --preserve-environment -c "${CMDLINE} ${SHELL} -l"
+    else
+        "${SHELL}" -l
+    fi
+elif [ "${SCRIPT_NAME}" = "sudo" ]; then
+    if [ "$(id -u)" = "0" ]; then
+        "${@}"
+        exit $?
+    fi
+
+    if [ -f "/.termux-chroot" ]; then
+        echo "[!] sudo is not working in termux-chroot."
+        exit 1
+    fi
+
+    if [ -z "${1}" ]; then
+        echo "Usage: sudo [COMMAND]"
+        exit 1
+    else
+        CMD="${1}"
+        shift 1
+
+        if [ -z "${1}" ]; then
+            "${SU_EXEC}" --preserve-environment -c "${CMDLINE} '${CMD}'"
+        else
+            ARGS="${CMDLINE} '${CMD}' "
+
+            for i in "${@}"; do
+                ARGS+="'${i}' "
+            done
+
+            "${SU_EXEC}" --preserve-environment -c "${ARGS}"
+        fi
+    fi
+else
+    echo "[!] Unknown script name '${SCRIPT_NAME}'"
+    exit 1
+fi

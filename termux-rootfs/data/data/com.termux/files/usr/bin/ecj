@@ -1,0 +1,20 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##  Wrapper for Eclipse Java Compiler
+##
+
+export CLASSPATH="${PREFIX}/share/dex/ecj.jar"
+
+## Generate list of libraries which will be used as compiler's classpath
+BUILD_CLASSPATH="$(find ${PREFIX}/share/java -maxdepth 1 -iname \*.jar -type f -o -type l | tr '\n' ':')"
+BUILD_CLASSPATH="${BUILD_CLASSPATH::-1}"
+
+unset LD_LIBRARY_PATH
+unset LD_PRELOAD
+exec /system/bin/app_process -Djava.io.tmpdir="${TMPDIR}" -Xmx512m "${PREFIX}/bin"  \
+                             "org.eclipse.jdt.internal.compiler.batch.Main"         \
+                             -cp "${BUILD_CLASSPATH}"                               \
+                             -proc:none                                             \
+                             -7                                                     \
+                             "$@" | sed '/MdfppReflectionUtils/d';                  \
+                             exit ${PIPESTATUS}

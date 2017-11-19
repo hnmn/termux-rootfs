@@ -1,0 +1,22 @@
+###############################################################
+##
+##  Profile for zsh
+##
+###############################################################
+
+##
+## Set the strict file mode creation mask so
+## only user with Termux UID can access them.
+##
+umask 077
+
+## load additional profiles
+if [ -d "${PREFIX}/etc/profile.d" ]; then
+    FILES=$(find "${PREFIX}/etc/profile.d" -type f -iname \*.sh)
+
+    if [ ! -z "${FILES}" ]; then
+        for file in ${FILES}; do
+            source "${file}"
+        done
+    fi
+fi

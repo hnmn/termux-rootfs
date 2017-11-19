@@ -1,0 +1,37 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##  Prepare root home for the first use
+##
+
+ROOT_HOME="/data/data/com.termux/files/root"
+
+umask 077
+
+if [ "$(id -u)" != "0" ]; then
+    echo "[!] This script must be run as root."
+    exit 1
+fi
+
+echo -n "== Creating home directory... "
+if mkdir "${ROOT_HOME}" > /dev/null 2>&1; then
+    echo "OK"
+else
+    echo "FAIL"
+    exit 1
+fi
+
+echo -n "== Copying files from '\${PREFIX}/etc/skel'... "
+if cp -r "${PREFIX}/etc/skel/." "${ROOT_HOME}" > /dev/null 2>&1; then
+    echo "OK"
+else
+    echo "FAIL"
+    exit 1
+fi
+
+echo -n "== Setting permissions for home... "
+if chmod 700 "${ROOT_HOME}" > /dev/null 2>&1; then
+    echo "OK"
+else
+    echo "FAIL"
+    exit 1
+fi

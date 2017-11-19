@@ -1,0 +1,314 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##  Apk build script
+##
+
+help()
+{
+    echo
+    echo " Usage: buildapk [OPTIONS] SRC_DIR"
+    echo
+    echo " Build Android application from source tree."
+    echo
+    echo " Options:"
+    echo "   -h, --help           print this help"
+    echo "   -l, --libs <DIR>     add libs from DIR to classpath"
+    echo "   -o, --output <PATH>  place generated apk to PATH"
+    echo "   -v, --verbose        show compilation warnings"
+    echo
+}
+
+##############################################################################
+##
+##  Handle command line arguments and setup environment
+##
+##############################################################################
+
+OUTPUT_DIR="output"
+VERBOSE=false
+
+while getopts "hl:o:s:v-:" opt; do
+    case "${opt}" in
+        -)
+            case "${OPTARG}" in
+                help)
+                    help
+                    exit 0
+                    ;;
+                libs)
+                    LIBS_DIR="${!OPTIND}"; OPTIND=$((OPTIND + 1))
+
+                    if [ -z "${LIBS_DIR}" ]; then
+                        echo "[!] Option '${OPTARG}' requires an argument."
+                        help
+                        exit 1
+                    fi
+
+                    if [ ! -e "${LIBS_DIR}" ]; then
+                        echo "[!] Directory '${LIBS_DIR}' does not exist."
+                        exit 1
+                    fi
+                    ;;
+                output)
+                    APK_OUTPUT_PATH="${!OPTIND}"; OPTIND=$((OPTIND + 1))
+
+                    if [ -z "${APK_OUTPUT_PATH}" ]; then
+                        echo "[!] Option '${OPTARG}' requires an argument."
+                        help
+                        exit 1
+                    fi
+
+                    if [[ ! -e $(dirname "${APK_OUTPUT_PATH}") ]]; then
+                        echo "[!] Directory '$(dirname "${APK_OUTPUT_PATH}")' does not exist."
+                        exit 1
+                    fi
+                    ;;
+                verbose)
+                    VERBOSE=true
+                    ;;
+                *)
+                    echo "[!] Invalid option '${OPTARG}'."
+                    help
+                    exit 1
+                    ;;
+            esac
+            ;;
+        h)
+            help
+            exit 0
+            ;;
+        l)
+            LIBS_DIR="${OPTARG}"
+
+            if [ ! -e "${LIBS_DIR}" ]; then
+                echo "[!] Directory '${LIBS_DIR}' does not exist."
+                exit 1
+            fi
+            ;;
+        o)
+            APK_OUTPUT_PATH="${OPTARG}"
+
+            if [[ ! -e $(dirname "${APK_OUTPUT_PATH}") ]]; then
+                echo "[!] Directory '$(dirname "${APK_OUTPUT_PATH}")' does not exist."
+                exit 1
+            fi
+            ;;
+        v)
+            VERBOSE=true
+            ;;
+        *)
+            help
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
+if [ ! -z "${LIBS_DIR}" ]; then
+    ADDITIONAL_CLASSPATH=$(find "${LIBS_DIR}" -iname \*.jar -type f -o -type l | tr '\n' ':')
+    [ ! -z "${ADDITIONAL_CLASSPATH}" ] && ADDITIONAL_CLASSPATH="${ADDITIONAL_CLASSPATH::-1}"
+fi
+
+##############################################################################
+##
+##  Change current directory to SRC_DIR
+##
+##############################################################################
+
+if [ -z "${1}" ]; then
+    BUILD_IN_CURRENT_DIRECTORY=true
+else
+    BUILD_IN_CURRENT_DIRECTORY=false
+    if ! cd "${1}"; then
+        echo "[!] Cannot cd to the '${1}'."
+        exit 1
+    fi
+fi
+
+##############################################################################
+##
+##  Check that we are in android project directory
+##
+##############################################################################
+
+if [ ! -f "AndroidManifest.xml" ]; then
+    echo "[!] Cannot find 'AndroidManifest.xml'."
+    echo "    Possible that this is not an Android project"
+    echo "    directory."
+    help
+    exit 1
+fi
+
+if [ ! -d "res" ]; then
+    echo "[!] Cannot find resources directory."
+    echo "    Possible that this is not an Android project"
+    echo "    directory."
+    help
+    exit 1
+fi
+
+if [ ! -d "src" ] && [ ! -d "java" ]; then
+    echo "[!] Cannot find Java sources directory."
+    echo "    Possible that this is not an Android project"
+    echo "    directory."
+    help
+    exit 1
+fi
+
+##############################################################################
+##
+##  Setting up output directory
+##
+##############################################################################
+
+if [ ! -d "${OUTPUT_DIR}" ]; then
+    echo -n "== Creating output directory... "
+
+    if mkdir "${OUTPUT_DIR}" > /dev/null 2>&1; then
+        echo "OK"
+    else
+        echo "FAIL"
+        exit 1
+    fi
+fi
+
+if [ ! -z "$(ls ${OUTPUT_DIR}/)" ]; then
+    echo -n "== Cleaning output directory... "
+
+    if find "${OUTPUT_DIR}" ! -path "${OUTPUT_DIR}" -delete > /dev/null 2>&1; then
+        echo "OK"
+    else
+        echo "FAIL"
+        exit 1
+    fi
+fi
+
+if [ -d "src" ]; then
+    JAVA_SOURCES_DIR="src"
+else
+    JAVA_SOURCES_DIR="java"
+fi
+
+##############################################################################
+##
+##  Generating R.java
+##
+##############################################################################
+
+echo -n "== Generating R.java... "
+if aapt package -m -J "${OUTPUT_DIR}" -M AndroidManifest.xml -S res; then
+    echo "OK"
+else
+    echo "FAIL"
+    exit 1
+fi
+
+##############################################################################
+##
+##  Compiling java sources
+##
+##############################################################################
+
+echo -n "== Compiling Java sources... "
+
+if ! ${VERBOSE}; then
+    ECJ_CLI="ecj -nowarn"
+else
+    ECJ_CLI="ecj"
+fi
+
+if [ ! -z "${ADDITIONAL_CLASSPATH}" ]; then
+    ECJ_CLI="${ECJ_CLI} -cp ${ADDITIONAL_CLASSPATH}"
+fi
+
+if ${ECJ_CLI} "${OUTPUT_DIR}" "${JAVA_SOURCES_DIR}"; then
+    echo "OK"
+else
+    echo "FAIL"
+    exit 1
+fi
+
+##############################################################################
+##
+##  Generating classes.dex
+##
+##############################################################################
+
+echo -n "== Generating DEX files... "
+
+if [ ! -z "${ADDITIONAL_CLASSPATH}" ]; then
+    LIST_OF_LIBS=$(echo "${ADDITIONAL_CLASSPATH}" | tr ':' ' ')
+fi
+
+if dx --dex --output="${OUTPUT_DIR}/classes.dex" ${LIST_OF_LIBS} "${OUTPUT_DIR}" "${JAVA_SOURCES_DIR}"; then
+    echo "OK"
+else
+    echo "FAIL"
+    exit 1
+fi
+
+##############################################################################
+##
+##  Building apk
+##
+##############################################################################
+
+echo -n "== Creating apk... "
+if aapt package -f -M AndroidManifest.xml -S res -F "${OUTPUT_DIR}/app.apk.unsigned"; then
+    echo "OK"
+else
+    echo "FAIL"
+    exit 1
+fi
+
+echo -n "== Adding classes.dex to apk... "
+if aapt add -f -k "${OUTPUT_DIR}/app.apk.unsigned" "${OUTPUT_DIR}/classes.dex" > /dev/null 2>&1; then
+    echo "OK"
+else
+    echo "FAIL"
+    exit 1
+fi
+
+echo -n "== Signing apk... "
+if apksigner "${PREFIX}/etc/debug.jks" "${OUTPUT_DIR}/app.apk.unsigned" "${OUTPUT_DIR}/app.apk"; then
+    echo "OK"
+else
+    echo "FAIL"
+    exit 1
+fi
+
+if [ -z "${APK_OUTPUT_PATH}" ]; then
+    TIMESTAMP="$(date +%d.%m.%Y_%H.%M.%S)"
+
+    if ${BUILD_IN_CURRENT_DIRECTORY}; then
+        echo -n "== Placing apk to './app_${TIMESTAMP}.apk'... "
+    else
+        echo -n "== Placing apk to '${1}/app_${TIMESTAMP}.apk'... "
+    fi
+
+    if mv -f "${OUTPUT_DIR}/app.apk" "./app_${TIMESTAMP}.apk" > /dev/null 2>&1; then
+        echo "OK"
+    else
+        echo "FAIL"
+        exit 1
+    fi
+else
+    echo -n "== Placing apk to '${APK_OUTPUT_PATH}'... "
+
+    if mv -f "${OUTPUT_DIR}/app.apk" "${APK_OUTPUT_PATH}" > /dev/null 2>&1; then
+        echo "OK"
+    else
+        echo "FAIL"
+        exit 1
+    fi
+fi
+
+##############################################################################
+##
+##  Go to the old working dir
+##
+##############################################################################
+
+if ! ${BUILD_IN_CURRENT_DIRECTORY}; then
+    cd "${OLDPWD}"
+fi

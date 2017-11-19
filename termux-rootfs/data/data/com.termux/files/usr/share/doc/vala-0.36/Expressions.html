@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8" />
+<title>Expressions - Vala Reference Manual</title>
+<link rel="stylesheet" type="text/css" href="default.css"><meta name="viewport" content="initial-scale=1">
+</head>
+<body>
+<div class="o-fixedtop c-navbar"><div class="o-navbar">
+<span class="c-pageturner u-float-left"><a href="index.html">Contents</a></span><span>Vala Reference Manual</span><div class="u-float-right">
+<span class="c-pageturner o-inlinewidth-4"><a href="Types.html">Prev</a></span><span class="c-pageturner o-inlinewidth-4"><a href="Statements.html">Next</a></span>
+</div>
+</div></div>
+<h2>4. Expressions</h2>
+<ul class="page_toc">
+<li><a href="Expressions.html#Literal_expressions">4.1 Literal expressions</a></li>
+<li><a href="Expressions.html#Member_access">4.2 Member access</a></li>
+<li><a href="Expressions.html#Element_access">4.3 Element access</a></li>
+<li><a href="Expressions.html#Arithmetic_operations">4.4 Arithmetic operations</a></li>
+<li><a href="Expressions.html#Relational_operations">4.5 Relational operations</a></li>
+<li><a href="Expressions.html#Increment/decrement_operations">4.6 Increment/decrement operations</a></li>
+<li><a href="Expressions.html#Logical_operations">4.7 Logical operations</a></li>
+<li><a href="Expressions.html#Bitwise_operations">4.8 Bitwise operations</a></li>
+<li><a href="Expressions.html#Assignment_operations">4.9 Assignment operations</a></li>
+<li><a href="Expressions.html#Invocation_expressions">4.10 Invocation expressions</a></li>
+<li><a href="Expressions.html#Class_instantiation">4.11 Class instantiation</a></li>
+<li><a href="Expressions.html#Struct_instantiation">4.12 Struct instantiation</a></li>
+<li><a href="Expressions.html#Array_instantiation">4.13 Array instantiation</a></li>
+<li><a href="Expressions.html#Conditional_expressions">4.14 Conditional expressions</a></li>
+<li><a href="Expressions.html#Coalescing_expressions">4.15 Coalescing expressions</a></li>
+<li><a href="Expressions.html#Flag_operations">4.16 Flag operations</a></li>
+<li><a href="Expressions.html#Type_operations">4.17 Type operations</a></li>
+<li><a href="Expressions.html#Ownership_transfer_expressions">4.18 Ownership transfer expressions</a></li>
+<li><a href="Expressions.html#Lambda_expressions">4.19 Lambda expressions</a></li>
+<li><a href="Expressions.html#Pointer_expressions">4.20 Pointer expressions</a></li>
+</ul>
+<p>Expressions are short pieces of code that define an action that should be taken when they are reached during a program's execution.  Such an operation can be arithmetical, calling a method, instantiating a type, and so on.  All expressions evaluate to a single value of a particular type - this value can then be used in another expression, either by combing the expressions together, or by assigning the value to an identifier. </p>
+<p>When expressions are combined together (e.g. add two numbers, then multiply the result by another: 5 + 4 * 3), then the order in which the sub-expressions are evaluated becomes significant.  Parentheses are used to mark out which expressions should be nested within others, e.g. (5 + 4) * 3 implies the addition expression is nested inside the multiplication expression, and so must be evaluated first. </p>
+<p>When identifiers are used in expressions they evaluate to their value, except when used in assignment.  The left handed side of an assignment are a special case of expressions where an identifier is not considered an expression in itself and is therefore not evaluated.  Some operations combine assignment with another operation (e.g. increment operations,) in which cases an identifier can be thought of as an expression initially, and then just an identifier for assignment after the overall expression has been evaluated. </p>
+<blockquote class="o-box c-rules">primary-expression:
+	literal
+	template
+	member-access-expression
+	pointer-member-access-expression
+	element-access-expression
+	postfix-expression
+	class-instantiation-expression
+	array-instantiation-expression
+	struct-instantiation-expression
+	invocation-expression
+	sizeof-expression
+	typeof-expression
+
+unary-expression:
+	primary-expression
+	sign-expression
+	logical-not-expression
+	bitwise-not-expression
+	prefix-expression
+	ownership-transfer-expression
+	cast-expression
+	pointer-expression
+
+expression:
+	conditional-expression
+	assignment-expression
+	lambda-expression
+
+</blockquote>
+
+<h3 id="Literal_expressions">4.1 Literal expressions</h3>
+<p>Each literal expression instantiates its respective type with the value given. </p>
+<p>Integer types... -?[:digit:]+ </p>
+<p>Floating point types... -?[:digit:]+(.[:digit:]+)? </p>
+<p>Strings... "[^"\n]*". """.*""" </p>
+<p>Booleans... true|false </p>
+<p>A final literal expression is <code>null</code>.  This expression evaluates to a non-typed data instance, which is a legal value for any nullable type (see <a href="Types.html#Nullable_types">Types/Nullable types</a>.) </p>
+
+<h3 id="Member_access">4.2 Member access</h3>
+<p>To access members of another scope. </p>
+<blockquote class="o-box c-rules">member-access-expression:
+	[ primary-expression <span class="literal">.</span> ] identifier
+
+</blockquote>
+<p>If no inner expression is supplied, then the identifier will be looked up starting from the current scope (for example a local variable in a method). Otherwise, the scope of the inner expression will be used. The special identifier <strong>this</strong> (without inner expression) inside an instance method will refer to the instance of the type symbol (class, struct, enum, etc.). </p>
+
+<h3 id="Element_access">4.3 Element access</h3>
+<blockquote class="o-box c-rules">element-access-expression:
+	container <span class="literal">[</span> indexes <span class="literal">]</span>
+
+container:
+	expression
+
+indexes:
+	expression [ <span class="literal">,</span> indexes ]
+
+</blockquote>
+<p>Element access can be used for: </p>
+<ul>
+<li><p>Accessing an element of a container at the given indexes </p></li>
+<li><p>Assigning an element to a container at the given indexes. In this case the element access expression is the left handed side of an assignment. </p></li>
+</ul>
+<p>Element access can be used on strings, arrays and types that have <strong>get</strong> and/or <strong>set</strong> methods. </p>
+<ul>
+<li><p>On strings you can only access characters, it's not possible to assign any value to an element. </p></li>
+<li><p>On arrays, it's possible to both access an element or assign to an element. The type of the element access expression is the same as the array element type. </p></li>
+</ul>
+<p>Element access can also be used with complex types (such as class, struct, etc.) as containers: </p>
+<ul>
+<li><p>If a <strong>get</strong> method exists accepting at least one argument and returning a value, then indexes will be used as arguments and the return value as element. </p></li>
+<li><p>If a <strong>set</strong> method exists accepting at least two arguments and returns <strong>void</strong>, then indexes will be used as arguments and the assigned value as last argument.. </p></li>
+</ul>
+
+<h3 id="Arithmetic_operations">4.4 Arithmetic operations</h3>
+<p>Binary operators, taking one argument on each side.  Each argument is an expression returning an appropriate type. </p>
+<p>Applicable, unless said otherwise, where both operands evaluate to numeric types (integer or floating point). </p>
+<p>Where at least one operand is a of floating point type, the result will be the same type as the largest floating point type involved.  Where both operands are of integer types, the result will have the same type as the largest of the integer types involved. </p>
+<p>Addition/Subtraction: </p>
+<blockquote class="o-box c-rules">additive-expression:
+	multiplicative-expression
+	multiplicative-expression <span class="literal">+</span> multiplicative-expression
+	multiplicative-expression <span class="literal">-</span> multiplicative-expression
+
+sign-expression:
+	<span class="literal">+</span> unary-expression
+	<span class="literal">-</span> unary-expression
+
+</blockquote>
+<p>Adds/Subtracts the second argument to/from the first.  Negations is equivalent to subtraction the operand from 0. </p>
+<p>Overflow? </p>
+<p>Multiplication/Division: </p>
+<blockquote class="o-box c-rules">multiplicative-expression:
+	unary-expression
+	unary-expression <span class="literal">*</span> unary-expression
+	unary-expression <span class="literal">/</span> unary-expression
+	unary-expression <span class="literal">%</span> unary-expression
+
+</blockquote>
+<p>Multiplies/divides the first argument by the second. </p>
+<p>If both operands are of integer types, then the result will be the quotient only of the calculation (equivalent to the precise answer rounded down to an integer value.)  If either operand is of a floating point type, then the result will be as precise as possible within the boundaries of the result type (which is worked out from the basic arithmetic type rules.) </p>
+
+<h3 id="Relational_operations">4.5 Relational operations</h3>
+<p>Result in a value of bool type. </p>
+<p>Applicable for comparing two instances of any numeric type, or two instances of string type.  Where numeric with at least one floating point type instance, operands are both converted to the largest floating point type involved.  Where both operands are of integer type, both are converted to the largest integer type involved.  When both are strings, they are lexically compared somehow. </p>
+<blockquote class="o-box c-rules">equality-expression:
+	relational-expression 
+	relational-expression <span class="literal">==</span> relational-expression
+	relational-expression <span class="literal">!=</span> relational-expression
+
+relational-expression:
+	shift-expression 
+	shift-expression <span class="literal">&lt;</span> relational-expression
+	shift-expression <span class="literal">&lt;=</span> relational-expression
+	shift-expression <span class="literal">&gt;</span> relational-expression
+	shift-expression <span class="literal">&gt;=</span> relational-expression
+	is-expression
+	as-expression
+
+</blockquote>
+
+<h3 id="Increment/decrement_operations">4.6 Increment/decrement operations</h3>
+<blockquote class="o-box c-rules">postfix-expression:
+	primary-expression <span class="literal">++</span>
+	primary-expression <span class="literal">--</span>
+
+prefix-expression:
+	<span class="literal">++</span> unary-expression
+	<span class="literal">--</span> unary-expression
+
+</blockquote>
+<p>Postfix and prefix expressions: </p>
+<pre class="o-box c-program"><span class="c-program-token">var</span> <span class="c-program-methodname">postfix</span> = <span class="c-program-methodname">i</span>++;
+<span class="c-program-token">var</span> <span class="c-program-methodname">prefix</span> = --<span class="c-program-methodname">j</span>;
+</pre>
+<p>are equivalent to: </p>
+<pre class="o-box c-program"><span class="c-program-token">var</span> <span class="c-program-methodname">postfix</span> = <span class="c-program-methodname">i</span>;
+<span class="c-program-methodname">i</span> += 1;
+
+<span class="c-program-methodname">j</span> -= 1;
+<span class="c-program-token">var</span> <span class="c-program-methodname">prefix</span> = <span class="c-program-methodname">j</span>;
+</pre>
+
+<h3 id="Logical_operations">4.7 Logical operations</h3>
+<p>Applicable to boolean type operands, return value is of boolean type.  No non boolean type instances are automatically converted. </p>
+<blockquote class="o-box c-rules">logical-or-expression:
+	logical-and-expression <span class="literal">||</span> logical-and-expression
+
+</blockquote>
+<p>Documentation </p>
+<blockquote class="o-box c-rules">logical-and-expression:
+	contained-in-expression <span class="literal">&amp;&amp;</span> contained-in-expression
+
+</blockquote>
+<p>Documentation </p>
+<blockquote class="o-box c-rules">logical-not-expression:
+	<span class="literal">!</span> expression
+
+</blockquote>
+
+<h3 id="Bitwise_operations">4.8 Bitwise operations</h3>
+<p>All only applicable to integer types. </p>
+<blockquote class="o-box c-rules">bitwise-or-expression:
+	bitwise-xor-expression <span class="literal">|</span> bitwise-xor-expression
+
+bitwise-xor-expression:
+	bitwise-and-expression <span class="literal">&amp;</span> bitwise-and-expression
+
+bitwise-and-expression:
+	equality-expression <span class="literal">&amp;</span> equality-expression
+
+bitwise-not-expression:
+	<span class="literal">~</span> expression
+
+</blockquote>
+<p>Documentation </p>
+<blockquote class="o-box c-rules">shift-expression:
+	additive-expression <span class="literal">&lt;&lt;</span> additive-expression
+	additive-expression <span class="literal">&gt;&gt;</span> additive-expression
+
+</blockquote>
+<p>Shifts the bits of the left argument left/right by the number represented by the second argument. </p>
+<p>Undefined for shifting further than data size, e.g. with a 32 bit integer...  </p>
+<p>Documentation </p>
+
+<h3 id="Assignment_operations">4.9 Assignment operations</h3>
+<p>Value assigned to identifier on left.  Type must match. </p>
+<p>When assignment includes another operation natural result type must match the declared type of variable which is the left hand side of the expression.  e.g. Let a be an int instance with the value 1, a += 0.5 is not allowed, as the natural result type of 1 + 0.5 is a float, not an int. </p>
+<blockquote class="o-box c-rules">assignment-expression:
+	simple-assignment-expression
+	number-assignment-expression
+
+simple-assignment-expression:
+	conditional-expression <span class="literal">=</span> expression
+
+number-assignment-expression:
+	conditional-expression <span class="literal">+=</span> expression
+	conditional-expression <span class="literal">-=</span> expression
+	conditional-expression <span class="literal">*=</span> expression
+	conditional-expression <span class="literal">/=</span> expression
+	conditional-expression <span class="literal">%=</span> expression
+	conditional-expression <span class="literal">|=</span> expression
+	conditional-expression <span class="literal">&amp;=</span> expression
+	conditional-expression <span class="literal">^=</span> expression
+	conditional-expression <span class="literal">&lt;&lt;=</span> expression
+	conditional-expression <span class="literal">&gt;&gt;=</span> expression
+
+</blockquote>
+<p>A simple assignment expression assigns the right handed side value to the left handed side. It is necessary that the left handed side expression is a valid lvalue. Other assignments: </p>
+<pre class="o-box c-program"><span class="c-program-methodname">result</span> += <span class="c-program-methodname">value</span>;
+<span class="c-program-methodname">result</span> &lt;&lt;= <span class="c-program-methodname">value</span>;
+...
+</pre>
+<p>Are equivalent to simple assignments: </p>
+<pre class="o-box c-program"><span class="c-program-methodname">result</span> = <span class="c-program-methodname">result</span> + <span class="c-program-methodname">value</span>;
+<span class="c-program-methodname">result</span> = <span class="c-program-methodname">result</span> &lt;&lt; <span class="c-program-methodname">value</span>;
+...
+</pre>
+
+<h3 id="Invocation_expressions">4.10 Invocation expressions</h3>
+<blockquote class="o-box c-rules">invocation-expression:
+	[ <span class="literal">yield</span> ] primary-expression <span class="literal">(</span> [ arguments ] <span class="literal">)</span>
+
+arguments:
+	expression [ <span class="literal">,</span> arguments]
+
+</blockquote>
+<p>The expression can refer to any callable: a method, a delegate or a signal. The type of the expression depends upon the return type of the callable symbol. Each argument expression type must be compatible against the respective callable parameter type. If an argument is not provided for a parameter then: </p>
+<p>If the callable has an ellipsis parameter, then any number of arguments of any type can be provided past the ellipsis. </p>
+<p>Delegates... See <a href="Delegates.html#">Delegates</a> </p>
+<p>Firing a signal is basically the same. See <a href="Classes.html#Signals">Classes/Signals</a> </p>
+
+<h3 id="Class_instantiation">4.11 Class instantiation</h3>
+<p>To instantiate a class (create an instance of it) use the <code>new</code> operator.  This operator takes a the name of the class, and a list of zero or more arguments to be passed to the creation method. </p>
+<blockquote class="o-box c-rules">class-instantiation-expression:
+	<span class="literal">new</span> type-name <span class="literal">(</span> arguments <span class="literal">)</span>
+
+arguments:
+	expression [ <span class="literal">,</span> arguments ]
+
+</blockquote>
+
+<h3 id="Struct_instantiation">4.12 Struct instantiation</h3>
+<blockquote class="o-box c-rules">struct-instantiation-expression:
+	type-name <span class="literal">(</span> arguments <span class="literal">)</span> [ <span class="literal">{</span> initializer <span class="literal">}</span> ]
+
+initializer:
+	field-name <span class="literal">=</span> expression [ <span class="literal">,</span> initializer ]
+
+arguments:
+	expression [ <span class="literal">,</span> arguments ]
+
+</blockquote>
+
+<h3 id="Array_instantiation">4.13 Array instantiation</h3>
+<p>This expression will create an array of the given size. The second approach shown below is a shorthand to the first one. </p>
+<blockquote class="o-box c-rules">array-instantiation-expression:
+	<span class="literal">new</span> type-name <span class="literal">[</span> sizes <span class="literal">]</span> [ <span class="literal">{</span> [ initializer ] <span class="literal">}</span> ]
+	<span class="literal">{</span> initializer <span class="literal">}</span>
+
+sizes:
+	expression [ <span class="literal">,</span> sizes ]
+
+initializer:
+	expression [ <span class="literal">,</span> initializer ]
+
+</blockquote>
+<p>Sizes expressions must evaluate either to an integer type or an enum value. Initializer expressions type must be compatible with the array element type. </p>
+
+<h3 id="Conditional_expressions">4.14 Conditional expressions</h3>
+<p>Allow a conditional in a single expression. </p>
+<blockquote class="o-box c-rules">conditional-expression:
+	boolean-expression [ <span class="literal">?</span> conditional-true-clause <span class="literal">:</span> conditional-false-clause ]
+
+boolean-expression:
+	coalescing-expression
+
+conditional-true-clause:
+	expression
+
+conditional-false-clause
+	expression
+
+</blockquote>
+<p>First boolean-expression is evaluated.  If true, then the conditional-true-clause is evaluated, and its result is the result of the conditional expression.  If the boolean expression evaluates to false, then the conditional-false-clause is evaluated, and its result becomes the result of the conditional expression. </p>
+
+<h3 id="Coalescing_expressions">4.15 Coalescing expressions</h3>
+<blockquote class="o-box c-rules">coalescing-expression:
+	nullable-expression [ <span class="literal">??</span> coalescing-expression ]
+
+nullable-expression:
+	logical-or-expression
+
+</blockquote>
+
+<h3 id="Flag_operations">4.16 Flag operations</h3>
+<p>Flag types are a variation on enumerated types, in which any number of flag values can be combined in a single instance of the flag type.  There are therefore operations available to combine several values in an instance, and to find out which values are represented in an instance. </p>
+<blockquote class="o-box c-rules">flag-combination-expression:
+	expression <span class="literal">|</span> expression
+
+</blockquote>
+<p>Where both expressions evaluate to instances of the same flag type, the result of this expression is a new instance of the flag type in which all values represented by either operand are represented. </p>
+<blockquote class="o-box c-rules">flag-recombination-expression:
+	expression <span class="literal">^</span> expression
+
+</blockquote>
+<p>Where both expressions evaluate to instances of the same flag type, the result of this expression is a new instance of the flag type in which all values represented by exactly one of the operands are represented. </p>
+<blockquote class="o-box c-rules">flag-separation-expression:
+	expression <span class="literal">&amp;</span> expression
+
+</blockquote>
+<p>Where both expressions evaluate to instances of the same flag type, the result of this expression is a new instance of the flag type in which all values represented by both operands are represented. </p>
+<blockquote class="o-box c-rules">flag-in-expression:
+	expression <span class="literal">in</span> expression
+
+</blockquote>
+<p>Where both expressions evaluate to instances of the same flag type, the result of this expression is a boolean. The result will be true if the left-handed flag is set into the right-handed flags. </p>
+
+<h3 id="Type_operations">4.17 Type operations</h3>
+<blockquote class="o-box c-rules">is-expression:
+	shift-expression <span class="literal">is</span> type-name
+
+</blockquote>
+<p>Performs a runtime type check on the instance resulting from evaluating the the nested expression.  If the instance is an instance of the type described (with, for example, a class or interface name,) the overall expression evaluates to true. </p>
+<p>Casting: </p>
+<blockquote class="o-box c-rules">cast-expression:
+	<span class="literal">(!)</span> unary-expression
+	<span class="literal">(</span> type-name <span class="literal">)</span> unary-expression
+
+</blockquote>
+<p>A cast expression returns the instance created in the nested expression as an instance of the type described.  If the nested expression evaluates to an instance of a type that is not also an instance of the given type, the expression is not valid.  If you are not sure whether the cast is valid, instead use an "as" expression. </p>
+<blockquote class="o-box c-rules">as-expression:
+	shift-expression <span class="literal">as</span> type-name
+
+</blockquote>
+<p>An "as" expression combines an "is" expression and a cast operation, with the latter depending on the former.  If the nested expression evaluates to an instance of the given type, then a cast is performed and the expression evaluates to the result of the nested expression cast as the given type.  Otherwise, the result is null. </p>
+<blockquote class="o-box c-rules">sizeof-expression:
+	<span class="literal">sizeof (</span> type-name <span class="literal">)</span>
+
+typeof-expression:
+	<span class="literal">typeof (</span> type-name <span class="literal">)</span>
+
+</blockquote>
+
+<h3 id="Ownership_transfer_expressions">4.18 Ownership transfer expressions</h3>
+<blockquote class="o-box c-rules">ownership-transfer-expression:
+	<span class="literal">(owned)</span> unary-expression
+
+</blockquote>
+<p>When an instance of a reference type is assigned to a variable or field, it is possible to request that the ownership of the instance is passed to the new field or variable.  The precise meaning of this depends on the reference type, for an explanation of ownership, see <a href="Concepts.html#References_and_ownership">Concepts/References and ownership</a>.  The identifier in this expression must refer to an instance of a reference type. </p>
+<p>Note that similar syntax is used to define that a method parameter should take ownership of a value assigned to it.  For this, see <a href="Methods.html#">Methods</a>. </p>
+
+<h3 id="Lambda_expressions">4.19 Lambda expressions</h3>
+<blockquote class="o-box c-rules">lambda-expression:
+	params <span class="literal">=&gt;</span> body
+
+params:
+	[ direction ] identifier
+	<span class="literal">(</span> [ param-names ] <span class="literal">)</span>
+
+param-names:
+	[ direction ] identifier [ <span class="literal">,</span> param-names ]
+
+direction:
+	<span class="literal">out</span>
+	<span class="literal">ref</span>
+
+body:
+	statement-block
+	expression
+
+</blockquote>
+
+<h3 id="Pointer_expressions">4.20 Pointer expressions</h3>
+<blockquote class="o-box c-rules">addressof-expression:
+	<span class="literal">&amp;</span> unary-expression
+
+</blockquote>
+<p>The "address of" expression evaluates to a pointer to the inner expression. Valid inner expressions are: </p>
+<ul>
+<li><p>Variables (local variables, fields and parameters) </p></li>
+<li>
+<p>Element access whose container is an array or a pointer </p>
+<p> pointer-indirection-expression:</p>
+</li>
+</ul>
+<p>The pointer indirection evaluates to the value pointed to by the inner expression. The inner expression must be a valid pointer type and it must not be a pointer to a reference type (for example pointer indirection to a type <code>SomeClass*</code> is not possible). </p>
+<blockquote class="o-box c-rules">pointer-member-access-expression:
+	primary-expression <span class="literal">-&gt;</span> identifier
+
+</blockquote>
+<p>This expression evaluates to the value of the member identified by the identifier. The inner expression must be a valid pointer type and the member must be in the scope of the base type of the pointer type. </p>
+</body>
+</html>

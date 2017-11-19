@@ -1,0 +1,7 @@
+#!/data/data/com.termux/files/usr/bin/sh
+##
+##  Since 'fidentify' may show an error 'kernel too old', the
+##  program should run under proot
+##
+
+exec proot -k "3.18.70" "${PREFIX}/libexec/testdisk/fidentify" "${@}"

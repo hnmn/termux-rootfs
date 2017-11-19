@@ -1,0 +1,219 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##	Create a new Android application
+##
+
+usage()
+{
+    echo
+    echo " Usage: create-android-app [OPTIONS] APP_DIR"
+    echo
+    echo " Create a new Android application project."
+    echo
+    echo " Options:"
+    echo "   -h, --help              Print this help"
+    echo "   -n, --name NAME         Set application name"
+    echo "   -p, --package PACKAGE   Set application package"
+    echo
+}
+
+###############################################################################
+##
+##  Handle command line arguments and setup environment
+##
+###############################################################################
+
+APP_SKEL="${PREFIX}/share/android/android-app-skel"
+DEFAULT_APP_NAME="My App"
+DEFAULT_APP_PACKAGE="com.android.example.app"
+
+if [ -z "${1}" ]; then
+    usage
+    exit 1
+fi
+
+while getopts "hn:p:-:" opt; do
+    case "${opt}" in
+        -)
+            case "${OPTARG}" in
+                help)
+                    usage
+                    exit 0
+                    ;;
+                name)
+                    ARGUMENT="${!OPTIND}"; OPTIND=$((OPTIND + 1))
+
+                    if [ -z "${ARGUMENT}" ]; then
+                        echo "[!] Option '${OPTARG}' requires an argument."
+                        usage
+                        exit 1
+                    fi
+
+                    PARSED="$(echo ${ARGUMENT} | grep -x -P '^[a-zA-Z0-9\s+-_=,.]+$')"
+
+                    if [ -z "${PARSED}" ]; then
+                        echo "[!] Application name can consist only of alphabetic"
+                        echo "    characters, numbers, whitespace, and special"
+                        echo "    symbols: _ - + - , ."
+                        usage
+                        exit 1
+                    fi
+
+                    APP_NAME="${PARSED}"
+                    unset PARSED
+                    ;;
+                package)
+                    ARGUMENT="${!OPTIND}"; OPTIND=$((OPTIND + 1))
+
+                    if [ -z "${ARGUMENT}" ]; then
+                        echo "[!] Option '${OPTARG}' requires an argument."
+                        usage
+                        exit 1
+                    fi
+
+                    PARSED="$(echo ${ARGUMENT} | grep -P '^([a-zA-Z_][a-zA-Z0-9_]*\.)+([a-zA-Z_][a-zA-Z0-9_]*)$')"
+
+                    if [ -z "${PARSED}" ]; then
+                        echo "[!] Package name should be in format 'com.android.example'."
+                        usage
+                        exit 1
+                    fi
+
+                    APP_PACKAGE="${PARSED}"
+                    unset PARSED
+                    ;;
+                *)
+                    echo "[!] Invalid option specified '${OPTARG}'."
+                    usage
+                    exit 1
+                    ;;
+            esac
+            ;;
+        h)
+            usage
+            exit 0
+            ;;
+        n)
+            PARSED=$(echo "${OPTARG}" | grep -x -P '^[a-zA-Z0-9\s+-_=,.]+$')
+
+            if [ -z "${PARSED}" ]; then
+                echo "[!] Application name can consist only of alphabetic"
+                echo "    characters, numbers, whitespace, and special"
+                echo "    symbols: _ - + = , ."
+                usage
+                exit 1
+            fi
+
+            APP_NAME="${PARSED}"
+            unset PARSED
+            ;;
+        p)
+            PARSED=$(echo "${OPTARG}" | grep -x -P '^([a-zA-Z_][a-zA-Z0-9_]*\.)+([a-zA-Z_][a-zA-Z0-9_]*)$')
+
+            if [ -z "${PARSED}" ]; then
+                echo "[!] Package name should be in format 'com.android.example'."
+                usage
+                exit 1
+            fi
+
+            APP_PACKAGE="${PARSED}"
+            unset PARSED
+            ;;
+        *)
+            usage
+            exit 0
+            ;;
+    esac
+done
+
+shift $((OPTIND - 1))
+APP_PATH="${1}"
+
+if [ -z "${APP_PATH}" ]; then
+    echo "[!] You must set an output directory."
+    usage
+    exit 1
+fi
+
+if [ -e "${APP_PATH}" ]; then
+    echo "[!] Directory '${APP_PATH}' already exists. Please, choose"
+    echo "    a different name."
+    usage
+    exit 1
+fi
+
+if [ -z "${APP_NAME}" ]; then
+    APP_NAME="${DEFAULT_APP_NAME}"
+fi
+
+if [ -z "${APP_PACKAGE}" ]; then
+    APP_PACKAGE="${DEFAULT_APP_PACKAGE}"
+fi
+
+###############################################################################
+##
+##  Copy base app structure to specified directory
+##
+###############################################################################
+
+echo -n "== Creating base app structure... "
+if cp -a "${APP_SKEL}" "${APP_PATH}"; then
+    echo "OK"
+else
+    echo "FAIL"
+    exit 1
+fi
+
+###############################################################################
+##
+##  Set app name
+##
+###############################################################################
+
+echo -n "== Setting app name to '$APP_NAME'... "
+if sed -i -E "s@\!\{\!APP_NAME\!\}\!@${APP_NAME}@" "${APP_PATH}/res/values/strings.xml" > /dev/null 2>&1; then
+    echo "OK"
+else
+    echo "FAIL"
+    exit 1
+fi
+
+###############################################################################
+##
+##  Set app package and move sources to appropriate directory
+##
+###############################################################################
+
+echo -n "== Setting app package to '$APP_PACKAGE'... "
+if ! sed -i -E "s@\!\{\!APP_PACKAGE\!\}\!@${APP_PACKAGE}@" "${APP_PATH}/AndroidManifest.xml" > /dev/null 2>&1; then
+    echo "FAIL"
+    exit 1
+fi
+
+if ! sed -i -E "s@\!\{\!APP_PACKAGE\!\}\!@${APP_PACKAGE}@" "${APP_PATH}/MainActivity.java" > /dev/null 2>&1; then
+    echo "FAIL"
+    exit 1
+fi
+
+if ! mkdir -p "${APP_PATH}/src/$(echo ${APP_PACKAGE} | tr '.' '/')" > /dev/null 2>&1; then
+    echo "FAIL"
+    exit 1
+fi
+
+if mv "${APP_PATH}/MainActivity.java" "${APP_PATH}/src/$(echo ${APP_PACKAGE} | tr '.' '/')"/ > /dev/null 2>&1; then
+    echo "OK"
+else
+    echo "FAIL"
+    exit 1
+fi
+
+###############################################################################
+##
+##  Done !
+##
+###############################################################################
+
+echo "== Done."
+echo
+echo "Sources stored in directory: '${APP_PATH}'."
+echo

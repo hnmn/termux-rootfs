@@ -1,0 +1,14 @@
+#!/data/data/com.termux/files/usr/bin/sh
+##
+##	Wrapper for riscvemu64
+##
+
+VM_CONFIG="/data/data/com.termux/files/usr/share/riscvemu/riscvemu.cfg"
+
+if [ -f "${VM_CONFIG}" ]; then
+    exec riscvemu64 "${VM_CONFIG}"
+else
+    echo " [!] Configuration file 'riscvemu.cfg' is not found. You can found"
+    echo "     examples in '\${PREFIX}/share/riscvemu/examples'."
+    exit 1
+fi

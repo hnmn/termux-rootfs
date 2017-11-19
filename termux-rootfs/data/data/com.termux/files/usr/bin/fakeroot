@@ -1,0 +1,63 @@
+#!/data/data/com.termux/files/usr/bin/sh
+##
+##  Simulate root (UID 0)
+##
+
+usage()
+{
+    echo
+    echo " Usage: fakeroot [-h|--help] [COMMAND]"
+    echo
+    echo " Simulate root user."
+    echo
+}
+
+## Disable LD_PRELOAD in prooted environment
+unset LD_PRELOAD
+
+## Set right temporary directory for proot
+export PROOT_TMP_DIR="${TMPDIR}"
+
+if [[ $(getenforce | tr '[[:upper:]]' '[[:lower:]]') = "enforcing" ]]; then
+    export PROOT_NO_SECCOMP=1
+    export USE_LINK2SYMLINK=true
+fi
+
+## Don't run fakeroot under termux-chroot
+if [ -e "${ROOTFS}/.termux-chroot" ]; then
+    echo "[!] Don't run fakeroot under termux-chrooted environment."
+    exit 1
+fi
+
+## Set shell to spawn
+SHELL="${PREFIX}/libexec/default_shell"
+
+if grep -qP '^-.*$' <<< "${1}"; then
+    if [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
+        usage
+        exit 0
+    else
+        echo "[!] Command name cannot begin with '-'."
+        usage
+        exit 1
+    fi
+else
+    ## If no command given, use shell
+    if [ ${#} -lt 1 ]; then
+        set -- "${SHELL}" '-l'
+    fi
+fi
+
+export PROOTED_SHELL=true
+
+## bind content under /proc/self/fd
+set -- '-b' "/proc/self/fd:/dev/fd" "${@}"
+set -- '-b' "/proc/self/fd/0:/dev/stdin" "${@}"
+set -- '-b' "/proc/self/fd/1:/dev/stdout" "${@}"
+set -- '-b' "/proc/self/fd/2:/dev/stderr" "${@}"
+
+if ${USE_LINK2SYMLINK}; then
+    exec proot --kill-on-exit --root-id --link2symlink "${@}"
+else
+    exec proot --kill-on-exit --root-id "${@}"
+fi

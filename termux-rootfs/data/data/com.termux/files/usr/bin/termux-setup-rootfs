@@ -1,0 +1,278 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##  termux-rootfs installation helper
+##
+
+###############################################################################
+##
+##  Preparation
+##
+###############################################################################
+
+umask 077
+
+if [ "$(id -u)" = "0" ]; then
+    echo "[!] Don't run this script as root."
+    exit 1
+fi
+
+if [ -e "${PREFIX}/var/lib/termux-rootfs/termux-rootfs_configured" ]; then
+    echo "[!] termux-rootfs is already configured."
+    exit 0
+fi
+
+[ -z "${PREFIX}" ] && export PREFIX="/data/data/com.termux/files/usr"
+. "${PREFIX}/etc/profile"
+
+###############################################################################
+##
+##  Creating necessary files and directories
+##
+###############################################################################
+
+echo "[*] Creating necessary files..."
+
+# create empty score files for games
+touch "${PREFIX}/var/games/typespeed.score"
+touch "${PREFIX}/var/games/vitetris-hiscores"
+touch "${PREFIX}/var/lib/dpkg/available"
+
+# create basic bash profile
+[ ! -e "${HOME}/.bash_profile" ] && cp "${PREFIX}/etc/skel/.bash_profile" "${HOME}/.bash_profile"
+
+# preconfigure vim
+if [ ! -e "${HOME}/.vimrc" ]; then
+    [ ! -e "${HOME}/.vim/undodir" ] && mkdir -p "${HOME}/.vim/undodir"
+    cp "${PREFIX}/etc/skel/.vimrc" "${HOME}/.vimrc"
+fi
+
+# preconfigure htop
+[ ! -e "${HOME}/.config/htop" ] && mkdir -p "${HOME}/.config/htop"
+if [ ! -e "${HOME}/.config/htop/htoprc" ]; then
+    cp "${PREFIX}/etc/skel/.config/htop/htoprc" "${HOME}/.config/htop/htoprc"
+fi
+
+# put sample html files fir nginx into var/www
+cat <<- EOF > "${PREFIX}/var/www/50x.html"
+<!DOCTYPE html>
+<html>
+<head>
+<title>Error</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>An error occurred.</h1>
+<p>Sorry, the page you are looking for is currently unavailable.<br/>
+Please try again later.</p>
+<p>If you are the system administrator of this resource then you should check
+the <a href="http://nginx.org/r/error_log">error log</a> for details.</p>
+<p><em>Faithfully yours, nginx.</em></p>
+</body>
+</html>
+EOF
+
+cat <<- EOF > "${PREFIX}/var/www/index.html"
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+EOF
+
+###############################################################################
+##
+##  Fixing permissions
+##
+###############################################################################
+
+#echo "[*] Fixing permissions..."
+#find "${PREFIX}" -type d -print0 | xargs -0 chmod 700
+#find "${PREFIX}" -type f -executable -print0 | xargs -0 chmod 700
+#find "${PREFIX}" -type f ! -executable -print0 | xargs -0 chmod 600
+
+# permissions for *.so libraries are already set
+# find ${PREFIX}/lib ${PREFIX}/libexec -type f | grep -P '.+\.so(\.[0-9\.]+)?$' | xargs chmod 600
+
+###############################################################################
+##
+##  Generate SSH host keys if needed
+##
+###############################################################################
+
+if [ ! -f "${PREFIX}/etc/ssh/keys/host_ed25519" ]; then
+    echo -n "[*] Generating SSH host key (ED25519)... "
+    ssh-keygen -N '' -t ed25519 -f "${PREFIX}/etc/ssh/keys/host_ed25519" > /dev/null 2>&1
+
+    if [ "${?}" = "0" ]; then
+        echo "OK"
+    else
+        echo "FAIL"
+    fi
+fi
+
+if [ ! -f "${PREFIX}/etc/ssh/keys/host_rsa" ]; then
+    echo -n "[*] Generating SSH host key (RSA)... "
+    ssh-keygen -N '' -t rsa -b 4096 -f "${PREFIX}/etc/ssh/keys/host_rsa" > /dev/null 2>&1
+
+    if [ "${?}" = "0" ]; then
+        echo "OK"
+    else
+        echo "FAIL"
+    fi
+fi
+
+###############################################################################
+##
+##  Generate SSL certificates
+##
+###############################################################################
+
+echo
+"${PREFIX}/bin/termux-gensslcerts"
+echo
+
+###############################################################################
+##
+##  Generate onion hostname (for TOR hidden services)
+##
+###############################################################################
+
+HSDIR=$(grep -P '^HiddenServiceDir\s+/.+$' "${PREFIX}/etc/tor/addons/hidden_services.torrc" | awk '{ print $2 }')
+
+if [ ! -z "${HSDIR}" ] && [ -d "${PREFIX}/var/lib/tor/hidden" ]; then
+    echo -n "[*] Generating onion hostname... "
+    OUTPUT=$(eschalot -l10-12 -p term)
+
+    if [ "${?}" != "0" ]; then
+        echo "FAIL"
+    else
+        HOSTNAME=$(grep -oP '^.+\.onion$' <<< "${OUTPUT}")
+        PRIVKEY=$(tail -n +3 <<< "${OUTPUT}")
+
+        if ! echo "${HOSTNAME}" > "${HSDIR}/hostname" 2>&1; then
+            echo "FAIL"
+        else
+            if echo "${PRIVKEY}" > "${HSDIR}/private_key" 2>&1; then
+                echo "OK"
+            else
+                echo "FAIL"
+            fi
+        fi
+    fi
+fi
+
+unset HSDIR
+unset OUTPUT
+unset HOSTNAME
+unset PRIVKEY
+
+###############################################################################
+##
+##  Initial setup of MariaDB
+##
+###############################################################################
+
+echo -n "[*] Initializing MariaDB database... "
+mysql_install_db > /dev/null 2>&1
+
+if [ "${?}" = "0" ]; then
+    echo "OK"
+else
+    echo "FAIL"
+fi
+
+###############################################################################
+##
+##  Initial setup of PostgreSQL
+##
+###############################################################################
+
+echo -n "[*] Initializing PostgreSQL database... "
+if mkdir -m 700 "${PREFIX}/var/lib/postgresql/db" > /dev/null 2>&1; then
+    initdb "${PREFIX}/var/lib/postgresql/db" > /dev/null 2>&1
+
+    if [ "${?}" = "0" ]; then
+        echo "OK"
+    else
+        echo "FAIL"
+    fi
+else
+    echo "FAIL"
+fi
+
+echo -n "[@] Do you want to setup PostgreSQL DB for Metasploit (Y/n): "
+read -r CHOICE
+if [ "${CHOICE}" = "y" ] || [ "${CHOICE}" = "Y" ]; then
+    setup_msfdb
+fi
+
+###############################################################################
+##
+##  Create man database
+##
+###############################################################################
+
+echo -n "[*] Creating man database... "
+makewhatis > /dev/null 2>&1
+
+if [ "${?}" = "0" ]; then
+    echo "OK"
+else
+    echo "FAIL"
+fi
+
+###############################################################################
+##
+##  Setting up password login
+##
+###############################################################################
+
+if [ ! -e "${PREFIX}/etc/login.pwd" ]; then
+    echo -n "[@] Do you want to set password for login (Y/n): "
+    read -r CHOICE
+
+    if [ "${CHOICE}" = "y" ] || [ "${CHOICE}" = "Y" ]; then
+        echo
+        echo " Make sure that you use a patched version of the"
+        echo " Termux app, or password login will be completely"
+        echo " meaningless (in original Termux app it may be"
+        echo " bypassed with failsafe mode)."
+        echo
+        echo " Patched Termux app and API plugin are located"
+        echo " in '\${PREFIX}/share/doc/termux-rootfs'."
+        echo
+
+        if ! passwd; then
+            echo "[!] Not setting password."
+        fi
+    fi
+fi
+
+date > "${PREFIX}/var/lib/termux-rootfs/termux-rootfs_configured"
+echo "[*] Done."

@@ -1,0 +1,56 @@
+have_library: checking for clock_gettime() in -lrt... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby  -lgmp -ldl -lm   -lc"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return 0;
+6: }
+/* end */
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby -lrt  -lgmp -ldl -lm   -lc"
+conftest.c:13:57: error: use of undeclared identifier 'clock_gettime'
+int t(void) { void ((*volatile p)()); p = (void ((*)()))clock_gettime; return !p; }
+                                                        ^
+1 error generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+13: int t(void) { void ((*volatile p)()); p = (void ((*)()))clock_gettime; return !p; }
+/* end */
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby -lrt  -lgmp -ldl -lm   -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+13: extern void clock_gettime();
+14: int t(void) { clock_gettime(); return 0; }
+/* end */
+
+--------------------
+

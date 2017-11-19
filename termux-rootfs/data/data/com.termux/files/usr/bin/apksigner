@@ -1,0 +1,12 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##  Wrapper for APK signer
+##
+
+export CLASSPATH="${PREFIX}/share/dex/apksigner.dex"
+
+unset LD_LIBRARY_PATH
+unset LD_PRELOAD
+exec /system/bin/app_process -Xmx512m -Djava.io.tmpdir="${TMPDIR}" "${PREFIX}/bin"               \
+                             "net.fornwall.apksigner.Main" "$@" | sed '/MdfppReflectionUtils/d'; \
+                             exit ${PIPESTATUS}

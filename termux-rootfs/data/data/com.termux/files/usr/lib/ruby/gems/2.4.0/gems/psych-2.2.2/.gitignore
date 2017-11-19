@@ -1,0 +1,14 @@
+*.swp
+*.bundle
+*.jar
+*.class
+.mvn
+/.bundle/
+/.yardoc
+/Gemfile.lock
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/

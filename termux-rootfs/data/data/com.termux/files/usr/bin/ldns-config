@@ -1,0 +1,36 @@
+#!/data/data/com.termux/files/usr/bin/sh
+
+prefix="/data/data/com.termux/files/usr"
+exec_prefix="${prefix}"
+VERSION="1.7.0"
+CFLAGS="-Wunused-function -Wstrict-prototypes -Wwrite-strings -W -Wall  -Oz"
+CPPFLAGS="-I/data/data/com.termux/files/usr/include  -I/data/data/com.termux/files/usr/include "
+LDFLAGS="-L/data/data/com.termux/files/usr/lib  -L/data/data/com.termux/files/usr/lib "
+LIBS="  -lcrypto"
+LIBDIR="${exec_prefix}/lib"
+INCLUDEDIR="${prefix}/include"
+LIBVERSION="2:0:0"
+
+for arg in $@
+do
+    if [ $arg = "--cflags" ]
+    then
+        echo "-I${INCLUDEDIR}"
+    fi
+    if [ $arg = "--libs" ]
+    then
+        echo "${LDFLAGS} -L${LIBDIR} ${LIBS} -lldns"
+    fi
+    if [ $arg = "-h" ] || [ $arg = "--help" ]
+    then
+        echo "Usage: $0 [--cflags] [--libs] [--version]"
+    fi
+    if [ $arg = "--version" ]
+    then
+        echo "${VERSION}"
+    fi
+    if [ $arg = "--libversion" ]
+    then
+        echo "${LIBVERSION}"
+    fi
+done

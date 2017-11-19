@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8" />
+<title>GIDL metadata format - Vala Reference Manual</title>
+<link rel="stylesheet" type="text/css" href="default.css"><meta name="viewport" content="initial-scale=1">
+</head>
+<body>
+<div class="o-fixedtop c-navbar"><div class="o-navbar">
+<span class="c-pageturner u-float-left"><a href="index.html">Contents</a></span><span>Vala Reference Manual</span><div class="u-float-right">
+<span class="c-pageturner o-inlinewidth-4"><a href="Preprocessor.html">Prev</a></span><span class="c-pageturner o-inlinewidth-4"><a href="GIR_metadata_format.html">Next</a></span>
+</div>
+</div></div>
+<h2>17. GIDL metadata format</h2>
+<ul class="page_toc">
+<li><a href="GIDL_metadata_format.html#Comments">17.1 Comments</a></li>
+<li><a href="GIDL_metadata_format.html#Other_Lines">17.2 Other Lines</a></li>
+<li><a href="GIDL_metadata_format.html#Specifiers">17.3 Specifiers</a></li>
+<li><a href="GIDL_metadata_format.html#Specifying_Different_Things">17.4 Specifying Different Things</a></li>
+<li><a href="GIDL_metadata_format.html#Properties_Reference">17.5 Properties Reference</a></li>
+<li><a href="GIDL_metadata_format.html#Examples">17.6 Examples</a></li>
+</ul>
+<p>This section describes the format of .metadata files as used by <strong>vapigen</strong> as additional information for .vapi file generation. Some of the information specified in the metadata can be used to set <a href="Attributes.html#">symbol attributes</a> as well. </p>
+
+<h3 id="Comments">17.1 Comments</h3>
+<p>Comments start with a <code>#</code> and end at the end of a line.  For example: </p>
+<pre># this is a comment</pre>
+
+<h3 id="Other_Lines">17.2 Other Lines</h3>
+<p>Every non-comment line in the file is made of up two sections: the specifier, and the parameters. </p>
+<p>The specifier is the first text to appear on the line, and it specifies what the rest of the line will be modifying. </p>
+<p>The parameters are a space separated list of a parameter name, followed by an equals sign and the value enclosed in quotes. </p>
+<p>For example, this line sets <strong>parameter1</strong> and <strong>parameter2</strong> on <strong>foo.bar</strong>: </p>
+<pre>foo.bar parameter1="value" parameter2="value"</pre>
+
+<h3 id="Specifiers">17.3 Specifiers</h3>
+<p>Specifiers always use the C name for whatever it is you are modifying.  For example if your namespace is <strong>Foo</strong>, and the Vala name for the type is <strong>Bar</strong>, then you would use <code>FooBar</code>. </p>
+<p>Specifiers may also use wildcards, and all items that partially match the specifier will be selected.  For example: </p>
+<pre>*.klass hidden="1"</pre>
+<p>will hide the <strong>klass</strong> field in all types. </p>
+
+<h3 id="Specifying_Different_Things">17.4 Specifying Different Things</h3>
+<p>To specify a: </p>
+<table class="c-informaltable">
+<tr>
+<td align="" colspan=""><p> Function  </p></td>
+<td align="" colspan=""><p> <code>name_of_function</code> </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> Type      </p></td>
+<td align="" colspan=""><p> <code>Type</code> </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> Property  </p></td>
+<td align="" colspan=""><p> <code>Type:property_name</code> </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> Signal    </p></td>
+<td align="" colspan=""><p> <code>Type::signal_name</code> </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> Field     </p></td>
+<td align="" colspan=""><p> <code>Type.field_name</code> </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> Parameter (Function) </p></td>
+<td align="" colspan=""><p> <code>name_of_function.param</code> </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> Parameter (Delegate) </p></td>
+<td align="" colspan=""><p> <code>DelegateName.param</code> </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> Parameter (Signal) </p></td>
+<td align="" colspan=""><p> <code>Type::signal_name.param</code> </p></td>
+</tr>
+</table>
+<p>For example, hiding a symbol: </p>
+<table class="c-informaltable">
+<tr>
+<td align="" colspan=""><p> Type     </p></td>
+<td align="" colspan=""><p> <code>Foo hidden="1"</code> </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> Function </p></td>
+<td align="" colspan=""><p> <code>some_function hidden="1"</code> </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> Field    </p></td>
+<td align="" colspan=""><p> <code>Foo.bar hidden="1"</code> </p></td>
+</tr>
+</table>
+
+<h3 id="Properties_Reference">17.5 Properties Reference</h3>
+<p>The format for the entries will be like so </p>
+<table class="c-informaltable">
+<tr>
+<td align="" colspan=""><p> <strong>Name</strong> </p></td>
+<td align="" colspan=""><p> <strong>Applies To</strong> </p></td>
+<td align="" colspan=""><p> <strong>Values</strong> </p></td>
+<td align="" colspan=""><p> <strong>Description</strong> </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>foobar</code> </p></td>
+<td align="" colspan=""><p> Signal, Function, Class, Struct, etc </p></td>
+<td align="" colspan=""><p> The acceptable values </p></td>
+<td align="" colspan=""><p> The description goes here. </p></td>
+</tr>
+</table>
+<p>And in alphabetical order: </p>
+<table class="c-informaltable">
+<tr>
+<td align="" colspan=""><p> <strong>Name</strong> </p></td>
+<td align="" colspan=""><p> <strong>Applies To</strong> </p></td>
+<td align="" colspan=""><p> <strong>Values</strong> </p></td>
+<td align="" colspan=""><p> <strong>Description</strong> </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>abstract</code> </p></td>
+<td align="" colspan=""><p> Class, Function </p></td>
+<td align="" colspan=""><p> 0, 1</p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>accessor_method</code> </p></td>
+<td align="" colspan=""><p> Property </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>array_length_cname</code> </p></td>
+<td align="" colspan=""><p> Field </p></td>
+<td align="" colspan=""><p> C identifier </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>array_length_pos</code> </p></td>
+<td align="" colspan=""><p> Parameter (Function) </p></td>
+<td align="" colspan=""><p> Double (position between two Vala parameters) </p></td>
+<td align="" colspan=""><p> Sets the position of the length for the parameter, length needs to be hidden separately. </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>array_length_type</code> </p></td>
+<td align="" colspan=""><p> Parameter (Function), Function (returning an array), Field </p></td>
+<td align="" colspan=""><p> C type </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>array_null_terminated</code> </p></td>
+<td align="" colspan=""><p> Function (returning an array), Parameter (Function), Field </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>async</code> </p></td>
+<td align="" colspan=""><p> Function </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""><p> Force async function, even if it doesn't end in _async </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>base_class</code> </p></td>
+<td align="" colspan=""><p> Class </p></td>
+<td align="" colspan=""><p> C type </p></td>
+<td align="" colspan=""><p> Marks the base class for the type </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>base_type</code> </p></td>
+<td align="" colspan=""><p> Struct </p></td>
+<td align="" colspan=""><p> Vala type </p></td>
+<td align="" colspan=""><p> Marks the struct as inheriting </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>cheader_filename</code> </p></td>
+<td align="" colspan=""><p> Anything (except parameters) </p></td>
+<td align="" colspan=""><p> Header include path </p></td>
+<td align="" colspan=""><p> Compiler will adds the specified header when thing is used. </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>common_prefix</code> </p></td>
+<td align="" colspan=""><p> Enum </p></td>
+<td align="" colspan=""><p> String </p></td>
+<td align="" colspan=""><p> Removes a common prefix from enumeration values </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>const_cname</code> </p></td>
+<td align="" colspan=""><p> Class (non-GObject) </p></td>
+<td align="" colspan=""><p> C type </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>copy_function</code> </p></td>
+<td align="" colspan=""><p> Class (non-GObject) </p></td>
+<td align="" colspan=""><p> C function name </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>cprefix</code> </p></td>
+<td align="" colspan=""><p> Module </p></td>
+<td align="" colspan=""><p> String </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>ctype</code> </p></td>
+<td align="" colspan=""><p> Parameter (Function), Field </p></td>
+<td align="" colspan=""><p> C type </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>default_value</code> </p></td>
+<td align="" colspan=""><p> Parameter (Function) </p></td>
+<td align="" colspan=""><p> Any Vala value that would be valid for the type </p></td>
+<td align="" colspan=""><p> Sets the default value for a parameter. </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>delegate_target_pos</code> </p></td>
+<td align="" colspan=""><p> Parameter (Function) </p></td>
+<td align="" colspan=""><p> Double (position between two Vala parameters) </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>deprecated</code> </p></td>
+<td align="" colspan=""><p> Anything (except parameters) </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""><p> Marks the thing as deprecated </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>deprecated_since</code> </p></td>
+<td align="" colspan=""><p> Anything (except parameters) </p></td>
+<td align="" colspan=""><p> Version </p></td>
+<td align="" colspan=""><p> Marks the thing as deprecated </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>ellipsis</code> </p></td>
+<td align="" colspan=""><p> Function </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""><p> Marks that the function has a variable argument list </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>errordomain</code> </p></td>
+<td align="" colspan=""><p> Enum </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""><p> Marks the enumeration as a GError domain </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>finish_name</code> </p></td>
+<td align="" colspan=""><p> Function </p></td>
+<td align="" colspan=""><p> C function name </p></td>
+<td align="" colspan=""><p> Sets custom asynchronous finish function </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>free_function</code> </p></td>
+<td align="" colspan=""><p> Class (non-GObject) </p></td>
+<td align="" colspan=""><p> C function name </p></td>
+<td align="" colspan=""><p> Sets a free function for the struct </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>gir_namespace</code> </p></td>
+<td align="" colspan=""><p> Module </p></td>
+<td align="" colspan=""><p> String </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>gir_version</code> </p></td>
+<td align="" colspan=""><p> Module </p></td>
+<td align="" colspan=""><p> Version </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>has_copy_function</code> </p></td>
+<td align="" colspan=""><p> Struct </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""><p> marks the struct as having a copy function </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>has_destroy_function</code> </p></td>
+<td align="" colspan=""><p> Struct </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>has_emitter</code> </p></td>
+<td align="" colspan=""><p> Signal </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>has_target</code> </p></td>
+<td align="" colspan=""><p> Delegate </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>has_type_id</code> </p></td>
+<td align="" colspan=""><p> Class, Enum, Struct </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""><p> Marks whether a GType is registered for this thing </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>hidden</code> </p></td>
+<td align="" colspan=""><p> Anything </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""><p> Causes the selected thing to not be output in the vapi file. </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>immutable</code> </p></td>
+<td align="" colspan=""><p> Struct </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""><p> Marks the struct as immutable </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>instance_pos</code> </p></td>
+<td align="" colspan=""><p> Delegate </p></td>
+<td align="" colspan=""><p> Double (Position between two Vala parameters) </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>is_array</code> </p></td>
+<td align="" colspan=""><p> Function (returning an array), Parameter, Field </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""><p> Marks the thing as an array </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>is_fundamental</code> </p></td>
+<td align="" colspan=""><p> Class (non-GObject) </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>is_immutable</code> </p></td>
+<td align="" colspan=""><p> Class (non-GObject) </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>is_out</code> </p></td>
+<td align="" colspan=""><p> Parameter </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""><p>  Marks the parameter as "out" </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>is_ref</code> </p></td>
+<td align="" colspan=""><p> Parameter </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""><p> Marks the parameter as "ref" </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>is_value_type</code> </p></td>
+<td align="" colspan=""><p> Struct, Union </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""><p> Marks type as a value type (aka struct) </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>lower_case_cprefix</code> </p></td>
+<td align="" colspan=""><p> Module </p></td>
+<td align="" colspan=""><p> String </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>lower_case_csuffix</code> </p></td>
+<td align="" colspan=""><p> Interface </p></td>
+<td align="" colspan=""><p> String </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>name</code> </p></td>
+<td align="" colspan=""><p> Any Type, Function, Signal </p></td>
+<td align="" colspan=""><p> Vala identifier </p></td>
+<td align="" colspan=""><p> Changes the name of the thing, does not change namespace </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>namespace</code> </p></td>
+<td align="" colspan=""><p> Any Type </p></td>
+<td align="" colspan=""><p> String </p></td>
+<td align="" colspan=""><p> Changes the namespace of the thing </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>namespace_name</code> </p></td>
+<td align="" colspan=""><p> Signal Parameter </p></td>
+<td align="" colspan=""><p> String </p></td>
+<td align="" colspan=""><p> Specify the namespace of the parameter type indicated with type_name </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>no_array_length</code> </p></td>
+<td align="" colspan=""><p> Function (returning an array), Parameter (Function, Delegate) </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""><p> Does not implicitly pass/return array length to/from function </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>nullable</code> </p></td>
+<td align="" colspan=""><p> Function (having a return value), Parameter </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""><p> Marks the value as nullable </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>owned_get</code> </p></td>
+<td align="" colspan=""><p> Property </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>parent</code> </p></td>
+<td align="" colspan=""><p> Any module member </p></td>
+<td align="" colspan=""><p> String (Namespace) </p></td>
+<td align="" colspan=""><p> Strip namespace prefix from symbol and put it into given sub-namespace </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>printf_format</code> </p></td>
+<td align="" colspan=""><p> Function </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>rank</code> </p></td>
+<td align="" colspan=""><p> Struct </p></td>
+<td align="" colspan=""><p> Integer </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>ref_function</code> </p></td>
+<td align="" colspan=""><p> Class (non-GObject) </p></td>
+<td align="" colspan=""><p> C function name </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>ref_function_void</code> </p></td>
+<td align="" colspan=""><p> Class (non-GObject) </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>rename_to</code> </p></td>
+<td align="" colspan=""><p> Any Type </p></td>
+<td align="" colspan=""><p> Vala identifier </p></td>
+<td align="" colspan=""><p> Renames the type to something else, ie fooFloat to float (not exactly the same as <code>name</code>, AFAIK name changes both the vala name and the cname. rename_to adds the required code so that when the rename_to'ed type is used, the c type is used) </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>replacement</code> </p></td>
+<td align="" colspan=""><p> Anything (except parameters) </p></td>
+<td align="" colspan=""><p> The thing that replaces this </p></td>
+<td align="" colspan=""><p> Specifies a replacement for a deprecated symbol </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>sentinel</code> </p></td>
+<td align="" colspan=""><p> Function (with ellipsis) </p></td>
+<td align="" colspan=""><p> C value </p></td>
+<td align="" colspan=""><p> The sentinel value marking the end of the vararg list </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>simple_type</code> </p></td>
+<td align="" colspan=""><p> Struct </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""><p> Marks the struct as being a simple type, like int </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>takes_ownership</code> </p></td>
+<td align="" colspan=""><p> Parameter (Function, Delegate) </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>throws</code> </p></td>
+<td align="" colspan=""><p> Function </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""><p> Marks that the function should use an out parameter instead of throwing an error </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>to_string</code> </p></td>
+<td align="" colspan=""><p> Enum </p></td>
+<td align="" colspan=""><p> C function name </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>transfer_ownership</code> </p></td>
+<td align="" colspan=""><p> Function/Delegate/Signal (having a return value), Parameter (Function, Signal) </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""><p> Transfers ownership of the value </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>type_arguments</code> </p></td>
+<td align="" colspan=""><p> Function/Delegate/Signal (having a return value), Property, Field, Parameter </p></td>
+<td align="" colspan=""><p> Vala types, comma separated </p></td>
+<td align="" colspan=""><p> Restricts the generic type of the thing </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>type_check_function</code> </p></td>
+<td align="" colspan=""><p> Class (GObject) </p></td>
+<td align="" colspan=""><p> C function/macro name </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>type_id</code> </p></td>
+<td align="" colspan=""><p> Struct, Class (GObject) </p></td>
+<td align="" colspan=""><p> C macro </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>type_name</code> </p></td>
+<td align="" colspan=""><p> Function (having a return value), Property, Parameter, Field </p></td>
+<td align="" colspan=""><p> Vala type name </p></td>
+<td align="" colspan=""><p> Changes the type of the selected thing. Overwrites old type, so "type_name" must be before any other type modifying metadata </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>type_parameters</code> </p></td>
+<td align="" colspan=""><p> Delegate, Class (non-GObject) </p></td>
+<td align="" colspan=""><p> Vala generic type parameters, e.g. T, comma separated </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>unref_function</code> </p></td>
+<td align="" colspan=""><p> Class (non-GObject) </p></td>
+<td align="" colspan=""><p> C function name </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>value_owned</code> </p></td>
+<td align="" colspan=""><p> Parameter (Function) </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>vfunc_name</code> </p></td>
+<td align="" colspan=""><p> Function </p></td>
+<td align="" colspan=""><p> C function pointer name </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>virtual</code> </p></td>
+<td align="" colspan=""><p> Function </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> <code>weak</code> </p></td>
+<td align="" colspan=""><p> Field </p></td>
+<td align="" colspan=""><p> 0, 1 </p></td>
+<td align="" colspan=""><p> Marks the field as weak </p></td>
+</tr>
+</table>
+
+<h3 id="Examples">17.6 Examples</h3>
+<p>Demonstrating... </p>
+<pre>// ...</pre>
+</body>
+</html>

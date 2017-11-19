@@ -1,0 +1,319 @@
+have_func: checking for labs() in stdlib.h... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby  -lgmp -ldl -lm   -lc"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return 0;
+6: }
+/* end */
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby  -lgmp -ldl -lm   -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <stdlib.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+15: int t(void) { void ((*volatile p)()); p = (void ((*)()))labs; return !p; }
+/* end */
+
+--------------------
+
+have_func: checking for llabs() in stdlib.h... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby  -lgmp -ldl -lm   -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <stdlib.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+15: int t(void) { void ((*volatile p)()); p = (void ((*)()))llabs; return !p; }
+/* end */
+
+--------------------
+
+have_func: checking for finite() in math.h... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby  -lgmp -ldl -lm   -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <math.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+15: int t(void) { void ((*volatile p)()); p = (void ((*)()))finite; return !p; }
+/* end */
+
+--------------------
+
+have_func: checking for isfinite() in math.h... -------------------- no
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby  -lgmp -ldl -lm   -lc"
+conftest.c:15:57: error: use of undeclared identifier 'isfinite'
+int t(void) { void ((*volatile p)()); p = (void ((*)()))isfinite; return !p; }
+                                                        ^
+1 error generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <math.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+15: int t(void) { void ((*volatile p)()); p = (void ((*)()))isfinite; return !p; }
+/* end */
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby  -lgmp -ldl -lm   -lc"
+conftest.c:15:13: error: conflicting types for '__builtin_isfinite'
+extern void isfinite();
+            ^
+/data/data/com.termux/files/usr/include/math.h:58:21: note: expanded from macro 'isfinite'
+#define isfinite(x) __builtin_isfinite(x)
+                    ^
+conftest.c:15:13: note: '__builtin_isfinite' is a builtin with type 'int ()'
+/data/data/com.termux/files/usr/include/math.h:58:21: note: expanded from macro 'isfinite'
+#define isfinite(x) __builtin_isfinite(x)
+                    ^
+conftest.c:16:15: error: too few arguments to function call, expected 1, have 0
+int t(void) { isfinite(); return 0; }
+              ^
+/data/data/com.termux/files/usr/include/math.h:58:41: note: expanded from macro 'isfinite'
+#define isfinite(x) __builtin_isfinite(x)
+                                        ^
+2 errors generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <math.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+15: extern void isfinite();
+16: int t(void) { isfinite(); return 0; }
+/* end */
+
+--------------------
+
+have_type: checking for struct RRational in ruby.h... -------------------- no
+
+"aarch64-linux-android-clang -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC   -c conftest.c"
+conftest.c:7:17: error: invalid application of 'sizeof' to an incomplete type 'conftest_type' (aka 'struct RRational')
+int conftestval[sizeof(conftest_type)?1:-1];
+                ^     ~~~~~~~~~~~~~~~
+conftest.c:6:16: note: forward declaration of 'struct RRational'
+typedef struct RRational conftest_type;
+               ^
+1 error generated.
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <ruby.h>
+4: 
+5: /*top*/
+6: typedef struct RRational conftest_type;
+7: int conftestval[sizeof(conftest_type)?1:-1];
+/* end */
+
+--------------------
+
+have_func: checking for rb_rational_num() in ruby.h... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby  -lgmp -ldl -lm   -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <ruby.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+15: int t(void) { void ((*volatile p)()); p = (void ((*)()))rb_rational_num; return !p; }
+/* end */
+
+--------------------
+
+have_func: checking for rb_rational_den() in ruby.h... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby  -lgmp -ldl -lm   -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <ruby.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+15: int t(void) { void ((*volatile p)()); p = (void ((*)()))rb_rational_den; return !p; }
+/* end */
+
+--------------------
+
+have_func: checking for rb_array_const_ptr() in ruby.h... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby  -lgmp -ldl -lm   -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <ruby.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+15: int t(void) { void ((*volatile p)()); p = (void ((*)()))rb_array_const_ptr; return !p; }
+/* end */
+
+--------------------
+
+have_func: checking for rb_sym2str() in ruby.h... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby  -lgmp -ldl -lm   -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <ruby.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+15: int t(void) { void ((*volatile p)()); p = (void ((*)()))rb_sym2str; return !p; }
+/* end */
+
+--------------------
+
+have_macro: checking for FIX_CONST_VALUE_PTR in ruby.h... -------------------- yes
+
+"aarch64-linux-android-clang -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC   -c conftest.c"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <ruby.h>
+4: /*top*/
+5: #ifndef FIX_CONST_VALUE_PTR
+6: # error
+7: |:/ === FIX_CONST_VALUE_PTR undefined === /:|
+8: #endif
+/* end */
+
+--------------------
+
+have_macro: checking for RARRAY_CONST_PTR in ruby.h... -------------------- yes
+
+"aarch64-linux-android-clang -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC   -c conftest.c"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <ruby.h>
+4: /*top*/
+5: #ifndef RARRAY_CONST_PTR
+6: # error
+7: |:/ === RARRAY_CONST_PTR undefined === /:|
+8: #endif
+/* end */
+
+--------------------
+
+have_macro: checking for RARRAY_AREF in ruby.h... -------------------- yes
+
+"aarch64-linux-android-clang -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC   -c conftest.c"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <ruby.h>
+4: /*top*/
+5: #ifndef RARRAY_AREF
+6: # error
+7: |:/ === RARRAY_AREF undefined === /:|
+8: #endif
+/* end */
+
+--------------------
+

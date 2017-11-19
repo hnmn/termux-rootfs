@@ -1,0 +1,163 @@
+#!/data/data/com.termux/files/usr/bin/sh
+##
+##  Mimic a normal Linux file system
+##
+
+usage()
+{
+    echo
+    echo " Usage: termux-chroot [-h|--help] [--root-id] [COMMAND]"
+    echo
+    echo " Turn Termux prefix into a normal Linux file system."
+    echo
+}
+
+## Disable LD_PRELOAD in prooted environment
+unset LD_PRELOAD
+
+## Set right temporary directory for proot
+export PROOT_TMP_DIR="${TMPDIR}"
+
+if [[ $(getenforce | tr '[[:upper:]]' '[[:lower:]]') = "enforcing" ]]; then
+    export PROOT_NO_SECCOMP=1
+    export USE_LINK2SYMLINK=1
+fi
+
+## Enable root UID if needed
+ENABLE_ROOT_ID=false
+if grep -qP '^-.*$' <<< "${1}"; then
+    if [ "${1}" = "--root-id" ]; then
+        if grep -qP '^-.*$' <<< "${2}"; then
+            echo "[!] Command name cannot begin with '-'."
+            exit 1
+        fi
+
+        ENABLE_ROOT_ID=true
+        shift 1
+    elif [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
+        usage
+        exit 0
+    else
+        echo "[!] Unknown option '${1}'."
+        usage
+        exit 1
+    fi
+fi
+
+## Set shell to spawn
+SHELL="${PREFIX}/libexec/default_shell"
+
+## Set command to execute (by default this is a login shell)
+if [[ -z "${@}" ]]; then
+    set -- "${SHELL}" '-l'
+fi
+
+## Execute command without proot when proot already running
+if [ -e "/.termux-chroot" ]; then
+    exec "${@}"
+fi
+
+ROOTFS=$(mktemp -d --tmpdir="${TMPDIR}" "termux-chroot-XXXXXXXXXXXX")
+
+## Path to new root filesystem directory
+set -- '-r' "${ROOTFS}" "${@}"
+
+## Enable root UID if requested
+if ${ENABLE_ROOT_ID}; then
+    set -- '--root-id' "${@}"
+fi
+
+## Populate new root filesystem
+set -- '-b' "${PREFIX}/..:${PREFIX}/.." "${@}"
+set -- '-b' "${PREFIX}/bin:/bin" "${@}"
+set -- '-b' "${PREFIX}/bin:/sbin" "${@}"
+set -- '-b' "${PREFIX}/etc:/etc" "${@}"
+set -- '-b' "${PREFIX}/../home:/home" "${@}"
+set -- '-b' "${PREFIX}/lib:/lib" "${@}"
+set -- '-b' "${PREFIX}/libexec:/libexec" "${@}"
+set -- '-b' "${PREFIX}/opt:/opt" "${@}"
+[ -d "${PREFIX}/../root" ] && set -- '-b' "${PREFIX}/../root:/root" "${@}"
+set -- '-b' "${TMPDIR}:/tmp" "${@}"
+set -- '-b' "${PREFIX}:/usr" "${@}"
+set -- '-b' "${PREFIX}/var:/var" "${@}"
+
+## Add bindings to devfs content
+[ -r "/dev/block" ] && set -- '-b' "/dev/block:/dev/block" "${@}"
+[ -r "/dev/full" ] && set -- '-b' "/dev/full:/dev/full" "${@}"
+[ -r "/dev/log" ] && set -- '-b' "/dev/log:/dev/log" "${@}"
+[ -r "/dev/mapper" ] && set -- '-b' "/dev/mapper:/dev/mapper" "${@}"
+[ -r "/dev/memcg" ] && set -- '-b' "/dev/memcg:/dev/memcg" "${@}"
+set -- '-b' "/dev/ashmem:/dev/ashmem" "${@}"
+set -- '-b' "/dev/binder:/dev/binder" "${@}"
+set -- '-b' "/dev/cpuctl:/dev/cpuctl" "${@}"
+set -- '-b' "/dev/null:/dev/null" "${@}"
+set -- '-b' "/dev/__properties__:/dev/__properties__" "${@}"
+set -- '-b' "/dev/ptmx:/dev/ptmx" "${@}"
+set -- '-b' "/dev/pts:/dev/pts" "${@}"
+set -- '-b' "/dev/random:/dev/random" "${@}"
+set -- '-b' "/dev/socket:/dev/socket" "${@}"
+set -- '-b' "/dev/tty:/dev/tty" "${@}"
+set -- '-b' "/dev/urandom:/dev/urandom" "${@}"
+set -- '-b' "/dev/xt_qtaguid:/dev/xt_qtaguid" "${@}"
+set -- '-b' "/dev/zero:/dev/zero" "${@}"
+set -- '-b' "/proc/self/fd:/dev/fd" "${@}"
+set -- '-b' "/proc/self/fd/0:/dev/stdin" "${@}"
+set -- '-b' "/proc/self/fd/1:/dev/stdout" "${@}"
+set -- '-b' "/proc/self/fd/2:/dev/stderr" "${@}"
+
+## Bind procfs
+set -- '-b' "/proc:/proc" "${@}"
+
+## Bind sysfs
+set -- '-b' "/sys:/sys" "${@}"
+
+## Bind Android-specific file systems
+set -- '-b' "/storage:/storage" "${@}"
+set -- '-b' "/mnt:/mnt" "${@}"
+set -- '-b' "/system:/system" "${@}"
+set -- '-b' "/system/vendor:/vendor" "${@}"
+
+## Add bindings to superuser binary
+if [ -x "/su/bin/su" ]; then
+    set -- '-b' "/su/bin/su:/bin/su" "${@}"
+    set -- '-b' "/su/bin/su:${PREFIX}/bin/su" "${@}"
+elif [ -x "/system/bin/su" ]; then
+    set -- '-b' "/system/bin/su:/bin/su" "${@}"
+    set -- '-b' "/system/bin/su:${PREFIX}/bin/su" "${@}"
+elif [ -x "/system/xbin/su" ]; then
+    set -- '-b' "/system/xbin/su:/bin/su" "${@}"
+    set -- '-b' "/system/xbin/su:${PREFIX}/bin/su" "${@}"
+fi
+
+## Use link2symlink on SELinux-enabled devices
+[ ! -z "${USE_LINK2SYMLINK}" ] && set -- '--link2symlink' "${@}"
+
+## Create lock file to avoid running nested proot
+if ! touch "${ROOTFS}/.termux-chroot" > /dev/null 2>&1; then
+    echo "[!] Failed to create lock file"
+fi
+
+touch "${ROOTFS}/DONT_PUT_FILES_IN_ROOT_DIR"
+
+## Remove lock file on exit
+on_exit()
+{
+    rm -f "${ROOTFS}/.termux-chroot" > /dev/null 2>&1
+    rm -f "${ROOTFS}/DONT_PUT_FILES_IN_ROOT_DIR" > /dev/null 2>&1
+}
+trap on_exit SIGHUP SIGINT SIGQUIT SIGTERM
+
+export PROOTED_SHELL=true
+proot --kill-on-exit "${@}"
+on_exit
+
+if [[ $(find "${ROOTFS}" -type f | wc -l) != 0 ]]; then
+    echo "[!] Possible that you created some files in emulated"
+    echo "    root directory. Please, put these files somewhere"
+    echo "    if you really need them."
+    echo
+    echo "    Directory: \${PREFIX}${ROOTFS##${PREFIX}}."
+else
+    ## Remove temporary dir that we created for rootfs
+    rm -rf "${ROOTFS}" > /dev/null 2>&1
+fi

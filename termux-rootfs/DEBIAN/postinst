@@ -1,0 +1,56 @@
+#!/data/data/com.termux/files/usr/bin/sh
+##
+##  Additional steps that should be done after installation/upgrade
+##  (actually this script is not executed on first installation because
+##  of changed environment and previuos binaries are removed)
+##
+
+PREFIX="/data/data/com.termux/files/usr"
+TMPDIR="/data/data/com.termux/cache"
+
+# Normally this should be done when Termux session is created (when Termux-RootFS
+# is already installed) but we need make sure that this directory is exist after
+# upgrade.
+if [ ! -e "${TMPDIR}" ]; then
+    mkdir -m 700 "${TMPDIR}" > /dev/null 2>&1
+else
+    if [ ! -d "${TMPDIR}" ]; then
+        rm -rf "${TMPDIR}" > /dev/null 2>&1
+        mkdir -m 700 "${TMPDIR}" > /dev/null 2>&1
+    fi
+fi
+
+# double check if TMPDIR is exist, if not, then create tmp directory
+# in $PREFIX, otherwise make a symlink from cache dir to $PREFIX/tmp
+if [ -e "${TMPDIR}" ]; then
+    if [ -d "${PREFIX}/tmp" ]; then
+        rm -rf "${PREFIX}/tmp" > /dev/null 2>&1
+    fi
+
+    if [ ! -e "${PREFIX}/tmp" ]; then
+        ln -sr "${TMPDIR}" "${PREFIX}/tmp" > /dev/null 2>&1
+    fi
+else
+    # fallback to regular tmp directory if cache directory
+    # cannot be created
+    if [ -L "${PREFIX}/tmp" ]; then
+        rm -f "${PREFIX}/tmp" > /dev/null 2>&1
+        mkdir -m 700 "${PREFIX}/tmp" > /dev/null 2>&1
+    fi
+fi
+
+# show message after installation is completed
+if [ ! -e "/data/data/com.termux/files/usr/var/lib/termux-rootfs/termux-rootfs_configured" ]; then
+    echo
+    echo "You need to restart Termux application and"
+    echo "run command 'termux-setup-rootfs'."
+    echo
+else
+    makewhatis > /dev/null 2>&1
+    echo
+    echo "You need to restart Termux application."
+    echo
+fi
+
+# try to exit with status 0 as there is no critical steps
+exit 0

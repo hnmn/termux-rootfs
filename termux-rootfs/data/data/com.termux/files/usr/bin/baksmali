@@ -1,0 +1,7 @@
+#!/data/data/com.termux/files/usr/bin/sh
+##
+##  Wrapper for Baksmali
+##
+
+HEAPSIZE="512M"
+exec java -Xmx${HEAPSIZE} -jar "${PREFIX}/share/java/exe/baksmali-2.2b4.jar" "${@}"

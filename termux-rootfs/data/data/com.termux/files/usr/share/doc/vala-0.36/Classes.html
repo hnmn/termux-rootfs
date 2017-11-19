@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8" />
+<title>Classes - Vala Reference Manual</title>
+<link rel="stylesheet" type="text/css" href="default.css"><meta name="viewport" content="initial-scale=1">
+</head>
+<body>
+<div class="o-fixedtop c-navbar"><div class="o-navbar">
+<span class="c-pageturner u-float-left"><a href="index.html">Contents</a></span><span>Vala Reference Manual</span><div class="u-float-right">
+<span class="c-pageturner o-inlinewidth-4"><a href="Errors.html">Prev</a></span><span class="c-pageturner o-inlinewidth-4"><a href="Interfaces.html">Next</a></span>
+</div>
+</div></div>
+<h2>10. Classes</h2>
+<ul class="page_toc">
+<li><a href="Classes.html#Types_of_class">10.1 Types of class</a></li>
+<li><a href="Classes.html#Types_of_class_members">10.2 Types of class members</a></li>
+<li><a href="Classes.html#Class_scope">10.3 Class scope</a></li>
+<li><a href="Classes.html#Class_member_visibility">10.4 Class member visibility</a></li>
+<li><a href="Classes.html#Class_declaration">10.5 Class declaration</a></li>
+<li><a href="Classes.html#Controlling_instantiation">10.6 Controlling instantiation</a></li>
+<li><a href="Classes.html#Construction">10.7 Construction</a></li>
+<li><a href="Classes.html#Class_fields">10.8 Class fields</a></li>
+<li><a href="Classes.html#Class_constants">10.9 Class constants</a></li>
+<li><a href="Classes.html#Class_methods">10.10 Class methods</a></li>
+<li><a href="Classes.html#Properties">10.11 Properties</a></li>
+<li><a href="Classes.html#Signals">10.12 Signals</a></li>
+<li><a href="Classes.html#Class_enums">10.13 Class enums</a></li>
+<li><a href="Classes.html#Class_delegates">10.14 Class delegates</a></li>
+<li><a href="Classes.html#Examples">10.15 Examples</a></li>
+</ul>
+<p>A class is definition of a data type.  A class can contain fields, constants, methods, properties, and signals. Class types support inheritance, a mechanism whereby a derived class can extend and specialize a base class. </p>
+<p>The simplest class declaration looks like this: </p>
+<pre class="o-box c-program"><span class="c-program-token">class</span> <span class="c-program-methodname">ClassName</span> {
+}
+</pre>
+<p>As class types support inheritance, you can specify a base class you want to derive from.  A derived class is-a superclass.  It gets access to some of its methods etc.  It can always be used in place of a and so on.... </p>
+<p>No classes can have multiple base classes, however GObject subclasses may implement multiple interfaces.  By implementing an interface, a classed type has an is-a relationship with an interface.  Whenever an instance of that interface is expected, an instance of this class will do. </p>
+
+<h3 id="Types_of_class">10.1 Types of class</h3>
+<p>Vala supports three different types of class: </p>
+<ul>
+<li><p>GObject subclasses are any classes derived directly or indirectly from GLib.Object.  This is the most powerful type of class, supporting all features described in this page.  This means signals, managed properties, interfaces and complex construction methods, plus all features of the simpler class types. </p></li>
+<li><p>Fundamental GType classes are those either without any superclass or that don't inherit at any level from GLib.Object.  These classes support inheritence, interfaces, virtual methods, reference counting, unmanaged properties, and private fields.  They are instantiated faster than GObject subclasses but are less powerful - it isn't recommended in general to use this form of class unless there is a specific reason to. </p></li>
+<li><p>Compact classes, so called because they use less memory per instance, are the least featured of all class types.  They are not registered with the GType system and do not support reference counting, virtual methods, or private fields.  They do support unmanaged properties.  Such classes are very fast to instantiate but not massively useful except when dealing with existing libraries.  They are declared using the Compact attribute on the class, See  </p></li>
+</ul>
+<p>Any non-compact class can also be defined as abstract.  An abstract class cannot be instantiated and is used as a base class for derived classes. </p>
+
+<h3 id="Types_of_class_members">10.2 Types of class members</h3>
+<p>There are three fundamentally different types of class members, instance, class and static. </p>
+<ul>
+<li><p>Instance members are held per instance of the class.  That is, each instance has its own copies of the members in its own instance scope.  Changes to instance fields will only apply to that instance, calling instance methods will cause them to be executed in the scope of that instance. </p></li>
+<li><p>Class members are shared between all instances of a class.  They can be accessed without an instance of the class, and class methods will execute in the scope of the class. </p></li>
+<li><p>Static members are shared between all instances of a class and any sub-classes of it.  They can be accessed without an instance of the class, and static methods will execute in the scope of the class. </p></li>
+</ul>
+<p>The distinction between class and static members is not common to other object models.  The essential difference is that a sub-class will recieve a copy of all its base classes' class members.  This is opposed to static members, of which there is only one copy - sub classes access can their base classes' static members because they are automatically imported into the class' scope. </p>
+
+<h3 id="Class_scope">10.3 Class scope</h3>
+<p>Class scope is more complicated than other scopes, but conceptually the same.  A class has a scope, which consists of its static and class members, as describe above.  When an instance of the class is created, it is given its own scope, consisting of the defined instance members, with the class' scope as its parent scope. </p>
+<p>Within the code of a class, the instance and class scopes are automatically searched as appropriate after the local scope, so no qualification is normally required.  When there is a conflict with a name in the local scope, the <code>this</code> scope can be used, for example: </p>
+<pre class="o-box c-program"><span class="c-program-token">class</span> <span class="c-program-methodname">ClassName</span> {
+        <span class="c-program-token">int</span> <span class="c-program-methodname">field_name</span>;
+        <span class="c-program-token">void</span> <span class="c-program-methodname">function_name</span>(<span class="c-program-methodname">field_name</span>) {
+                <span class="c-program-token">this</span>.<span class="c-program-methodname">field_name</span> = <span class="c-program-methodname">field_name</span>;
+        }
+}
+</pre>
+<p>When a name is defined in a class which conflicts with one in a subclass, the <code>base</code> scope can be used, to refer to the scope of the subclass. </p>
+
+<h3 id="Class_member_visibility">10.4 Class member visibility</h3>
+<p>All class members have a visibility.  Visibility is declared using the following mutually exclusive modifiers: </p>
+<blockquote class="o-box c-rules">class-member-visibility-modifier:
+	<span class="literal">private</span>
+	<span class="literal">protected</span>
+	<span class="literal">internal</span>
+	<span class="literal">public</span>
+
+</blockquote>
+<p>This defines whether the member is visible to code in different locations: </p>
+<ul>
+<li><p>"private" asserts that the member will only be visible to code that is within this class declaration </p></li>
+<li><p>"protected" asserts that the member will be visible to any code within this class, and also to any code that is in a subclass of this class </p></li>
+<li><p>"internal" asserts that the member should be visible to any code in the project, but excludes the member from the public API of a shared object </p></li>
+<li><p>"public" asserts that the member should be visible to any code, including the public API of a shared object </p></li>
+</ul>
+
+<h3 id="Class_declaration">10.5 Class declaration</h3>
+<blockquote class="o-box c-rules">class-declaration:
+	[ access-modifier ] <span class="literal">class</span> qualified-class-name [ inheritance-list ] <span class="literal">{</span> [ class-members ] <span class="literal">}</span>
+
+qualified-class-name:
+	[ qualified-namespace-name <span class="literal">.</span> ] class-name
+
+class-name:
+	identifier
+
+inheritance-list:
+	<span class="literal">:</span> superclasses-and-interfaces
+
+superclasses-and-interfaces:
+	( qualified-class-name | qualified-interface-name ) [ <span class="literal">,</span> superclasses-and-interfaces ]
+
+class-members:
+	class-member [ class-members ]
+
+class-member:
+	class-creation-method-declaration
+	class-constructor-declaration
+	class-destructor-declaration
+	class-constant-declaration
+	class-delegate-declaration
+	class-enum-declaration
+	class-instance-member
+	class-class-member
+	class-static-member
+	inner-class-declaration
+
+class-constructor-declaration:
+	class-instance-constructor-declaration
+	class-class-constructor-declaration
+	class-static-constructor-declaration
+
+class-instance-member:
+	class-instance-field-declaration
+	class-instance-method-declaration
+	class-instance-property-declaration
+	class-instance-signal-declaration
+
+class-class-member:
+	class-class-field-declaration
+	class-class-method-declaration
+	class-class-property-declaration
+
+class-static-member:
+	class-static-field-declaration
+	class-static-method-declaration
+	class-static-property-declaration
+
+inner-class-declaration:
+	[ access-modifier ] <span class="literal">class</span> class-name [ inheritance-list ] <span class="literal">{</span> [ class-members ] <span class="literal">}</span>
+
+</blockquote>
+<p>In Vala, a class must have either one or zero superclasses, where have zero superclasses has the result described in  section.  A class must meet all the prerequisites defined by the interfaces it wishes to implement, by implementing prerequisite interfaces or inheriting from a particular class.  This latter requirement means it is potentially possible to have two interfaces that cannot be implemented by a single class. </p>
+<p>When declaring which class, if any, a new class subclasses, and which interfaces it implements, the names of those other classes or interfaces can be qualified relative to the class being declared.  This means that, for example, if the class is declared as "class foo.Bar" (class "Bar" in namespace "foo") then it may subclass class "Base" in namespace "foo" simply with "class foo.Bar : Base". </p>
+<p>If an access modifier for the class is not given, the default "internal" is used. </p>
+<p>It is possible to declare a class definition to be "abstract."  An abstract class is one they may not be instantiated, instead it first be subclassed by a non-abstract ("concrete") class.  An abstract class declaration may include abstract class instance members.  These act as templates for methods or properties that must be implemented in all concrete subclasses of the abstract class.  It is thus guaranteed that any instance of the abstract class (which must be in fact an instance of a concrete subclass) will have a method or property as described in the abstract class definition. </p>
+<blockquote class="o-box c-rules">abstract-class-declaration:
+	[ access-modifier ] <span class="literal">abstract</span><span class="literal">class</span> qualified-class-name [ inheritance-list ] <span class="literal">{</span> [ abstract-class-members ] <span class="literal">}</span>
+
+abstract-class-members:
+	class-members
+	class-instance-abstract-method-declaration
+	class-instance-abstract-property-declaration
+
+</blockquote>
+
+<h3 id="Controlling_instantiation">10.6 Controlling instantiation</h3>
+<p>When a class is instantiated, data might be required from the user to set initial properties.  To define which properties should be or can be set at this stage, the class declaration should be written as: </p>
+<pre class="o-box c-program"><span class="c-program-token">class</span> <span class="c-program-methodname">ClassName</span> : <span class="c-program-methodname">GLib</span>.<span class="c-program-methodname">Object</span> {
+
+        <span class="c-program-token">public</span> <span class="c-program-methodname">ClassName</span>() {
+        }
+
+        <span class="c-program-token">public</span> <span class="c-program-methodname">ClassName</span>.<span class="c-program-methodname">with_some_quality</span> (<span class="c-program-methodname">Property1Type</span> <span class="c-program-methodname">property1value</span>) {
+                <span class="c-program-token">this</span>.<span class="c-program-methodname">property1</span> = <span class="c-program-methodname">property1value</span>;
+        }
+}
+</pre>
+<p>This example allows the <a href="http://wiki.gnome.org/Projects/Vala/Manual/Export/ClassName#">ClassName</a> class to be instantiated either setting no properties, or setting the  property.  The convention is to name constructors as "with_" and then a description of what the extra properties will be used for, though following this is optional. </p>
+<blockquote class="o-box c-rules">class-creation-method-declaration:
+	[ class-member-visibility-modifier ] class-name [ <span class="literal">.</span> creation-method-name ] <span class="literal">(</span> param-list <span class="literal">)</span><span class="literal">{</span> construction-assignments <span class="literal">}</span>
+
+class-name:
+	identifier
+
+creation-method-name:
+	identifier
+
+construction-assignments:
+	this <span class="literal">.</span> property-name <span class="literal">=</span> param-name <span class="literal">;</span>
+
+</blockquote>
+<p>class-name must be the same as the name of the class.  If a creation method is given an extra name, this name is also used with instantiating the class, using the same syntax as for declaring the method, e.g. <code>var a = new Button.with_label ("text")</code>. </p>
+<p>If the property being set is construct type then assignment is made before construction, else afterwards. </p>
+<p>Any number of these are allowed, but only one with each name (including null name.) </p>
+
+<h3 id="Construction">10.7 Construction</h3>
+<p>During instantiaion, after construction properties have been set, a series of blocks of code are executed.  This is the process that prepares the instance for use.  There are three types of <code>construct</code> blocks that a class may define: </p>
+<blockquote class="o-box c-rules">class-instance-constructor-declaration:
+	<span class="literal">construct</span><span class="literal">{</span> statement-list <span class="literal">}</span>
+
+</blockquote>
+<p>Code in this block is executed on every instance of the class that is instantiated.  It is run after construction properties have been set. </p>
+<blockquote class="o-box c-rules">class-class-constructor-declaration:
+	<span class="literal">class</span><span class="literal">construct</span><span class="literal">{</span> statement-list <span class="literal">}</span>
+
+</blockquote>
+<p>This block will be executed once at the first use of its class, and once at the first use of each subclass of this class. </p>
+<blockquote class="o-box c-rules">class-static-constructor-declaration:
+	<span class="literal">static</span><span class="literal">construct</span><span class="literal">{</span> statement-list <span class="literal">}</span>
+
+</blockquote>
+<p>The first time that a class, or any subclass of it, is instantiated, this code is run.  It is guaranteed that this code will run exactly once in a program where such a class is used. </p>
+<p>The order of execution for constructors: </p>
+<blockquote class="o-box c-rules">class-instance-destructor-declaration:
+	<span class="literal">~</span> class-name <span class="literal">(</span><span class="literal">)</span><span class="literal">{</span> statement-list <span class="literal">}</span>
+
+</blockquote>
+<p>Destruction here.  When does it happen?  And when for each type of class? </p>
+
+<h3 id="Class_fields">10.8 Class fields</h3>
+<p>Fields act as variable with a scope of either the class or a particular instance, and therefore have names and types in the same way.  Basic declarations are as: </p>
+<blockquote class="o-box c-rules">class-instance-field-declaration:
+	[ class-member-visibility-modifier ] qualified-type-name field-name [ <span class="literal">=</span> expression ] ;
+
+class-class-field-declaration:
+	[ class-member-visibility-modifier ] <span class="literal">class</span> qualified-type-name field-name [ <span class="literal">=</span> expression ] ;
+
+class-static-field-declaration:
+	[ class-member-visibility-modifier ] <span class="literal">static</span> qualified-type-name field-name [ <span class="literal">=</span> expression ] ;
+
+</blockquote>
+<p>Initial values are optional. FIXME: how much calculation can be done here?  what are the defaults? </p>
+
+<h3 id="Class_constants">10.9 Class constants</h3>
+<p>Constants defined in a class are basically the same as those defined in a namespace.  The only difference is the scope and the choice of visibilities available. </p>
+<blockquote class="o-box c-rules">class-constant-declaration:
+	[ class-member-visibility-modifier ] <span class="literal">const</span> qualified-type-name constant-name <span class="literal">=</span> expression ;
+
+</blockquote>
+
+<h3 id="Class_methods">10.10 Class methods</h3>
+<p>Class methods are methods bound to a particularly class or class instance, i.e. they are executed within the scope of that class or class instance.  They are declared the same way as other methods, but within the declaration of a class. </p>
+<p>The same visibility modifiers can be used as for fields, although in this case they refer to what code can call the methods, rather than who can see or change values. </p>
+<p>The <code>static</code> modifier is applicable to methods also.  A static method is independent of any instance of the class.  It is therefore only in the class scope, and may only access other <code>static</code> members. </p>
+<blockquote class="o-box c-rules">class-instance-method-declaration:
+	[ class-member-visibility-modifier ] [ class-method-type-modifier ] return-type method-name <span class="literal">(</span> [ params-list ] <span class="literal">)</span> method-contracts [ <span class="literal">throws</span> exception-list ] <span class="literal">{</span> statement-list <span class="literal">}</span>
+
+class-class-method-declaration:
+	[ class-member-visibility-modifier ] <span class="literal">class</span> return-type method-name <span class="literal">(</span> [ params-list ] <span class="literal">)</span> method-contracts [ <span class="literal">throws</span> exception-list ] <span class="literal">{</span> statement-list <span class="literal">}</span>
+
+class-static-method-declaration:
+	[ class-member-visibility-modifier ] <span class="literal">static</span> return-type method-name <span class="literal">(</span> [ params-list ] <span class="literal">)</span> method-contracts [ <span class="literal">throws</span> exception-list ] <span class="literal">{</span> statement-list <span class="literal">}</span>
+
+class-method-type-modifier:
+	<span class="literal">virtual</span>
+	<span class="literal">override</span>
+
+</blockquote>
+<p>Methods can be virtual, as described in <a href="Concepts.html#Object_oriented_programming">Concepts/Object oriented programming</a>.  Methods in Vala classes are not virtual automatically, instead the "virtual" modifier must be used when it is needed.  Virtual methods will only chain up if overridden using the override keyword. </p>
+<p>Vala classes may also define abstract methods, by writing the declaration with the "abstract" modifier and replacing the method body with an empty statement ";".  Abstract methods are not true methods, as they do not have an associated statement block, and so cannot be invoked.  Abstract methods can only exist in abstract classes, and must be overridden in derived classes.  For this reason an abstract method is always virtual.  The purpose of an abstract method is to define methods that all non-abstract subclasses of the current definition must implement, it is therefore always allowable to invoke the method on an instance of the abstract class, because it is required that that instance must in fact be of a non-abstract subclass. </p>
+<blockquote class="o-box c-rules">class-instance-abstract-method-declaration:
+	[ class-member-visibility-modifier ] <span class="literal">abstract</span> return-type method-name <span class="literal">(</span> [ params-list ] <span class="literal">)</span> method-contracts [ <span class="literal">throws</span> exception-list ] <span class="literal">;</span>
+
+</blockquote>
+
+<h3 id="Properties">10.11 Properties</h3>
+<p>Properties are an enhanced version of fields.  They allow custom code to be called whenever the property is retrieved or assigned to, but may be treated as fields by external Vala code.  Properties also function like methods to some extent, and so can be defined as virtual and overridden in subclasses.  Since they are also allowed in interfaces, they allow interfaces to declare data members that implementing classes must expose (see <a href="Interfaces.html#">Interfaces</a>.) </p>
+<h4>Declaration<a name="Declaration"> </a>
+</h4>
+<blockquote class="o-box c-rules">class-instance-property-declaration:
+	[ class-member-visibility-modifier ] [ class-method-type-modifier ] qualified-type-name property-name <span class="literal">{</span> accessors [ default-value ] <span class="literal">}</span><span class="literal">;</span>
+
+class-instance-abstract-property-declaration:
+	[ class-member-visibility-modifier ] <span class="literal">abstract</span> qualified-type-name property-name <span class="literal">{</span> automatic-accessors <span class="literal">}</span><span class="literal">;</span>
+
+class-class-property-declaration:
+	[ class-member-visibility-modifier ] <span class="literal">class</span> qualified-type-name property-name <span class="literal">{</span> accessors [ default-value ]  <span class="literal">}</span><span class="literal">;</span>
+
+class-static-property-declaration:
+	[ class-member-visibility-modifier ] <span class="literal">static</span> qualified-type-name property-name <span class="literal">{</span> accessors [ default-value ]  <span class="literal">}</span><span class="literal">;</span>
+
+property-name:
+	identifier
+
+accessors:
+	automatic-accessors
+	[ getter ] [ setter ] [ property-constructor ]
+
+automatic-accessors:
+	[ automatic-getter ] [ automatic-setter ] [ automatic-property-constructor ]
+
+automatic-getter:
+	[ class-member-visibility-modifier ] <span class="literal">get</span><span class="literal">;</span>
+
+automatic-setter:
+	[ class-member-visibility-modifier ] <span class="literal">set</span>  [ <span class="literal">construct</span> ] <span class="literal">;</span>
+
+automatic-property-constructor:
+	[ class-member-visibility-modifier ] <span class="literal">construct</span><span class="literal">;</span>
+
+get-accessor:
+	[ class-member-visibility-modifier ] <span class="literal">get</span><span class="literal">{</span> statement-list <span class="literal">}</span>
+
+set-accessor:
+	[ class-member-visibility-modifier ] <span class="literal">set</span> [ <span class="literal">construct</span> ] <span class="literal">{</span> statement-list <span class="literal">}</span>
+
+property-constructor:
+	[ class-member-visibility-modifier ] <span class="literal">construct</span><span class="literal">{</span> statement-list <span class="literal">}</span>
+
+default-value:
+	<span class="literal">default</span><span class="literal">=</span> expression <span class="literal">;</span>
+
+</blockquote>
+<h4>Execute Code on Setting/Getting Values<a name="Execute_Code_on_Setting/Getting_Values"> </a>
+</h4>
+<p>Properties can either be declared with code that will perform particular actions on get and set, or can simply declare which actions are allowed and allow Vala to implement simple get and set methods.  This second pattern (automatic property) will result in fields being added to the class to store values that the property will get and set.  If either get or set has custom code, then the other must either be also written in full, or omitted altogether. </p>
+<p>When a value is assigned to a property, the <strong>set</strong> block is invoked, with a parameter called <strong>value</strong> of the same type as the property.  When a value is requested from a property, the <strong>get</strong> block is invoked, and must return an instance of the same type of the property. </p>
+<h4>Construct / Set Construct Block<a name="Construct_/_Set_Construct_Block"> </a>
+</h4>
+<p>A property may have zero or one <strong>construct</strong> blocks.  This means either a <strong>set construct</strong> block or a separate <strong>construct</strong> block.  If this is the case that then the property becomes a construct property, meaning that if it is set in creation method, it will be set (using the construct block, as opposed to any simple <strong>set</strong> block, where there is a distinction) before class construct blocks are called. </p>
+<h4>Notify Changes Signals<a name="Notify_Changes_Signals"> </a>
+</h4>
+<p>Managed properties may be annotated with Notify, See <a href="Attributes.html#">Attributes</a>.  This will cause the class instance to emit a notify signal when the property has been assigned to. </p>
+<h4>Virtual Properties<a name="Virtual_Properties"> </a>
+</h4>
+<p>Instance properties can be defined virtual with the same semantics as for virtual methods.  If in an abstract class, an instance property can be defined as abstract.  This is done using the "abstract" keyword on a declaration that is otherwise the same as an automatic property.  It is then the responsibility of derived classes to implement the property by providing get or set blocks as appropriate.  An abstract property is automatically virtual. </p>
+<h4>Abstract Properties<a name="Abstract_Properties"> </a>
+</h4>
+<p>As with methods, it is possible to declare abstract properties.  These have much the same semantics as abstract methods, i.e. all non-abstract subclasses will have to implement properties with at least the accessors defined in the abstract property. Any <strong>set construct</strong> or construct accessor must be defined too in non-abstract classes and use <strong>override</strong>. </p>
+<blockquote class="o-box c-rules">class-instance-abstract-property-declaration:
+	[ class-member-visibility-modifier ] <span class="literal">abstract</span> qualified-type-name property-name <span class="literal">{</span> automatic-accessors <span class="literal">}</span><span class="literal">;</span>
+
+</blockquote>
+
+<h3 id="Signals">10.12 Signals</h3>
+<p>Signals are a system allowing a classed-type instance to emit events which can be recieved by arbitrary listeners.  Receiving these events is achieved by connecting the signal to a handler, for which Vala has a specific syntax.  Signals are integrated with the GLib <a href="http://wiki.gnome.org/Projects/Vala/Manual/Export/MainLoop#">MainLoop</a> system, which provides a system for queueing events (i.e. signal emissions,) when needed - though this capability is not needed non-threaded applications. </p>
+<blockquote class="o-box c-rules">class-instance-signal-declaration:
+	[ class-member-visibility-modifier ] [ class-method-type-modifier ] <span class="literal">signal</span> return-type signal-name <span class="literal">(</span> [ params-list ] <span class="literal">)</span><span class="literal">;</span>
+
+signal-name:
+	identifier
+
+</blockquote>
+<p>Signals may also provide an extra piece of information called a signal detail.  This is a single string, which can be used as an initial hint as to the purpose of the signal emission.  In Vala you can register that a signal handler should only be invoked when the signal detail matches a given string.  A typical use of signal details is in GObject's own "notify" signal, which says that a property of an object has changed - GObject uses the detail string to say which property has been changed. </p>
+<p>To assign a handler to a signal, (or register to receive this type of event from the instance), use the following form of expression: </p>
+<blockquote class="o-box c-rules">signal-connection-expression:
+	qualified-signal-name [ signal-detail ] <span class="literal">+=</span> signal-handler
+
+qualified-signal-name:
+	[ qualified-namespace-name <span class="literal">.</span> ] variable-identifier <span class="literal">.</span> signal-name
+
+signal-detail:
+	<span class="literal">[</span> expression <span class="literal">]</span>
+
+signal-handler:
+	expression
+	qualified-method-name
+	lambda-expression
+
+</blockquote>
+<p>This expression will request that the signal handler given be invoked whenever the signal is emitted.  In order for such a connection expression to be legal, the handler must have the correct signature.  The handler should be defined to accept as parameters the same types as the signal, but with an extra parameter before.  This parameter should have the type of the class in which the signal is declared.  When a signal is emitted all handlers are called with this parameter being the object by which the signal was emitted. </p>
+<p>The time that an arbtirary expression is acceptable in this expression is when that expression evaluates to an instance of a delegate type, i.e. to a method that is a legal handler for the signal.  For details on delegates, see <a href="Delegates.html#">Delegates</a>.  For details on lambda expressions see <a href="Methods.html#Lambdas">Methods/Lambdas</a>. </p>
+<p>Note that optional signal detail should be directly appended to the signal name, with no white space, e.g. <code>o.notify["name"] += ...</code> </p>
+<p>It is also possible to disconnect a signal handler using the following expression form: </p>
+<blockquote class="o-box c-rules">signal-disconnection-expression:
+	qualified-signal-name [ signal-detail ]  <span class="literal">-=</span> connected-signal-handler
+
+connected-signal-handler:
+	expression
+	qualified-method-name
+
+</blockquote>
+<p>Note that you cannot disconnect a signal handler which was defined inline as a lambda expression and then immediately connected to the signal.  If this is the effect you really need to achieve, you must assign the lambda expression to an identifier first, so that the lambda can be referred to again at a later time. </p>
+
+<h3 id="Class_enums">10.13 Class enums</h3>
+<p>Enums defined in a class are basically the same as those defined in a namespace.  The only difference is the scope and the choice of visibilities available.  See <a href="Enumerated_types__Enums_.html#">Enumerated types (Enums)</a>. </p>
+<blockquote class="o-box c-rules">class-enum-declaration:
+	[ class-member-visibility-modifier ] <span class="literal">enum</span> enum-name <span class="literal">{</span> [ enum-members ] <span class="literal">}</span>
+
+</blockquote>
+
+<h3 id="Class_delegates">10.14 Class delegates</h3>
+<p>Delegates defined in a class are basically the same as those defined in a namespace.  The only difference is the scope and the choice of visibilities available.  See <a href="Delegates.html#">Delegates</a>. </p>
+<blockquote class="o-box c-rules">class-delegate-declaration:
+	[ class-member-visibility-modifier ] return-type <span class="literal">delegate</span> delegate-name <span class="literal">(</span> method-params-list <span class="literal">)</span><span class="literal">;</span>
+
+</blockquote>
+
+<h3 id="Examples">10.15 Examples</h3>
+<p>Demonstrating... </p>
+<pre class="o-box c-program"><span class="c-program-comment">// ...</span>
+<span class="c-program-comment"></span>
+</pre>
+<h4>Using Properties<a name="Using_Properties"> </a>
+</h4>
+<p>For more examples see: <a href="https://live.gnome.org/Vala/PropertiesSample">Samples for Class Properties</a> </p>
+Virtual Properties<pre class="o-box c-program"><span class="c-program-token">namespace</span> <span class="c-program-methodname">Properties</span> {
+    <span class="c-program-token">class</span> <span class="c-program-methodname">Base</span> : <span class="c-program-methodname">Object</span> {
+        <span class="c-program-token">protected</span> <span class="c-program-token">int</span> <span class="c-program-methodname">_number</span>;
+        <span class="c-program-token">public</span> <span class="c-program-token">virtual</span> <span class="c-program-token">int</span> <span class="c-program-methodname">number</span> { 
+            <span class="c-program-token">get</span> { 
+                <span class="c-program-token">return</span> <span class="c-program-token">this</span>.<span class="c-program-methodname">_number</span>; 
+            } 
+            <span class="c-program-token">set</span> { 
+                <span class="c-program-token">this</span>.<span class="c-program-methodname">_number</span> = <span class="c-program-methodname">value</span>; 
+            }
+        }
+    }
+    
+    <span class="c-program-comment">/* </span>
+<span class="c-program-comment">     * This class just use Base class default handle </span>
+<span class="c-program-comment">     * of number property.</span>
+<span class="c-program-comment">     */</span>
+    <span class="c-program-token">class</span> <span class="c-program-methodname">Subclass</span> : <span class="c-program-methodname">Base</span> {
+        <span class="c-program-token">public</span> <span class="c-program-token">string</span> <span class="c-program-methodname">name</span> { <span class="c-program-token">get</span>; <span class="c-program-token">set</span>; }
+    }
+    
+    
+    <span class="c-program-comment">/**</span>
+<span class="c-program-comment">     * This class override how number is handle internally.</span>
+<span class="c-program-comment">     * </span>
+<span class="c-program-comment">     */</span>
+    <span class="c-program-token">class</span> <span class="c-program-methodname">ClassOverride</span> : <span class="c-program-methodname">Base</span> {
+        <span class="c-program-token">public</span> <span class="c-program-token">override</span> <span class="c-program-token">int</span> <span class="c-program-methodname">number</span> {
+            <span class="c-program-token">get</span> {
+                <span class="c-program-token">return</span> <span class="c-program-token">this</span>.<span class="c-program-methodname">_number</span>;
+            }
+            <span class="c-program-token">set</span> {
+                <span class="c-program-token">this</span>.<span class="c-program-methodname">_number</span> = <span class="c-program-methodname">value</span> * 3;
+            }
+        }
+        
+        <span class="c-program-token">public</span> <span class="c-program-token">static</span> <span class="c-program-token">int</span> <span class="c-program-methodname">main</span> (<span class="c-program-token">string</span>[] <span class="c-program-methodname">args</span>) {
+            <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">Implementing Virtual Properties...</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+            <span class="c-program-token">var</span> <span class="c-program-methodname">bc</span> = <span class="c-program-token">new</span> <span class="c-program-methodname">Base</span> ();
+            <span class="c-program-methodname">bc</span>.<span class="c-program-methodname">number</span> = 3;
+            <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">Class number = '</span><span class="c-program-phrase">"</span> + <span class="c-program-methodname">bc</span>.<span class="c-program-methodname">number</span>.<span class="c-program-methodname">to_string</span> () + <span class="c-program-phrase">"</span><span class="c-program-phrase">'</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+            <span class="c-program-token">var</span> <span class="c-program-methodname">sc</span> = <span class="c-program-token">new</span> <span class="c-program-methodname">Subclass</span> ();
+            <span class="c-program-methodname">sc</span>.<span class="c-program-methodname">number</span> = 3;
+            <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">Class number = '</span><span class="c-program-phrase">"</span> + <span class="c-program-methodname">sc</span>.<span class="c-program-methodname">number</span>.<span class="c-program-methodname">to_string</span> () + <span class="c-program-phrase">"</span><span class="c-program-phrase">'</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+            <span class="c-program-token">var</span> <span class="c-program-methodname">co</span> = <span class="c-program-token">new</span> <span class="c-program-methodname">ClassOverride</span> ();
+            <span class="c-program-methodname">co</span>.<span class="c-program-methodname">number</span> = 3;
+            <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">Class number = '</span><span class="c-program-phrase">"</span> + <span class="c-program-methodname">co</span>.<span class="c-program-methodname">number</span>.<span class="c-program-methodname">to_string</span> () + <span class="c-program-phrase">"</span><span class="c-program-phrase">'</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+            <span class="c-program-token">return</span> 0;
+        }
+    }
+}
+</pre>
+
+Abstract Properties<pre class="o-box c-program"><span class="c-program-token">namespace</span> <span class="c-program-methodname">Properties</span> {
+    <span class="c-program-token">abstract</span> <span class="c-program-token">class</span> <span class="c-program-methodname">Base</span> : <span class="c-program-methodname">Object</span> {
+        <span class="c-program-token">public</span> <span class="c-program-token">abstract</span> <span class="c-program-token">string</span> <span class="c-program-methodname">name</span> { <span class="c-program-token">get</span>; <span class="c-program-token">set</span> <span class="c-program-token">construct</span>; }
+        
+        <span class="c-program-token">construct</span> {
+            <span class="c-program-token">this</span>.<span class="c-program-methodname">name</span> = <span class="c-program-phrase">"</span><span class="c-program-phrase">NO_NAME</span><span class="c-program-phrase">"</span>;
+        }
+    }
+    
+    <span class="c-program-token">class</span> <span class="c-program-methodname">Subclass</span> : <span class="c-program-methodname">Base</span> {
+        <span class="c-program-token">private</span> <span class="c-program-token">string</span> <span class="c-program-methodname">_name</span>;
+        
+        <span class="c-program-token">public</span> <span class="c-program-token">override</span> <span class="c-program-token">string</span> <span class="c-program-methodname">name</span> {
+            <span class="c-program-token">get</span> {
+                <span class="c-program-token">return</span> <span class="c-program-token">this</span>.<span class="c-program-methodname">_name</span>;
+            }
+            
+            <span class="c-program-token">set</span> <span class="c-program-token">construct</span> {
+                <span class="c-program-token">this</span>.<span class="c-program-methodname">_name</span> = <span class="c-program-methodname">value</span>;
+            }
+        }
+        
+        <span class="c-program-comment">/* This class have a default constructor that initializes</span>
+<span class="c-program-comment">         * name as the construct block on Base, and a .with_name()</span>
+<span class="c-program-comment">         * constructor where the user can set class derived name </span>
+<span class="c-program-comment">         * roperty.</span>
+<span class="c-program-comment">        */</span>
+        <span class="c-program-token">public</span> <span class="c-program-methodname">Subclass</span>.<span class="c-program-methodname">with_name</span> (<span class="c-program-token">string</span> <span class="c-program-methodname">name</span>) {
+            <span class="c-program-methodname">Object</span> (<span class="c-program-methodname">name</span>:<span class="c-program-methodname">name</span>);
+            <span class="c-program-token">this</span>.<span class="c-program-methodname">_name</span> = <span class="c-program-methodname">name</span>;
+        }
+        
+        <span class="c-program-token">public</span> <span class="c-program-token">static</span> <span class="c-program-token">int</span> <span class="c-program-methodname">main</span> (<span class="c-program-token">string</span>[] <span class="c-program-methodname">args</span>) {
+            <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">Implementing Abstract Properties...</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+            <span class="c-program-token">var</span> <span class="c-program-methodname">sc</span> = <span class="c-program-token">new</span> <span class="c-program-methodname">Subclass</span>.<span class="c-program-methodname">with_name</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">TEST_CLASS</span><span class="c-program-phrase">"</span>);
+            <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">Class name = '</span><span class="c-program-phrase">"</span> + <span class="c-program-methodname">sc</span>.<span class="c-program-methodname">name</span> + <span class="c-program-phrase">"</span><span class="c-program-phrase">'</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+            <span class="c-program-token">var</span> <span class="c-program-methodname">sc2</span> = <span class="c-program-token">new</span> <span class="c-program-methodname">Subclass</span> ();
+            <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">Class name = '</span><span class="c-program-phrase">"</span> + <span class="c-program-methodname">sc2</span>.<span class="c-program-methodname">name</span> + <span class="c-program-phrase">"</span><span class="c-program-phrase">'</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+            <span class="c-program-token">return</span> 0;
+        }
+    }
+}
+</pre>
+<p>Compile and run using: </p>
+<pre># valac source.vala
+# ./source</pre>
+<h4>Using signals<a name="Using_signals"> </a>
+</h4>
+<pre class="o-box c-program"><span class="c-program-token">public</span> <span class="c-program-token">class</span> <span class="c-program-methodname">Test</span> : <span class="c-program-methodname">Object</span> {
+        <span class="c-program-token">public</span> <span class="c-program-token">signal</span> <span class="c-program-token">void</span> <span class="c-program-methodname">test</span> (<span class="c-program-token">int</span> <span class="c-program-methodname">data</span>);
+}
+
+<span class="c-program-token">void</span> <span class="c-program-token">delegate</span> <span class="c-program-methodname">TestHandler</span> (<span class="c-program-methodname">Test</span> <span class="c-program-methodname">t</span>, <span class="c-program-token">int</span> <span class="c-program-methodname">data</span>);
+
+<span class="c-program-token">public</span> <span class="c-program-token">static</span> <span class="c-program-token">void</span> <span class="c-program-methodname">main</span> (<span class="c-program-token">string</span>[] <span class="c-program-methodname">args</span>) {
+
+        <span class="c-program-methodname">Test</span> <span class="c-program-methodname">t</span> = <span class="c-program-token">new</span> <span class="c-program-methodname">Test</span>();
+
+        <span class="c-program-methodname">TestHandler</span> <span class="c-program-methodname">h</span> = (<span class="c-program-methodname">t</span>, <span class="c-program-methodname">data</span>) =&gt; {
+                <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span>(<span class="c-program-phrase">"</span><span class="c-program-phrase">Data: %d</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>, <span class="c-program-methodname">d</span>);
+        }
+
+        <span class="c-program-methodname">t</span>.<span class="c-program-methodname">test</span> ();
+        <span class="c-program-methodname">t</span>.<span class="c-program-methodname">test</span> += <span class="c-program-methodname">h</span>;
+        <span class="c-program-methodname">t</span>.<span class="c-program-methodname">test</span> ();
+        <span class="c-program-methodname">t</span>.<span class="c-program-methodname">test</span> -= <span class="c-program-methodname">h</span>;
+        <span class="c-program-methodname">t</span>.<span class="c-program-methodname">test</span> ();
+}
+</pre>
+</body>
+</html>

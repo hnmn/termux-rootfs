@@ -1,0 +1,14 @@
+prefix=/data/data/com.termux/files/usr
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: libavformat
+Description: FFmpeg container format library
+Version: 57.71.100
+Requires: 
+Requires.private: libavcodec >= 57.89.100, libswresample >= 2.7.100, libavutil >= 55.58.100
+Conflicts:
+Libs: -L${libdir}  -lavformat 
+Libs.private: -liconv -lxvidcore -L/data/data/com.termux/files/usr/lib -lx265 -L/data/data/com.termux/files/usr/lib -lx264 -L/data/data/com.termux/files/usr/lib -lvpx -lm -L/data/data/com.termux/files/usr/lib -lvpx -lm -L/data/data/com.termux/files/usr/lib -lvpx -lm -L/data/data/com.termux/files/usr/lib -lvpx -lm -lvorbisenc -lvorbis -logg -L/data/data/com.termux/files/usr/lib -lopus -lmp3lame -L/data/data/com.termux/files/usr/lib -lgnutls -lm -lbz2 -lz -pthread
+Cflags: -I${includedir}

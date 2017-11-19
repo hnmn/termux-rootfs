@@ -1,0 +1,6 @@
+$(OBJS): $(HDRS) $(ruby_headers) \
+  $(VK_HEADER) \
+  $(hdrdir)/ruby/io.h \
+  $(hdrdir)/ruby/encoding.h \
+  $(hdrdir)/ruby/oniguruma.h
+

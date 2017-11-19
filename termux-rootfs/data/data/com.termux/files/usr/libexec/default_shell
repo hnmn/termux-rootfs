@@ -1,0 +1,16 @@
+#!/data/data/com.termux/files/usr/bin/sh
+##
+##  Determine and execute default shell
+##
+
+if [ -L "/data/data/com.termux/files/home/.termux/shell" ]; then
+    SHELL=$(readlink "/data/data/com.termux/files/home/.termux/shell")
+
+    if [ ! -x "${SHELL}" ]; then
+        SHELL="${PREFIX}/bin/bash"
+    fi
+else
+    SHELL="${PREFIX}/bin/bash"
+fi
+
+exec "${SHELL}" "${@}"

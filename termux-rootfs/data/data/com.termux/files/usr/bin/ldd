@@ -1,0 +1,25 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##  Android's version of ldd
+##
+
+if [ $# -gt 0 ]; then
+    for file in "${@}"; do
+        if grep -qo 'statically linked' <(file "${file}"); then
+            echo "${file}: statically linked"
+        else
+            echo "${file}:"
+            LIBS=$(objdump -p "${file}" | grep NEEDED | cut -d ' ' -f 18)
+            for lib in ${LIBS}; do
+                echo -e "\t`basename "${lib}"`"
+            done
+        fi
+    done
+else
+    echo
+    echo " Usage: ldd [FILES]"
+    echo
+    echo " Print shared object dependencies for files."
+    echo
+    exit 1
+fi

@@ -1,0 +1,9 @@
+#!/data/data/com.termux/files/usr/bin/sh
+##
+##  Wrapper for Android's command 'getenforce'
+##
+
+unset LD_PRELOAD
+unset LD_LIBRARY_PATH
+
+exec /system/bin/getenforce "${@}"

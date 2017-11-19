@@ -1,0 +1,11 @@
+prefix=/data/data/com.termux/files/usr
+exec_prefix=${prefix}
+libdir=/data/data/com.termux/files/usr/lib
+includedir=${prefix}/include
+
+Name: r_debug
+Description: radare foundation libraries
+Version: 2.0.1
+Requires:
+Libs: -L${libdir} -lr_debug -lr_reg -lr_anal -lr_bp -lr_io -lr_parse -lr_cons -lr_syscall -lr_hash -lr_flag -lr_util -lr_socket
+Cflags: -I${includedir}/libr

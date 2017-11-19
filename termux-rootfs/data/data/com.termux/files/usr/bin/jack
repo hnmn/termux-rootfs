@@ -1,0 +1,19 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+export CLASSPATH="${PREFIX}/share/dex/jack.jar"
+
+## Generate list of libraries
+BUILD_CLASSPATH="$(find ${PREFIX}/share/jack -iname \*.jack -type f -o -type l | tr '\n' ':')"
+BUILD_CLASSPATH="${BUILD_CLASSPATH::-1}"
+
+unset LD_LIBRARY_PATH
+unset LD_PRELOAD
+exec /system/bin/app_process -Djava.io.tmpdir="${TMPDIR}" -Xmx512m "${PREFIX}/bin"  \
+                             "com.android.jack.Main"                                \
+                             -D jack.annotation-processor=off                       \
+                             -D jack.classpath.default-libraries=off                \
+                             -cp "${BUILD_CLASSPATH}"                               \
+                             "$@" 2>&1                                              \
+                             | grep -v MdfppReflectionUtils                         \
+                             | grep -v "mkdir failed: EEXIST (File exists) ";       \
+                             exit $PIPESTATUS

@@ -1,0 +1,1 @@
+gcc/aarch64-linux-android/7.2.0/libgfortran.spec

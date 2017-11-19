@@ -1,0 +1,42 @@
+##
+## A handle for your relay, so people don't have to refer to it by key.
+## Nicknames must be between 1 and 19 characters inclusive, and must
+## contain only the characters [a-zA-Z0-9].
+##
+#Nickname Termux
+
+##
+## Port for incoming relay connections
+## (port forwarding is required)
+##
+ORPort 9001
+
+##
+## Port for directory mirror
+## (port forwarding is required)
+##
+DirPort 9030
+
+##
+## Whether to be an exit relay or not
+##
+ExitRelay 0
+
+##
+## Policy for exit relaying
+##
+ExitPolicy reject *:*
+
+##
+## Define these to limit how much relayed traffic you will allow. Your
+## own traffic is still unthrottled. Note that RelayBandwidthRate must
+## be at least 75 kilobytes per second.
+## Note that units for these config options are bytes (per second), not
+## bits (per second), and that prefixes are binary prefixes, i.e. 2^10,
+## 2^20, etc.
+##
+## Throttle traffic to 256 KB/s (2048 Kbps)
+RelayBandwidthRate  256 KBytes
+
+## But allow bursts up to 300 KB/s (2400 Kbps)
+RelayBandwidthBurst 300 KBytes

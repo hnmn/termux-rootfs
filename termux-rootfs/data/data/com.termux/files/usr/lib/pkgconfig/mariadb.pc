@@ -1,0 +1,23 @@
+# these four variables are present in almost every .pc file
+prefix=/data/data/com.termux/files/usr
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include/mysql
+# those are rarely present or not at all, but we export them regardless
+bindir=${prefix}/bin
+sbindir=${prefix}//data/data/com.termux/files/usr/bin
+scriptdir=${prefix}/bin
+plugindir=${prefix}/lib/mysql/plugin
+docdir=${prefix}/share/doc
+mandir=${prefix}/share/man
+sharedir=${prefix}/share
+mysqlsharedir=${prefix}/share/mysql
+mysqltestdir=${prefix}/mysql-test
+socket=/data/data/com.termux/files/usr/tmp/mysqld.sock
+
+Name: MariaDB
+Description: MariaDB: a very fast and robust SQL database server
+URL: http://mariadb.org
+Version: 10.2.10
+Libs: -L${libdir} -lmariadb -lz -ldl -lm -liconv -lssl -lcrypto
+Cflags: -I${includedir} -I${includedir}/.. 

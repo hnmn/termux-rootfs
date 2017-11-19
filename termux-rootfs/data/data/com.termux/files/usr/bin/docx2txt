@@ -1,0 +1,21 @@
+#!/data/data/com.termux/files/usr/bin/sh
+
+if [ ! -z "${1}" ]; then
+    if [ -e "${1}" ]; then
+        if [ -f "${1}" ]; then
+            exec ${PREFIX}/libexec/docx2txt.pl "${1}"
+        else
+            echo "[!] '${1}' must be a valid docx file."
+            exit 1
+        fi
+    else
+        echo "[!] '${1}' does not exist."
+        exit 1
+    fi
+else
+    echo
+    echo "Usage: docx2txt [FILE]"
+    echo "Convert docx file to plain text."
+    echo
+    exit 0
+fi

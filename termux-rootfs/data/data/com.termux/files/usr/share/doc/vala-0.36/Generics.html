@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8" />
+<title>Generics - Vala Reference Manual</title>
+<link rel="stylesheet" type="text/css" href="default.css"><meta name="viewport" content="initial-scale=1">
+</head>
+<body>
+<div class="o-fixedtop c-navbar"><div class="o-navbar">
+<span class="c-pageturner u-float-left"><a href="index.html">Contents</a></span><span>Vala Reference Manual</span><div class="u-float-right">
+<span class="c-pageturner o-inlinewidth-4"><a href="Interfaces.html">Prev</a></span><span class="c-pageturner o-inlinewidth-4"><a href="Structs.html">Next</a></span>
+</div>
+</div></div>
+<h2>12. Generics</h2>
+<ul class="page_toc">
+<li><a href="Generics.html#Generics_declaration">12.1 Generics declaration</a></li>
+<li><a href="Generics.html#Instantiation">12.2 Instantiation</a></li>
+<li><a href="Generics.html#Examples">12.3 Examples</a></li>
+</ul>
+<p>Generic programming is a way of defining that something is applicable to a variety of potential types, without having to know these types before hand.  The classic example would be a collection such as a list, which can be trivially customised to contain any type of data elements.  Generics allow a Vala programmer to have these customisations done automatically. </p>
+<p>Some of these are possible, which? </p>
+<blockquote class="o-box c-rules">class Wrapper &lt; T &gt; : Object { ... }
+new Wrapper &lt; Object &gt; ( ) ;
+BUG: class StringWrapper : Wrapper &lt; string &gt; ( ) { ... }
+FAIL: class WrapperWrapper &lt; Wrapper &lt; T &gt; &gt; : Object { ... }
+FAIL: new WrapperWrapper &lt; Wrapper &lt; Object &gt; &gt; ( ) ;
+interface IWrapper &lt; T &gt; { ... }
+class ImpWrapper1 &lt; T &gt; : Object, IWrapper &lt; T &gt; { ... }
+BUG: class ImpWrapper2 : Object, IWrapper &lt; string &gt; { ... }
+</blockquote>
+
+<h3 id="Generics_declaration">12.1 Generics declaration</h3>
+<p>Some of the syntax could be best placed in the class/interface/struct pages, but that might overcomplicate them... </p>
+<p>In class declaration - In struct declaration - In interface declaration - In base class declaration - In implemented interfaces declaration - In prerequesite class/interface declaration. </p>
+<p>Declaration with type parameters introduces new types into that scope, identified by names given in declaration, e.g. T. </p>
+<blockquote class="o-box c-rules">qualified-type-name-with-generic:
+	qualified-class-name-with-generic
+	qualified-interface-name-with-generic
+	qualified-struct-name-with-generic
+
+qualified-class-name-with-generic:
+	[ qualified-namespace-name <span class="literal">.</span> ] class-name type-parameters
+
+qualified-interface-name-with-generic:
+	[ qualified-namespace-name <span class="literal">.</span> ] interface-name type-parameters
+
+qualified-struct-name-with-generic:
+	[ qualified-namespace-name <span class="literal">.</span> ] struct-name type-parameters
+
+type-parameters:
+	<span class="literal">&lt;</span> generic-clause <span class="literal">&gt;</span>
+
+generic-clause:
+	type-identifier [ <span class="literal">,</span> generic-clause ]
+	qualified-type-name [ <span class="literal">,</span> generic-clause ]
+
+type-identifier:
+	identifier
+
+</blockquote>
+<p>type-identifier will be the type-name for the parameterised type. </p>
+<p>Deal is: in the class/interface/struct sections, replace qualified-*-name with qualified-*-name-with-generic. </p>
+
+<h3 id="Instantiation">12.2 Instantiation</h3>
+<p>Only explanation here?  Syntax should go with variable declaration statement? </p>
+<p>When using generic for a type-name, only type-names can be used as type-parameters, not identifiers.  NB. in scope of generic class, T etc. is a real type-name. </p>
+
+<h3 id="Examples">12.3 Examples</h3>
+<p>Demonstrating... </p>
+<pre class="o-box c-program"><span class="c-program-token">using</span> <span class="c-program-methodname">GLib</span>;
+
+<span class="c-program-token">public</span> <span class="c-program-token">interface</span> <span class="c-program-methodname">With</span> &lt; <span class="c-program-methodname">T</span> &gt; {
+        <span class="c-program-token">public</span> <span class="c-program-token">abstract</span> <span class="c-program-token">void</span> <span class="c-program-methodname">sett</span>(<span class="c-program-methodname">T</span> <span class="c-program-methodname">t</span>);
+        <span class="c-program-token">public</span> <span class="c-program-token">abstract</span> <span class="c-program-methodname">T</span> <span class="c-program-methodname">gett</span>();
+}
+
+
+<span class="c-program-token">public</span> <span class="c-program-token">class</span> <span class="c-program-methodname">One</span> : <span class="c-program-methodname">Object</span>, <span class="c-program-methodname">With</span> &lt; <span class="c-program-token">int</span> &gt; {
+        <span class="c-program-token">public</span> <span class="c-program-token">int</span> <span class="c-program-methodname">t</span>;
+
+        <span class="c-program-token">public</span> <span class="c-program-token">void</span> <span class="c-program-methodname">sett</span>(<span class="c-program-token">int</span> <span class="c-program-methodname">t</span>) {
+                <span class="c-program-token">this</span>.<span class="c-program-methodname">t</span> = <span class="c-program-methodname">t</span>;
+        }
+        <span class="c-program-token">public</span> <span class="c-program-token">int</span> <span class="c-program-methodname">gett</span>() {
+                <span class="c-program-token">return</span> <span class="c-program-methodname">t</span>;
+        }
+}
+
+<span class="c-program-token">public</span> <span class="c-program-token">class</span> <span class="c-program-methodname">Two</span> &lt; <span class="c-program-methodname">T</span>, <span class="c-program-methodname">U</span> &gt; : <span class="c-program-methodname">Object</span>, <span class="c-program-methodname">With</span> &lt; <span class="c-program-methodname">T</span> &gt; {
+        <span class="c-program-token">public</span> <span class="c-program-methodname">T</span> <span class="c-program-methodname">t</span>;
+
+        <span class="c-program-token">public</span> <span class="c-program-token">void</span> <span class="c-program-methodname">sett</span>(<span class="c-program-methodname">T</span> <span class="c-program-methodname">t</span>) {
+                <span class="c-program-token">this</span>.<span class="c-program-methodname">t</span> = <span class="c-program-methodname">t</span>;
+        }
+        <span class="c-program-token">public</span> <span class="c-program-methodname">T</span> <span class="c-program-methodname">gett</span>() {
+                <span class="c-program-token">return</span> <span class="c-program-methodname">t</span>;
+        }
+
+        <span class="c-program-token">public</span> <span class="c-program-methodname">U</span> <span class="c-program-methodname">u</span>;
+}
+
+<span class="c-program-token">public</span> <span class="c-program-token">class</span> <span class="c-program-methodname">Test</span> : <span class="c-program-methodname">GLib</span>.<span class="c-program-methodname">Object</span> {
+
+        <span class="c-program-token">public</span> <span class="c-program-token">static</span> <span class="c-program-token">void</span> <span class="c-program-methodname">main</span>(<span class="c-program-token">string</span>[] <span class="c-program-methodname">args</span>) {
+                <span class="c-program-token">var</span> <span class="c-program-methodname">o</span> = <span class="c-program-token">new</span> <span class="c-program-methodname">One</span> ();
+                <span class="c-program-methodname">o</span>.<span class="c-program-methodname">sett</span>(5);
+                <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span>(<span class="c-program-phrase">"</span><span class="c-program-phrase">%d</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>, <span class="c-program-methodname">o</span>.<span class="c-program-methodname">t</span>);
+
+                <span class="c-program-token">var</span> <span class="c-program-methodname">t</span> = <span class="c-program-token">new</span> <span class="c-program-methodname">Two</span> &lt; <span class="c-program-token">int</span>, <span class="c-program-token">double</span>? &gt; ();
+                <span class="c-program-methodname">t</span>.<span class="c-program-methodname">sett</span>(5);
+                <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span>(<span class="c-program-phrase">"</span><span class="c-program-phrase">%d</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>, <span class="c-program-methodname">t</span>.<span class="c-program-methodname">t</span>);
+
+                <span class="c-program-methodname">t</span>.<span class="c-program-methodname">u</span> = 5.0f;
+                <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span>(<span class="c-program-phrase">"</span><span class="c-program-phrase">%f</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>, <span class="c-program-methodname">t</span>.<span class="c-program-methodname">u</span>);
+        }
+}
+</pre>
+</body>
+</html>

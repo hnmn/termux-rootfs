@@ -1,0 +1,73 @@
+#!/data/data/com.termux/files/usr/bin/python
+##
+##  ifconfig.co - test port connectivity
+##
+
+from io import StringIO
+import requests
+import json
+import sys
+
+def usage():
+    print("")
+    print(" Usage: testport [-h|--help] PORT")
+    print("")
+    print(" Test reachablility of port from the Internet.")
+    print("")
+
+if __name__ == "__main__":
+    port = None
+
+    if len(sys.argv) > 1:
+        if sys.argv[1] == '-h' or sys.argv[1] == '--help':
+            usage()
+            sys.exit(0)
+        else:
+            try:
+                port = int(sys.argv[1])
+
+                if port < 1 or port > 65535:
+                    print("Port '{}' is invalid.".format(sys.argv[1]))
+                    print("Allowed port numbers are 1-65535.")
+                    usage()
+                    sys.exit(1)
+            except ValueError:
+                print("Got invalid value '{}'.".format(sys.argv[1]))
+                print("Allowed port numbers are 1-65535.")
+                usage()
+                sys.exit(1)
+    else:
+        usage()
+        sys.exit(0)
+
+    resp = requests.get('http://ifconfig.co/port/{}'.format(port))
+
+    if resp.status_code == 200:
+        if resp.text is not None:
+            try:
+                str_io = StringIO(resp.text)
+                parsed = json.load(str_io)
+
+                ip = parsed['ip']
+                is_reachable = parsed['reachable']
+
+                print("IP: {}".format(ip))
+
+                if is_reachable is True:
+                    print("Port {} is open.".format(port))
+                else:
+                    print("Port {} is closed.".format(port))
+            except:
+                print("Error while decoding response from server.")
+                sys.exit(1)
+        else:
+            print("Got an empty response from server.")
+            sys.exit(1)
+    elif resp.status_code == 429:
+        print("Too many requests from are sent your IP.")
+        print("Try again later.")
+        sys.exit(1)
+    else:
+        printf("Error while sending request to server.")
+        printf("Server response: {}".format(resp.status_code))
+        sys.exit(1)

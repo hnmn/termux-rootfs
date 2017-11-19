@@ -1,0 +1,57 @@
+## Run as daemon
+daemonise = true
+
+## Bind to this address
+proxyAddress = 0.0.0.0
+
+## Offline browsing
+proxyOffline = false
+
+## Maximum number of connections per server
+serverSlots = 8
+
+## Maximum number of connections per broken server
+serverMaxSlots = 12
+
+## Disable local configuration interface
+disableLocalInterface = true
+localDocumentRoot = ""
+
+## Log to file
+logSyslog = false
+logFile = "/data/data/com.termux/files/usr/var/log/polipo.log"
+logFilePermissions = 600
+logLevel = 0xFF
+scrubLogs = true
+
+## Directory with on-disk cache
+diskCacheRoot = /data/data/com.termux/files/usr/var/lib/polipo
+
+disableIndexing = false
+disableServersList = false
+
+## Share cache
+cacheIsShared = true
+
+## Don't cache cookies
+dontCacheCookies = true
+
+## Chunk usage
+chunkLowMark = 33554432
+chunkCriticalMark = 50331648
+chunkHighMark = 67108864
+
+## Objects usage
+publicObjectLowMark = 4096
+objectHighMark = 16384
+
+## Maximum open file descriptors
+maxDiskEntries = 512
+
+## Maximum size of on-disk cache entry
+maxDiskCacheEntrySize = 4194304
+
+## Tuning cache expiration
+maxAge = 14d
+maxExpiresAge = 30d
+maxNoModifiedAge = 30m

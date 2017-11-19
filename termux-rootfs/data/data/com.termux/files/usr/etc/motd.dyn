@@ -1,0 +1,131 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##  Dynamic motd that will be executed by login
+##
+
+print_onion_hostname()
+{
+    local HSDIR
+    local HOSTNAME
+    HSDIR=$(grep -P '^HiddenServiceDir\s+/.+$' "${PREFIX}/etc/tor/addons/hidden_services.torrc" | awk '{ print $2 }')
+
+    if [ -f "${HSDIR}/hostname" ]; then
+        HOSTNAME=$(cat "${HSDIR}/hostname")
+        echo " Onion host: ${HOSTNAME}"
+    fi
+}
+
+print_hardware_info()
+{
+    local DEVICE_NAME
+    local ARCH
+
+    DEVICE_NAME="$(getprop ro.product.brand) $(getprop ro.product.model)"
+    DEVICE_NAME=$(tr '[:lower:]' '[:upper:]' <<< "${DEVICE_NAME:0:1}")"${DEVICE_NAME:1}"
+    ARCH=$(uname -m)
+
+    echo " Hardware: ${DEVICE_NAME} (${ARCH})"
+}
+
+print_battery_info()
+{
+    local CHARGE_LEVEL
+    local STATUS
+    local VOLTAGE
+
+    ## Check if we can access to battery stats (when SELinux enabled, the access may be prohibited)
+    if [ -r "/sys/class/power_supply/battery/capacity" ]; then
+        CHARGE_LEVEL=$(cat /sys/class/power_supply/battery/capacity)
+        STATUS=$(cat /sys/class/power_supply/battery/status | tr '[:upper:]' '[:lower:]')
+        VOLTAGE=$(cat /sys/class/power_supply/battery/voltage_now)
+        VOLTAGE=$((VOLTAGE / 1000))
+
+        echo " Battery: ${CHARGE_LEVEL}% (${STATUS}), ${VOLTAGE}mV"
+    fi
+}
+
+print_cpu_usage()
+{
+    local CORES
+    local CPU_USAGE
+    local LOADAVG
+
+    CORES=$(grep -c '^processor' /proc/cpuinfo)
+    LOADAVG=$(cat /proc/loadavg | awk '{ print $1,$2,$3}')
+
+    if [[ $(getenforce) != "Enforcing" ]]; then
+        CPU_USAGE=$(ps aux | awk 'BEGIN {sum=0} {sum+=$3}; END {print sum}')
+        CPU_USAGE=$((${CPU_USAGE/\.*} / CORES))
+        echo " Load: CPU ${CPU_USAGE}% (${CORES} cores), AVG ${LOADAVG}"
+    else
+        echo " Load average (${CORES} cores): ${LOADAVG}"
+    fi
+}
+
+print_ram_usage()
+{
+    local FREE
+    local TOTAL
+
+    # in MB
+    FREE=$(free -m | grep Mem | awk '{ print $6 }')
+    TOTAL=$(free -m | grep Mem | awk '{ print $2 }')
+
+    echo " RAM: ${FREE}MB / ${TOTAL}MB"
+}
+
+print_os_info()
+{
+    local ANDROID_VER
+    local KERNEL_VER
+
+    ANDROID_VER=$(getprop ro.build.version.release)
+    KERNEL_VER=$(uname -r)
+
+    echo " OS: Android ${ANDROID_VER}, Linux ${KERNEL_VER}"
+}
+
+print_uptime()
+{
+    local seconds
+    local days
+    local hours
+    local mins
+    local UPTIME
+
+    # Get uptime in seconds.
+    seconds=$(< /proc/uptime)
+    seconds="${seconds/.*}"
+    days="$((seconds / 60 / 60 / 24)) days"
+    hours="$((seconds / 60 / 60 % 24)) hours"
+    mins="$((seconds / 60 % 60)) minutes"
+
+    # Format the days, hours and minutes.
+    strip_date() {
+        case "$1" in
+            "0 "*) unset "${1/* }" ;;
+            "1 "*) printf "%s" "${1/s}" ;;
+            *)     printf "%s" "$1" ;;
+        esac
+    }
+
+    days=$(strip_date "$days")
+    hours=$(strip_date "$hours")
+    mins=$(strip_date "$mins")
+
+    UPTIME="${days:+$days, }${hours:+$hours, }${mins}"
+    UPTIME="${UPTIME%', '}"
+    UPTIME="${UPTIME:-${seconds} seconds}"
+
+    echo " Uptime: ${UPTIME}"
+}
+
+echo
+print_onion_hostname
+print_hardware_info
+print_battery_info
+print_cpu_usage
+print_ram_usage
+print_os_info
+print_uptime
+echo

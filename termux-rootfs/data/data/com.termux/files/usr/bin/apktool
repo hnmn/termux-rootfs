@@ -1,0 +1,7 @@
+#!/data/data/com.termux/files/usr/bin/sh
+##
+##  Wrapper for Apktool
+##
+
+HEAPSIZE="512M"
+exec java -Xmx"${HEAPSIZE}" -jar "${PREFIX}/share/java/exe/apktool-2.2.4.jar" "${@}"

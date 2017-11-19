@@ -1,0 +1,56 @@
+##
+##  Syntax highlighting for python
+##
+
+syntax "python" "\.py$" "SConscript$" "SConstruct$"
+header "^#![[:space:]]*/.*/(python|env[[:space:]]+python).*"
+linter pyflakes
+comment "#"
+
+# keywords
+color brightmagenta "\<(and|as|assert|break|class|continue|def|del|elif|else|except|finally|for|from|global)\>"
+color brightmagenta "\<(if|import|in|is|lambda|nonlocal|not|or|pass|raise|return|try|while|with|yield)\>"
+
+# operators
+color magenta "[.:;,+*|=!\%@]" "<" ">" "/" "-" "&"
+
+# special types
+color red "\<(False|None|True)\>"
+
+# functions
+color brightblue "\<[a-zA-Z0-9_]+\("
+
+# brackets
+color blue "(\(|\)|\[|\]|\{|\})"
+
+# numbers
+color yellow "\<0[Jj]?\>"
+color yellow "\<[1-9][0-9]*[Jj]?\>"
+color yellow "\<[1-9][0-9]*[Ee][0-9]+[Jj]?\>"
+color yellow "\.[0-9]+[Jj]?\>"
+color yellow "\.[0-9]+[Ee][0-9]+[Jj]?\>"
+color yellow "\<0b[0-1]+\>"
+color yellow "\<0o[0-7]+\>"
+color yellow "\<0x[0-9a-fA-F]+\>"
+
+# one-quoted strings
+color yellow "['][^']*[^\\][']" "[']{3}.*[^\\][']{3}"
+color yellow "["][^"]*[^\\]["]" "["]{3}.*[^\\]["]{3}"
+
+# highlight tabs
+color ,red "	"
+
+# triple quoted strings
+color green start=""""([^"]|$)" end=""""" start="'''([^']|$)" end="'''"
+
+# inline comments
+color cyan "#.*$"
+
+# remainders
+color brightyellow "(CHECK|FIX|FIXME|TODO|XXX)([[:space:]]*:[[:space:]]*)?"
+
+# shebang
+color brightblack "^#![[:space:]]*/.*/(python|env[[:space:]]+python).*"
+
+# trailing spaces
+color ,green "[[:space:]]+$"

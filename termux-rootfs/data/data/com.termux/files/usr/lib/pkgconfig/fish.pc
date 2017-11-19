@@ -1,0 +1,10 @@
+prefix=/data/data/com.termux/files/usr
+datadir=/data/data/com.termux/files/usr/share
+completionsdir=/data/data/com.termux/files/usr/share/fish/vendor_completions.d
+functionsdir=/data/data/com.termux/files/usr/share/fish/vendor_functions.d
+confdir=/data/data/com.termux/files/usr/share/fish/vendor_conf.d
+
+Name: fish
+Description: fish, the friendly interactive shell
+URL: https://fishshell.com/
+Version: 2.6.0

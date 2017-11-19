@@ -1,0 +1,68 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##  Setup and run isolated Ubuntu environment
+##
+
+BOOTSTRAP_ARCHIVE="${PREFIX}/share/termux-bootstrap/ubuntu-artful-core-cloudimg-arm64-root.tar.xz"
+
+usage()
+{
+    echo
+    echo " Usage: ubuntu-container [-h|--help] [PATH]"
+    echo
+    echo " Setup and run an isolated Ubuntu environment at"
+    echo " specified path."
+    echo
+    echo " If you want to have access for files that exists on"
+    echo " host (Termux home and sdcard), then you need to set"
+    echo " environment variable 'MOUNT_HOST_FS'."
+    echo
+}
+
+if [ ! -z "${1}" ]; then
+    if [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
+        usage
+        exit 0
+    fi
+
+    ROOTFS="${1}"
+
+    if grep -qP '^-.*$' <<< "${ROOTFS}"; then
+        echo "[!] Directory name cannot begin with '-'."
+        usage
+        exit 1
+    fi
+
+    if [ ! -e "${ROOTFS}" ]; then
+        mkdir -p "${ROOTFS}"
+    fi
+
+    if [ ! -d "${ROOTFS}" ]; then
+        echo "[!] Not a directory '${ROOTFS}'."
+        usage
+        exit 1
+    fi
+else
+    usage
+    exit 1
+fi
+
+if [ ! -e "${ROOTFS}/bin" ]; then
+    echo -n "[*] Unpacking basic system... "
+    if tar xf "${BOOTSTRAP_ARCHIVE}" -C "${ROOTFS}" > /dev/null 2>&1; then
+        echo "OK"
+    else
+        echo "FAIL"
+        exit 1
+    fi
+
+    ## Add groups of Termux application user
+    for gid in $(id -G); do
+        group_name=$(id -gn "${gid}")
+        echo "${group_name}:x:${gid}:root" >> "${ROOTFS}/etc/group"
+        echo "${group_name}:*::root" >> "${ROOTFS}/etc/gshadow"
+    done
+fi
+
+echo "[*] Starting Ubuntu environment..."
+exec fakechroot "${ROOTFS}" bash -l

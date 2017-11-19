@@ -1,0 +1,2 @@
+shell "/data/data/com.termux/files/usr/libexec/default_shell"
+mousetrack on

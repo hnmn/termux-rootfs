@@ -1,0 +1,63 @@
+##
+##  Configuration file for running polipo with tor
+##
+
+## Run as daemon
+daemonise = true
+
+## Bind to this address
+proxyAddress = 0.0.0.0
+proxyPort = 9080
+
+## Parent proxy (must point to tor server's address:port)
+socksParentProxy = 127.0.0.1:9050
+
+## Maximum number of connections per server
+serverSlots = 8
+
+## Maximum number of connections per broken server
+serverMaxSlots = 12
+
+## Disable local configuration interface
+disableLocalInterface = true
+localDocumentRoot = ""
+
+## Log to file
+logSyslog = false
+logFile = "/data/data/com.termux/files/usr/var/log/polipo-tor.log"
+logFilePermissions = 600
+logLevel = 0xFF
+scrubLogs = true
+
+## Disable on-disk cache
+diskCacheRoot = ""
+
+## Share cache
+cacheIsShared = true
+
+## Don't cache cookies
+dontCacheCookies = true
+
+## Chunk usage
+chunkLowMark = 33554432
+chunkCriticalMark = 50331648
+chunkHighMark = 67108864
+
+## Objects usage
+publicObjectLowMark = 4096
+objectHighMark = 16384
+
+## Maximum open file descriptors
+maxDiskEntries = 128
+
+## Maximum size of on-disk cache entry
+maxDiskCacheEntrySize = 4194304
+
+## Tuning cache expiration
+maxAge = 1d
+maxExpiresAge = 3d
+maxNoModifiedAge = 30m
+
+## Sanitize http headers
+censoredHeaders = from, accept-language, x-pad
+censorReferer = maybe

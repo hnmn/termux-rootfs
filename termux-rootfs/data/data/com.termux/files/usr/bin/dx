@@ -1,0 +1,12 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##  Wrapper for dx tool from Android SDK
+##
+
+export CLASSPATH="${PREFIX}/share/dex/dx.dex"
+
+unset LD_LIBRARY_PATH
+unset LD_PRELOAD
+exec /system/bin/app_process -Djava.io.tmpdir="${TMPDIR}" -Xmx512m     \
+                             "${PREFIX}/bin" dx.dx.command.Main "$@"   \
+                             | sed '/MdfppReflectionUtils/d'; exit ${PIPESTATUS}

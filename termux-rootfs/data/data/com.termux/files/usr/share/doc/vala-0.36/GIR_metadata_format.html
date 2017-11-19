@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8" />
+<title>GIR metadata format - Vala Reference Manual</title>
+<link rel="stylesheet" type="text/css" href="default.css"><meta name="viewport" content="initial-scale=1">
+</head>
+<body>
+<div class="o-fixedtop c-navbar"><div class="o-navbar">
+<span class="c-pageturner u-float-left"><a href="index.html">Contents</a></span><span>Vala Reference Manual</span><div class="u-float-right">
+<span class="c-pageturner o-inlinewidth-4"><a href="GIDL_metadata_format.html">Prev</a></span><span class="c-pageturner o-inlinewidth-4"><span></span></span>
+</div>
+</div></div>
+<h2>18. GIR metadata format</h2>
+<ul class="page_toc">
+<li><a href="GIR_metadata_format.html#Locating_metadata">18.1 Locating metadata</a></li>
+<li><a href="GIR_metadata_format.html#Comments">18.2 Comments</a></li>
+<li><a href="GIR_metadata_format.html#Syntax">18.3 Syntax</a></li>
+<li><a href="GIR_metadata_format.html#Valid_arguments">18.4 Valid arguments</a></li>
+<li><a href="GIR_metadata_format.html#Examples">18.5 Examples</a></li>
+</ul>
+<p>The <code>GIR</code> format actually has a lot of information for generating bindings, but it's a different language than Vala. Therefore, it's almost impossible to directly map a whole .gir file into a Vala tree, hence the need of metadata. On the other side we might want to use directly .gir + .metadata instead of generating a .vapi, but .vapi is more humanly readable and faster to parse than the GIR, hence the need of vapigen for generating a .vapi. </p>
+
+<h3 id="Locating_metadata">18.1 Locating metadata</h3>
+<p>The filename of a metadata for a <code>SomeLib.gir</code> must be <code>SomeLib.metadata</code>. By default Vala looks for .metadata into the same directory of the .gir file, however it's possible to specify other directories using the <code>--metadatadir</code> option. </p>
+
+<h3 id="Comments">18.2 Comments</h3>
+<p>Comments in the metadata have the same syntax as in Vala code: </p>
+<pre class="o-box c-program"><span class="c-program-comment">// this is a comment</span>
+<span class="c-program-comment"></span><span class="c-program-comment">/*</span>
+<span class="c-program-comment"> * multi-line comment</span>
+<span class="c-program-comment"> */</span>
+</pre>
+
+<h3 id="Syntax">18.3 Syntax</h3>
+<p>Metadata information for each symbol must provided on different lines: </p>
+<blockquote class="o-box c-rules">rule:
+	pattern [ arguments ] [  relative-rules ] 
+
+relative-rules:
+	<span class="literal">.</span> pattern [ arguments ] [  relative-rules ]
+
+pattern:
+	[ <span class="literal">#</span> selector ] [ <span class="literal">.</span> pattern ]
+
+arguments:
+	[ <span class="literal">=</span> expression ] [ arguments ]
+
+expression:
+	<span class="literal">null</span>
+	<span class="literal">true</span>
+	<span class="literal">false</span>
+	<span class="literal">-</span> expression
+	integer-literal
+	real-literal
+	string-literal
+	symbol
+
+symbol:
+	identifier [ <span class="literal">.</span> identifier ]
+
+</blockquote>
+<ul>
+<li><p>Patterns are tied to the GIR tree: if a class <code>FooBar</code> contains a method <code>baz_method</code> then it can be referenced in the metadata as <code>FooBar.baz_method</code>. </p></li>
+<li><p>Selectors are used to specify a particular element name of the GIR tree, for example <code>FooBar.baz_method#method</code> will only select method elements whose name is baz_method. Useful to solve name collisions. </p></li>
+<li><p>Given a namespace named <code>Foo</code> a special pattern <code>Foo</code> is available for setting general arguments. </p></li>
+<li><p>If a GIR symbol matches multiple rules then all of them will be applied: if there are clashes among arguments, last written rules in the file take precedence. </p></li>
+<li><p>If the expression for an argument is not provided, it's treated as <strong>true</strong> by default. </p></li>
+<li><p>A <strong>relative rule</strong> is relative to the nearest preceding <strong>absolute rule</strong>. Metadata must contain at least one absolute rule. It's not possible to make a rule relative to another relative rule. </p></li>
+</ul>
+
+<h3 id="Valid_arguments">18.4 Valid arguments</h3>
+<table class="c-informaltable">
+<tr>
+<td align="" colspan=""><p> <strong>Name</strong> </p></td>
+<td align="" colspan=""><p> <strong>Applies to</strong> </p></td>
+<td align="" colspan=""><p> <strong>Type</strong> </p></td>
+<td align="" colspan=""><p> <strong>Description</strong> </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> skip </p></td>
+<td align="" colspan=""><p> all </p></td>
+<td align="" colspan=""><p> bool </p></td>
+<td align="" colspan=""><p> Skip processing the symbol </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> hidden </p></td>
+<td align="" colspan=""><p> all </p></td>
+<td align="" colspan=""><p> bool </p></td>
+<td align="" colspan=""><p> Process the symbol but hide from output </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> type </p></td>
+<td align="" colspan=""><p> method, parameter, property, field, constant, alias </p></td>
+<td align="" colspan=""><p> string </p></td>
+<td align="" colspan=""><p> Complete Vala type </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> type_arguments </p></td>
+<td align="" colspan=""><p> method, parameter, property, field, constant, alias </p></td>
+<td align="" colspan=""><p> string </p></td>
+<td align="" colspan=""><p> Vala type parameters for generics, separated by commas </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> cheader_filename </p></td>
+<td align="" colspan=""><p> all including namespace </p></td>
+<td align="" colspan=""><p> string </p></td>
+<td align="" colspan=""><p> C headers separated by commas </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> name </p></td>
+<td align="" colspan=""><p> all including namespace </p></td>
+<td align="" colspan=""><p> string </p></td>
+<td align="" colspan=""><p> Vala symbol name </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> owned </p></td>
+<td align="" colspan=""><p> parameter </p></td>
+<td align="" colspan=""><p> bool </p></td>
+<td align="" colspan=""><p> Whether the parameter value should be owned </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> unowned </p></td>
+<td align="" colspan=""><p> method, property, field, constant </p></td>
+<td align="" colspan=""><p> bool </p></td>
+<td align="" colspan=""><p> Whether the symbol is unowned </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> parent </p></td>
+<td align="" colspan=""><p> all </p></td>
+<td align="" colspan=""><p> string </p></td>
+<td align="" colspan=""><p> Move the symbol to the specified container symbol. If no container exists, a new namespace will be created. </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> nullable </p></td>
+<td align="" colspan=""><p> method, parameter, property, field, constant, alias </p></td>
+<td align="" colspan=""><p> bool </p></td>
+<td align="" colspan=""><p> Whether the type is nullable or not </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> deprecated </p></td>
+<td align="" colspan=""><p> all </p></td>
+<td align="" colspan=""><p> bool </p></td>
+<td align="" colspan=""><p> Whether the symbol is deprecated or not </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> replacement </p></td>
+<td align="" colspan=""><p> all </p></td>
+<td align="" colspan=""><p> string </p></td>
+<td align="" colspan=""><p> Deprecation replacement, implies <code>deprecated=true</code> </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> deprecated_since </p></td>
+<td align="" colspan=""><p> all </p></td>
+<td align="" colspan=""><p> string </p></td>
+<td align="" colspan=""><p> Deprecated since version, implies <code>deprecated=true</code> </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> array </p></td>
+<td align="" colspan=""><p> method, parameter, property, field, constant, alias </p></td>
+<td align="" colspan=""><p> bool </p></td>
+<td align="" colspan=""><p> Whether the type is an array or not </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> array_length_idx </p></td>
+<td align="" colspan=""><p> parameter </p></td>
+<td align="" colspan=""><p> int </p></td>
+<td align="" colspan=""><p> The index of the C array length parameter </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> default </p></td>
+<td align="" colspan=""><p> parameter </p></td>
+<td align="" colspan=""><p> any </p></td>
+<td align="" colspan=""><p> Default expression for the parameter </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> out </p></td>
+<td align="" colspan=""><p> parameter </p></td>
+<td align="" colspan=""><p> bool </p></td>
+<td align="" colspan=""><p> Whether the parameter direction is out or not </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> ref </p></td>
+<td align="" colspan=""><p> parameter </p></td>
+<td align="" colspan=""><p> bool </p></td>
+<td align="" colspan=""><p> Whether the parameter direction is ref or not </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> vfunc_name </p></td>
+<td align="" colspan=""><p> method </p></td>
+<td align="" colspan=""><p> string </p></td>
+<td align="" colspan=""><p> Name of the C virtual function </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> virtual </p></td>
+<td align="" colspan=""><p> method, signal, property </p></td>
+<td align="" colspan=""><p> bool </p></td>
+<td align="" colspan=""><p> Whether the symbol is virtual or not </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> abstract </p></td>
+<td align="" colspan=""><p> method, signal, property </p></td>
+<td align="" colspan=""><p> bool </p></td>
+<td align="" colspan=""><p> Whether the symbol is abstract or not </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> scope </p></td>
+<td align="" colspan=""><p> parameter (async method) </p></td>
+<td align="" colspan=""><p> string </p></td>
+<td align="" colspan=""><p> Scope of the delegate, in GIR terms </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> struct </p></td>
+<td align="" colspan=""><p> record (detected as boxed compact class) </p></td>
+<td align="" colspan=""><p> bool </p></td>
+<td align="" colspan=""><p> Whether the boxed type must be threaten as struct instead of compact class </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> printf_format </p></td>
+<td align="" colspan=""><p> method </p></td>
+<td align="" colspan=""><p> bool </p></td>
+<td align="" colspan=""><p> Add the [PrintfFormat] attribute to the method if true </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> array_length_field </p></td>
+<td align="" colspan=""><p> field (array) </p></td>
+<td align="" colspan=""><p> string </p></td>
+<td align="" colspan=""><p> The name of the length field </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> sentinel </p></td>
+<td align="" colspan=""><p> method </p></td>
+<td align="" colspan=""><p> string </p></td>
+<td align="" colspan=""><p> C expression of the last argument for varargs </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> closure </p></td>
+<td align="" colspan=""><p> parameter </p></td>
+<td align="" colspan=""><p> int </p></td>
+<td align="" colspan=""><p> Specifies the index of the parameter representing the user data for this callback </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> errordomain </p></td>
+<td align="" colspan=""><p> enumeration </p></td>
+<td align="" colspan=""><p> bool </p></td>
+<td align="" colspan=""><p> Whether the enumeration is an errordomain or not </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> destroys_instance </p></td>
+<td align="" colspan=""><p> method </p></td>
+<td align="" colspan=""><p> bool </p></td>
+<td align="" colspan=""><p> Whether the instance is owned by the method </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> throws </p></td>
+<td align="" colspan=""><p> method </p></td>
+<td align="" colspan=""><p> string </p></td>
+<td align="" colspan=""><p> Type of exception the method throws </p></td>
+</tr>
+</table>
+
+<h3 id="Examples">18.5 Examples</h3>
+<p>Demonstrating... </p>
+<h4>Overriding Types<a name="Overriding_Types"> </a>
+</h4>
+<p>When you have the following expression: </p>
+<pre>typedef GList MyList;</pre>
+<p>where <code>GList</code> will hold integers, use <code>type</code> metadata as follows: </p>
+<pre>MyList type="GLib.List&lt;int&gt;"</pre>
+<p>The above metadata will generate the following code: </p>
+<pre class="o-box c-program">    <span class="c-program-token">public</span> <span class="c-program-token">class</span> <span class="c-program-methodname">MyList</span> : <span class="c-program-methodname">GLib</span>.<span class="c-program-methodname">List</span>&lt;<span class="c-program-token">int</span>&gt; {
+        [<span class="c-program-methodname">CCode</span> (<span class="c-program-methodname">has_construct_function</span> = <span class="c-program-token">false</span>)]
+        <span class="c-program-token">protected</span> <span class="c-program-methodname">MyList</span> ();
+        <span class="c-program-token">public</span> <span class="c-program-token">static</span> <span class="c-program-methodname">GLib</span>.<span class="c-program-methodname">Type</span> <span class="c-program-methodname">get_type</span> ();
+    }
+</pre>
+<p>Then you can use <code>GLib.List</code> or <code>NameSpace.MyList</code> as if equal. </p>
+<h4>Skipping Simbols<a name="Skipping_Simbols"> </a>
+</h4>
+<pre>MySimbol skip</pre>
+<h4>More Examples<a name="More_Examples"> </a>
+</h4>
+<pre>// ...</pre>
+</body>
+</html>

@@ -1,0 +1,22 @@
+## Use smooth scrolling as the default.
+set smooth
+
+## Allow nano to be suspended.
+set suspend
+
+## Do case sensitive searches by default.
+set casesensitive
+
+## Set tab size to 4 spaces.
+set tabsize 4
+
+## Convert tabs to spaces.
+set tabstospaces
+
+## Wrap text after 79 symbols.
+# set fill 79
+
+## Don't wrap text
+set nowrap
+
+include "/data/data/com.termux/files/usr/share/nano/*.nanorc"
