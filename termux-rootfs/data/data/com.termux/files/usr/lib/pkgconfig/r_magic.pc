@@ -1,0 +1,11 @@
+prefix=/data/data/com.termux/files/usr
+exec_prefix=${prefix}
+libdir=/data/data/com.termux/files/usr/lib
+includedir=${prefix}/include
+
+Name: r_magic
+Description: radare foundation libraries
+Version: 2.0.1
+Requires:
+Libs: -L${libdir} -lr_magic -lr_util
+Cflags: -I${includedir}/libr

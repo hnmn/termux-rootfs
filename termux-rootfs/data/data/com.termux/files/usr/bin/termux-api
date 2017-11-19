@@ -1,0 +1,861 @@
+#!/data/data/com.termux/files/usr/bin/sh
+##
+##  Access Android's APIs from Termux
+##
+
+SCRIPT_NAME=$(basename "${0}")
+TERMUX_API_CLIENT="${PREFIX}/libexec/termux-api-client"
+
+clipboardAPI()
+{
+    PARAMS=""
+
+    if [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
+        echo
+        echo "Usage: ${SCRIPT_NAME} [-s text]"
+        echo
+        echo "Access to the system clipboard."
+        echo
+        echo "-s text  Put text to the clipboard. If no arguments given,"
+        echo "         read text from the stdin."
+        echo
+        exit 0
+    fi
+
+    while getopts :s option; do
+        case "${option}" in
+            s)
+                PARAMS="-e api_version 2 --ez set true"
+                ;;
+            *)
+                echo "${SCRIPT_NAME}: illegal option -${OPTARG}"
+                exit 1
+                ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+
+    if [ ${#} = 0 ]; then
+        ${TERMUX_API_CLIENT} Clipboard ${PARAMS}
+    else
+        echo "${@}" | ${TERMUX_API_CLIENT} Clipboard ${PARAMS}
+    fi
+}
+
+dialogAPI()
+{
+    ARG_I=""
+    OPT_I=""
+    ARG_M=""
+    ARG_P=""
+    ARG_T=""
+    OPT_T=""
+
+    if [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
+        echo
+        echo "Usage: ${SCRIPT_NAME} [options]"
+        echo
+        echo "Show a text entry dialog."
+        echo
+        echo "Options:"
+        echo " -i hint   the input hint to show when the input is"
+        echo "           empty."
+        echo
+        echo " -m        use a textarea with multiple lines instead"
+        echo "           of a single."
+        echo
+        echo " -p        enter the input as a password"
+        echo
+        echo " -t title  the title to show for the input prompt"
+        echo
+        exit 0
+    fi
+
+    while getopts :i:mpt: option; do
+        case "${option}" in
+            i)
+                ARG_I="--es input_hint"
+                OPT_I="${OPTARG}"
+                ;;
+            m)
+                ARG_M="--ez multiple_lines true"
+                ;;
+            p)
+                ARG_P="--es input_type password"
+                ;;
+            t)
+                ARG_T="--es input_title"
+                OPT_T="${OPTARG}"
+                ;;
+            *)
+                echo "${SCRIPT_NAME}: illegal option -${OPTARG}"
+                exit 1
+                ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+
+    if [ $# != 0 ]; then
+        echo "$SCRIPT_NAME: too many arguments"
+        exit 1
+    fi
+
+    set -- ${ARG_M} ${ARG_P}
+    if [ -n "$ARG_I" ]; then set -- "$@" $ARG_I "$OPT_I"; fi
+    if [ -n "$ARG_T" ]; then set -- "$@" $ARG_T "$OPT_T"; fi
+
+    ${TERMUX_API_CLIENT} Dialog "${@}"
+}
+
+downloadAPI()
+{
+    ARG_D=""
+    OPT_D=""
+    ARG_T=""
+    OPT_T=""
+
+    if [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
+        echo
+        echo "Usage: ${SCRIPT_NAME} [options] URL"
+        echo
+        echo "Download a resource from URL using the system"
+        echo "download manager."
+        echo
+        echo "Options:"
+        echo " -d desc   Description for the download request"
+        echo "           notification."
+        echo
+        echo " -t title  Title for the download request"
+        echo "           notification."
+        echo
+        exit 0
+    fi
+
+    while getopts :d:t: option; do
+        case "${option}" in
+            d)
+                ARG_D="--es description"
+                OPT_D="${OPTARG}"
+                ;;
+            t)
+                ARG_T="--es title"
+                OPT_T="${OPTARG}"
+                ;;
+            *)
+                echo "${SCRIPT_NAME}: illegal option -${OPTARG}"
+                exit 1
+                ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+
+    if [ ${#} -lt 1 ]; then echo "${SCRIPT_NAME}: no url specified"; exit 1; fi
+    if [ ${#} -gt 1 ]; then echo "${SCRIPT_NAME}: too many arguments"; exit 1; fi
+
+    URL_TO_DOWNLOAD="${1}"
+
+    set --
+    if [ -n "${ARG_D}" ]; then set -- "${@}" ${ARG_D} "${OPT_D}"; fi
+    if [ -n "${ARG_T}" ]; then set -- "${@}" ${ARG_T} "${OPT_T}"; fi
+    set -- "${@}" "${URL_TO_DOWNLOAD}"
+
+    ${TERMUX_API_CLIENT} Download "${@}"
+}
+
+locationAPI()
+{
+    PARAMS=""
+
+    if [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
+        echo
+        echo "Usage: ${SCRIPT_NAME} [options]"
+        echo
+        echo "Get the device location."
+        echo
+        echo "Options:"
+        echo " -p provider  Set location provider. Default: gps."
+        echo "              Available: gps, network, passive."
+        echo
+        echo " -r request   Kind of request to make. Default: once."
+        echo "              Available requests: once, last, updates."
+        echo
+        exit 0
+    fi
+
+    while getopts :r:p: option; do
+        case "${option}" in
+            p)
+                case "${OPTARG}" in
+                    gps|network|passive);;
+                    *)
+                        echo "${SCRIPT_NAME}: unsupported provider '${OPTARG}'"
+                        exit 1
+                        ;;
+                esac
+                PARAMS="${PARAMS} --es provider ${OPTARG}"
+                ;;
+            r)
+                case "${OPTARG}" in
+                    once|last|updates);;
+                    *)
+                        echo "${SCRIPT_NAME}: unsupported request '${OPTARG}'"
+                        exit 1
+                        ;;
+                esac
+                PARAMS="${PARAMS} --es request ${OPTARG}"
+                ;;
+            *)
+                echo "${SCRIPT_NAME}: illegal option -${OPTARG}"
+                exit 1
+                ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+
+    if [ ${#} != 0 ]; then
+        echo "${SCRIPT_NAME}: too many arguments"
+        exit 1
+    fi
+
+    ${TERMUX_API_CLIENT} Location ${PARAMS}
+}
+
+notificationAPI()
+{
+    if [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
+        echo
+        echo "Usage: termux-notification [options]"
+        echo
+        echo "Display a system notification. Context text is read from"
+        echo "stdin or specified using --content."
+        echo
+        echo "Options:"
+        echo " --action action          Action to execute when pressing"
+        echo "                          the notification."
+        echo
+        echo " --button1 text           Text to show on the first"
+        echo "                          notification button."
+        echo
+        echo " --button1-action action  Action to execute on the first"
+        echo "                          notification button."
+        echo
+        echo " --button2 text           Text to show on the second"
+        echo "                          notification button."
+        echo
+        echo " --button2-action action  Action to execute on the second"
+        echo "                          notification button."
+        echo
+        echo " --button3 text           Text to show on the third"
+        echo "                          notification button."
+        echo
+        echo " --button3-action action  Action to execute on the third"
+        echo "                          notification button."
+        echo
+        echo " --content content        Content to show in the notification."
+        echo "                          Read from stdin not specified here."
+        echo
+        echo " --id id                  Notification id (will overwrite"
+        echo "                          any previous notification with the"
+        echo "                          same id)."
+        echo
+        echo " --led-color rrggbb       color of the blinking led as RRGGBB."
+        echo "                          Default: none"
+        echo
+        echo " --led-on milliseconds    Number of milliseconds for the LED"
+        echo "                          to be on while it's flashing."
+        echo "                          Default: 800."
+        echo
+        echo " --led-off milliseconds   Number of milliseconds for the LED"
+        echo "                          to be off while it's flashing."
+        echo "                          Default: 800."
+        echo
+        echo " --on-delete action       Action to execute when the the"
+        echo "                          notification is cleared."
+        echo
+        echo " --priority prio          Notification priority."
+        echo "                          (high/low/max/min/default)"
+        echo
+        echo " --sound                  Play a sound with the notification."
+        echo
+        echo " --sticky                 Make notification sticky. You will"
+        echo "                          have to set notification id with the"
+        echo "                          '--id' argument. It will be required"
+        echo "                          for removing notification."
+        echo
+        echo " --title title            Notification title to show."
+        echo
+        echo " --vibrate pattern        Vibrate pattern, comma separated as"
+        echo "                          in 500,1000,200."
+        echo
+        exit 0
+    fi
+
+    OPT_ACTION=""
+    OPT_ID=""
+    OPT_LED_COLOR=""
+    OPT_LED_OFF=""
+    OPT_LED_ON=""
+    OPT_ON_DELETE_ACTION=""
+    OPT_PRIORITY=""
+    OPT_SOUND=""
+    OPT_STICKY=""
+    OPT_TITLE=""
+    OPT_VIBRATE=""
+    OPT_BUTTON1_TEXT=""
+    OPT_BUTTON1_ACTION=""
+    OPT_BUTTON2_TEXT=""
+    OPT_BUTTON2_ACTION=""
+    OPT_BUTTON3_TEXT=""
+    OPT_BUTTON3_ACTION=""
+
+    TEMP=`busybox getopt -n ${SCRIPT_NAME} -o hc:i:t: --long action:,button1:,button1-action:,button2:,button2-action:,\
+button3:,button3-action:,content:,help,id:,led-color:,led-on:,led-off:,on-delete:,priority:,sound,sticky,title:,vibrate: \
+    -s bash \
+    -- "${@}"`
+    eval set -- "${TEMP}"
+
+    while true; do
+        case "${1}" in
+            --action)
+                OPT_ACTION="${2}"
+                shift 2
+                ;;
+            --button1)
+                OPT_BUTTON1_TEXT="${2}"
+                shift 2
+                ;;
+            --button1-action)
+                OPT_BUTTON1_ACTION="${2}"
+                shift 2
+                ;;
+            --button2)
+                OPT_BUTTON2_TEXT="${2}"
+                shift 2
+                ;;
+            --button2-action)
+                OPT_BUTTON2_ACTION="${2}"
+                shift 2
+                ;;
+            --button3)
+                OPT_BUTTON3_TEXT="${2}"
+                shift 2
+                ;;
+            --button3-action)
+                OPT_BUTTON3_ACTION="${2}"
+                shift 2
+                ;;
+            -c|--content)
+                OPT_CONTENT="${2}"
+                shift 2
+                ;;
+            -i|--id)
+                OPT_ID="${2}"
+                shift 2
+                ;;
+            --led-color)
+                OPT_LED_COLOR="${2}"
+                shift 2
+                ;;
+            --led-on)
+                OPT_LED_ON="${2}"
+                shift 2
+                ;;
+            --led-off)
+                OPT_LED_OFF="${2}"
+                shift 2
+                ;;
+            --on-delete)
+                OPT_ON_DELETE_ACTION="${2}"
+                shift 2
+                ;;
+            --priority)
+                OPT_PRIORITY="${2}"
+                shift 2
+                ;;
+            --sound)
+                OPT_SOUND="true"
+                shift 1
+                ;;
+            --sticky)
+                OPT_STICKY="true"
+                shift 1
+                ;;
+            -t|--title)
+                OPT_TITLE="${2}"
+                shift 2
+                ;;
+            --vibrate)
+                OPT_VIBRATE="${2}"
+                shift 2
+                ;;
+            --)
+                shift
+                break
+                ;;
+        esac
+    done
+
+    if [ ${#} != 0 ]; then
+        echo "${SCRIPT_NAME}: too many arguments"
+        exit 1
+    fi
+
+    set --
+    if [ -n "${OPT_ACTION}" ]; then set -- "${@}" --es action "${OPT_ACTION}"; fi
+    if [ -n "${OPT_BUTTON1_ACTION}" ]; then set -- "${@}" --es button_action_1 "${OPT_BUTTON1_ACTION}"; fi
+    if [ -n "${OPT_BUTTON1_TEXT}" ]; then set -- "${@}" --es button_text_1 "${OPT_BUTTON1_TEXT}"; fi
+    if [ -n "${OPT_BUTTON2_ACTION}" ]; then set -- "${@}" --es button_action_2 "${OPT_BUTTON2_ACTION}"; fi
+    if [ -n "${OPT_BUTTON2_TEXT}" ]; then set -- "${@}" --es button_text_2 "${OPT_BUTTON2_TEXT}"; fi
+    if [ -n "${OPT_BUTTON3_ACTION}" ]; then set -- "${@}" --es button_action_3 "${OPT_BUTTON3_ACTION}"; fi
+    if [ -n "${OPT_BUTTON3_TEXT}" ]; then set -- "${@}" --es button_text_3 "${OPT_BUTTON3_TEXT}"; fi
+    if [ -n "${OPT_ID}" ]; then set -- "${@}" --es id "${OPT_ID}"; fi
+    if [ -n "${OPT_LED_COLOR}" ]; then set -- "${@}" --es led-color "${OPT_LED_COLOR}"; fi
+    if [ -n "${OPT_LED_OFF}" ]; then set -- "${@}" --ei led-off "${OPT_LED_OFF}"; fi
+    if [ -n "${OPT_LED_ON}" ]; then set -- "${@}" --ei led-on "${OPT_LED_ON}"; fi
+    if [ -n "${OPT_ON_DELETE_ACTION}" ]; then set -- "${@}" --es on_delete_action "${OPT_ON_DELETE_ACTION}"; fi
+    if [ -n "${OPT_PRIORITY}" ]; then set -- "${@}" --es priority "${OPT_PRIORITY}"; fi
+    if [ -n "${OPT_SOUND}" ]; then set -- "${@}" --ez sound "${OPT_SOUND}"; fi
+    if [ -n "${OPT_STICKY}" ]; then set -- "${@}" --ez sticky "${OPT_STICKY}"; fi
+    if [ -n "${OPT_TITLE}" ]; then set -- "${@}" --es title "${OPT_TITLE}"; fi
+    if [ -n "${OPT_VIBRATE}" ]; then set -- "${@}" --ela vibrate "${OPT_VIBRATE}"; fi
+
+    if [ -v OPT_CONTENT ]; then
+        # Note that we want to accept an empty content (--content "").
+        echo ${OPT_CONTENT:=""} | ${TERMUX_API_CLIENT} Notification "$@"
+    else
+        ${TERMUX_API_CLIENT} Notification "$@"
+    fi
+}
+
+notificationRemoveAPI()
+{
+    if [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
+        echo
+        echo "Usage: ${SCRIPT_NAME} ID"
+        echo
+        echo "Remove a notification previously shown with"
+        echo "notification --id."
+        echo
+        exit 0
+    fi
+
+    if [ ${#} != 1 ]; then
+        echo "${SCRIPT_NAME}: no notification id specified"
+        exit 1
+    fi
+
+    ${TERMUX_API_CLIENT} NotificationRemove --es id ${1}
+}
+
+shareAPI()
+{
+    PARAMS=""
+
+    if [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
+        echo
+        echo "Usage: ${SCRIPT_NAME} [options] FILE"
+        echo
+        echo "Share a file specified as argument or the text"
+        echo "received on stdin if no file argument is given."
+        echo
+        echo "Options:"
+        echo " -a action        Which action to performed on the"
+        echo "                  shared content. (edit/send/view)"
+        echo "                  Default: view."
+        echo
+        echo " -c content-type  content-type to use."
+        echo "                  Default: guessed from file extension,"
+        echo "                  text/plain for stdin."
+        echo
+        echo " -d               Share to the default receiver if"
+        echo "                  one is selected."
+        echo
+        echo " -t title         Title to use for shared content."
+        echo "                  Default: shared file name."
+        echo
+        exit 0
+    fi
+
+    while getopts :a:c:dt: option; do
+        case "${option}" in
+            a)
+                case "${OPTARG}" in
+                    edit|send|view);;
+                    *)
+                        echo "${SCRIPT_NAME}: unsupported action: '${OPTARG}'"
+                        exit 1
+                        ;;
+                esac
+                PARAMS="${PARAMS} --es action ${OPTARG}"
+                ;;
+            c)
+                PARAMS="${PARAMS} --es content-type ${OPTARG}"
+                ;;
+            d)
+                PARAMS="${PARAMS} --ez default-receiver true"
+                ;;
+            t)
+                PARAMS="${PARAMS} --es title ${OPTARG}"
+                ;;
+            *)
+                echo "${SCRIPT_NAME}: illegal option -${OPTARG}"
+                exit 1
+                ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+
+    if [ ${#} -gt 1 ]; then
+        echo "${SCRIPT_NAME}: too many arguments"
+        exit 1
+    fi
+
+    if [ ${#} != 0 ]; then
+        FILE=$(realpath "${1}")
+        ${TERMUX_API_CLIENT} Share ${PARAMS} --es file "${FILE}"
+    else
+        ${TERMUX_API_CLIENT} Share ${PARAMS}
+    fi
+}
+
+sendSmsAPI()
+{
+    RECIPIENTS=""
+
+    if [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
+        echo
+        echo "Usage: ${SCRIPT_NAME} -n number[,num2,num3,...] [text]"
+        echo
+        echo "Send a SMS message to the specified recipient number(s)."
+        echo "The text to send is either supplied as arguments or read"
+        echo "from stdin if no arguments are given."
+        echo
+        echo "-n number(s)  Recipient number(s). Separate multiple numbers"
+        echo "              by commas."
+        echo
+        exit 0
+    fi
+
+    while getopts :n: option; do
+        case "$option" in
+            n)
+                RECIPIENTS="--esa recipients $OPTARG"
+                ;;
+            *)
+                echo "${SCRIPT_NAME}: illegal option -$OPTARG"
+                exit 1
+                ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+
+    if [ -z "${RECIPIENTS}" ]; then
+        echo "${SCRIPT_NAME}: no recipient number given"
+        exit 1
+    fi
+
+    if [ ${#} = 0 ]; then
+        ${TERMUX_API_CLIENT} SmsSend ${RECIPIENTS}
+    else
+        echo "${@}" | ${TERMUX_API_CLIENT} SmsSend ${RECIPIENTS}
+    fi
+}
+
+smsInboxAPI()
+{
+    PARAM_LIMIT=10
+    PARAM_OFFSET=0
+    PARAMS=""
+
+    if [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
+        echo
+        echo "Usage: ${SCRIPT_NAME} [options]"
+        echo
+        echo "List received SMS messages."
+        echo
+        echo "Options:"
+        echo " -d        show dates when messages were created"
+        echo
+        echo " -l limit  set limit of shown SMS (default: ${PARAM_LIMIT})"
+        echo
+        echo " -n        show phone numbers"
+        echo
+        echo " -o        offset in SMS list (default: ${PARAM_OFFSET})"
+        echo
+        exit 0
+    fi
+
+
+    while getopts :dl:no: option; do
+        case "${option}" in
+            d)
+                PARAMS="${PARAMS} --ez show-dates true"
+                ;;
+            l)
+                PARAM_LIMIT="${OPTARG}"
+                ;;
+            n)
+                PARAMS="${PARAMS} --ez show-phone-numbers true"
+                ;;
+            o)
+                PARAM_OFFSET="${OPTARG}"
+                ;;
+            *)
+                echo "${SCRIPT_NAME}: illegal option -${OPTARG}"
+                exit 1
+                ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+
+    if [ ${#} != 0 ]; then
+        echo "${SCRIPT_NAME}: too many arguments"
+        exit 1
+    fi
+
+    PARAMS="${PARAMS} --ei offset ${PARAM_OFFSET} --ei limit ${PARAM_LIMIT}"
+
+    ${TERMUX_API_CLIENT} SmsInbox ${PARAMS}
+}
+
+toastAPI()
+{
+    PARAMS=""
+
+    if [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
+        echo
+        echo "Usage: ${SCRIPT_NAME} [-s] [text]"
+        echo
+        echo "Show a popup notification."
+        echo
+        echo "The text to show is either supplied as arguments"
+        echo "or read from stdin if no arguments are given."
+        echo
+        echo "-s  only show the toast for a short while"
+        echo
+        exit 0
+    fi
+
+    while getopts :s option; do
+        case "${option}" in
+            s)
+                PARAMS="--ez short true"
+                ;;
+            *)
+                ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+
+    if [ ${#} != 0 ]; then
+        echo "${@}" | ${TERMUX_API_CLIENT} Toast ${PARAMS}
+    else
+        ${TERMUX_API_CLIENT} Toast ${PARAMS}
+    fi
+}
+
+ttsAPI()
+{
+    PARAMS=""
+
+    if [ "${1}" = "--engines" ]; then
+        ${TERMUX_API_CLIENT} TextToSpeech --es engine LIST_AVAILABLE
+        echo
+        exit 0
+    fi
+
+    if [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
+        echo
+        echo "Usage: ${SCRIPT_NAME} [options] [text]"
+        echo "       ${SCRIPT_NAME} --engines"
+        echo
+        echo "Speak text with a system TTS engine. The text"
+        echo "to speak is either supplied as arguments or read"
+        echo "from stdin if no arguments are given."
+        echo
+        echo "Options:"
+        echo " --engines  Show available TTS engines and exit."
+        echo
+        echo " -e engine  TTS engine to use."
+        echo
+        echo " -l lang    Language to speak in. Note: the"
+        echo "            specified language may be unsupported"
+        echo "            by the engine."
+        echo
+        echo " -n region  Region of language to speak in."
+        echo
+        echo " -p pitch   Pitch to use in speech. 1.0 is the"
+        echo "            normal pitch, lower values lower the"
+        echo "            tone of the synthesized voice, greater"
+        echo "            values increase it."
+        echo
+        echo " -r rate    Speech rate to use. 1.0 is the normal"
+        echo "            rate, lower values slow down the speech"
+        echo "            while greater values accelerates it."
+        echo
+        echo " -s stream  Audio stream to use. Default: MUSIC."
+        echo "            Available streams: ALARM, MUSIC,"
+        echo "            NOTIFICATION, RING, SYSTEM, VOICE_CALL."
+        echo
+        exit 0
+    fi
+
+    while getopts :e:l:n:v:p:r:s: option; do
+        case "${option}" in
+            e)
+                PARAMS="${PARAMS} --es engine ${OPTARG}"
+                ;;
+            l)
+                PARAMS="${PARAMS} --es language ${OPTARG}"
+                ;;
+            n)
+                PARAMS="${PARAMS} --es region ${OPTARG}"
+                ;;
+            v)
+                PARAMS="${PARAMS} --es variant ${OPTARG}"
+                ;;
+            p)
+                PARAMS="${PARAMS} --ef pitch ${OPTARG}"
+                ;;
+            r)
+                PARAMS="${PARAMS} --ef rate ${OPTARG}"
+                ;;
+            s)
+                PARAMS="${PARAMS} --es stream ${OPTARG}"
+                ;;
+            *)
+                echo "${SCRIPT_NAME}: illegal option -${OPTARG}"
+                exit 1
+                ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+
+    if [ ${#} = 0 ]; then
+        ${TERMUX_API_CLIENT} TextToSpeech ${PARAMS}
+    else
+        echo "${@}" | ${TERMUX_API_CLIENT} TextToSpeech ${PARAMS}
+    fi
+}
+
+vibrateAPI()
+{
+    PARAMS=""
+
+    if [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
+        echo
+        echo "Usage: ${SCRIPT_NAME} [options]"
+        echo
+        echo "Vibrate the device."
+        echo
+        echo "Options:"
+        echo " -d duration  The duration to vibrate in ms."
+        echo "              (default:1000)"
+        echo
+        echo " -f           Force vibration even in silent mode."
+        echo
+        exit 0
+    fi
+
+    while getopts :fd: option; do
+        case "${option}" in
+            d)
+                PARAMS="${PARAMS} --ei duration_ms ${OPTARG}"
+                ;;
+            f)
+                PARAMS="${PARAMS} --ez force true"
+                ;;
+            *)
+                echo "${SCRIPT_NAME}: illegal option -${OPTARG}"
+                exit 1
+                ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+
+    if [ ${#} != 0 ]; then
+        echo "${SCRIPT_NAME}: too many arguments"
+        exit 1
+    fi
+
+    ${TERMUX_API_CLIENT} Vibrate ${PARAMS}
+}
+
+
+case "${SCRIPT_NAME}" in
+    battery-status|termux-battery-status)
+        ${TERMUX_API_CLIENT} BatteryStatus
+        ;;
+    clipboard)
+        clipboardAPI "${@}"
+        ;;
+    contact-list|termux-contact-list)
+        ${TERMUX_API_CLIENT} ContactList
+        ;;
+    download|termux-download)
+        downloadAPI "${@}"
+        ;;
+    location|termux-location)
+        locationAPI "${@}"
+        ;;
+    notification|termux-notification)
+        notificationAPI "${@}"
+        ;;
+    notification-remove|termux-notification-remove)
+        notificationRemoveAPI "${@}"
+        ;;
+    pressure-sensor|termux-pressure-sensor)
+        ${TERMUX_API_CLIENT} Barometer
+        ;;
+    share|termux-share)
+        shareAPI "${@}"
+        ;;
+    sms|termux-sms-send)
+        sendSmsAPI "${@}"
+        ;;
+    sms-inbox|termux-sms-inbox)
+        smsInboxAPI "${@}"
+        ;;
+    telephony-cellinfo|termux-telephony-cellinfo)
+        ${TERMUX_API_CLIENT} TelephonyCellInfo
+        ;;
+    telephony-deviceinfo|termux-telephony-deviceinfo)
+        ${TERMUX_API_CLIENT} TelephonyDeviceInfo
+        ;;
+    termux-dialog)
+        dialogAPI "${@}"
+        ;;
+    toast|termux-toast)
+        toastAPI "${@}"
+        ;;
+    tts|termux-tts-speak)
+        ttsAPI "${@}"
+        ;;
+    vibrate|termux-vibrate)
+        vibrateAPI "${@}"
+        ;;
+    wifi-conn-info|termux-wifi-connectioninfo)
+        ${TERMUX_API_CLIENT} WifiConnectionInfo
+        ;;
+    wifi-scan-info|termux-wifi-scaninfo)
+        ${TERMUX_API_CLIENT} WifiScanInfo
+        ;;
+    termux-api)
+        echo
+        echo "This is a wrapper for the termux-api-client"
+        echo
+        echo "For using Termux API, symlink ${SCRIPT_NAME} to the following"
+        echo "applets:"
+        echo " battery-status, clipboard, contact-list, termux-dialog,"
+        echo " download, location, notification, notification-remove,"
+        echo " pressure-sensor, share, sms, sms-inbox, telephony-cellinfo,"
+        echo " telephony-deviceinfo, toast, tts, vibrate, wifi-conn-info,"
+        echo " wifi-scan-info."
+        echo
+        exit 0
+        ;;
+    *)
+        echo "termux-api error: requested unknown applet '${SCRIPT_NAME}'"
+        exit 1
+        ;;
+esac

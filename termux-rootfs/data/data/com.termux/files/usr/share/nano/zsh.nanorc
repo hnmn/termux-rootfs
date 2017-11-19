@@ -1,0 +1,45 @@
+##
+##  Syntax highlighting for shell 'zsh'
+##
+
+syntax "zsh" "\.zsh$" "\.?(zshenv|zprofile|zshrc|zlogin|zlogout)$"
+header "^#![[:space:]]*/.*/(zsh|env[[:space:]]+zsh).*"
+comment "#"
+
+# keywords and bultins
+color green "\<(add-zsh-hook|alias|always|autoload|bg|bindkey|break|builtin|bye|case|cd|cdr|chdir)\>"
+color green "\<(command|compctl|compinit|continue|declare|dirs|disable|disown|do|done|echo|echotc)\>"
+color green "\<(echoti|elif|else|emulate|enable|esac|eval|exec|exit|export|false|fc|fg|fi|for|function)\>"
+color green "\<(functions|getln|getopts|hash|history|if|in|integer|job|jobs|kill|let|limit|local|log)\>"
+color green "\<(logout|noglob|popd|print|printf|prompt|promptinit|pushd|pushln|pwd|r|read|readonly)\>"
+color green "\<(rehash|return|sched|select|set|setopt|shift|source|suspend|test|then|time|times|trap)\>"
+color green "\<(true|ttyctl|type|typeset|ulimit|umask|unalias|unfunction|unhash|unlimit|unset|unsetopt)\>"
+color green "\<(until|vared|wait|whence|where|which|while|zargs|zle|zmodload|zmv|zstyle)\>"
+
+# special characters
+color green "(^|[[:space:]]+)\.[[:space:]]"
+color green "[{}():;|`$<>!=&\\]" "(\]|\[)"
+
+# conditions
+color green "\[.+-(a|b|c|d|e|f|g|h|k|n|o|p|r|s|t|u|v|w|x|z|G|L|N|O|S|ef|eq|ge|gt|le|lt|ne|nt|ot).+\]"
+
+# variable names
+icolor brightred "\$\{?[0-9A-Z_!@#$*?-]+\}?"
+
+# function definitions
+icolor brightgreen "^[[:space:]]*(function )?[a-zA-Z_]+[a-zA-Z0-9_-]*\(\)"
+
+# highlight tabs
+color ,red "	"
+
+# strings
+color brightyellow ""(\\.|[^"])*"" "'(\\.|[^'])*'"
+
+# comments
+color cyan "(^|[[:space:]])#.*$"
+
+# shebang
+color brightblack "^#![[:space:]]*/.*/(zsh|env[[:space:]]+zsh).*"
+
+# trailing whitespaces
+color ,green "[[:space:]]+$"

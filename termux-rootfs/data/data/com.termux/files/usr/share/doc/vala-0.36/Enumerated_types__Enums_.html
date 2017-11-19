@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8" />
+<title>Enumerated types (Enums) - Vala Reference Manual</title>
+<link rel="stylesheet" type="text/css" href="default.css"><meta name="viewport" content="initial-scale=1">
+</head>
+<body>
+<div class="o-fixedtop c-navbar"><div class="o-navbar">
+<span class="c-pageturner u-float-left"><a href="index.html">Contents</a></span><span>Vala Reference Manual</span><div class="u-float-right">
+<span class="c-pageturner o-inlinewidth-4"><a href="Structs.html">Prev</a></span><span class="c-pageturner o-inlinewidth-4"><a href="Attributes.html">Next</a></span>
+</div>
+</div></div>
+<h2>14. Enumerated types (Enums)</h2>
+<ul class="page_toc">
+<li><a href="Enumerated_types__Enums_.html#Enum_declaration">14.1 Enum declaration</a></li>
+<li><a href="Enumerated_types__Enums_.html#Enum_members">14.2 Enum members</a></li>
+<li><a href="Enumerated_types__Enums_.html#Methods">14.3 Methods</a></li>
+<li><a href="Enumerated_types__Enums_.html#Flag_types">14.4 Flag types</a></li>
+<li><a href="Enumerated_types__Enums_.html#Error_domains">14.5 Error domains</a></li>
+<li><a href="Enumerated_types__Enums_.html#Examples">14.6 Examples</a></li>
+</ul>
+<p>Enumerated types declare all possible values that instances of the type may take.  They may also define methods of the type, but an enumerated type has no data other than its value.  Enumerated types are value types, and so each instantiation of the type is unique, even when they represent the same value.  This distinction is not significant in practice because when instances are compared, it is always by value not identity. </p>
+<p>Enumerated types are usually known as simply "enums". </p>
+
+<h3 id="Enum_declaration">14.1 Enum declaration</h3>
+<blockquote class="o-box c-rules">enum-declaration:
+	[ access-modifier ] <span class="literal">enum</span> qualified-enum-name <span class="literal">{</span> [ enum-members ] <span class="literal">}</span>
+
+qualified-enum-name:
+	[ qualified-namespace-name <span class="literal">.</span> ] enum-name
+
+enum-name:
+	identifier
+
+enum-members:
+	[ enum-values ] [ <span class="literal">;</span> enum-methods ]
+
+enum-values:
+	enum-value [ <span class="literal">,</span> enum-values ]
+
+enum-value:
+	enum-value-name [ <span class="literal">=</span> expression ]
+
+enum-value-name:
+	identifier
+
+enum-methods:
+	enum-method [ enum-methods ]
+
+enum-method:
+	method-declaration
+
+</blockquote>
+
+<h3 id="Enum_members">14.2 Enum members</h3>
+<p>Equivalent to constants, all have an integer value, either explicit or automatically assigned. </p>
+
+<h3 id="Methods">14.3 Methods</h3>
+<p>Are similar to static methods of classes, i.e. are not related to any particular instance, but can be invoked on either an instance or the enum itself. </p>
+
+<h3 id="Flag_types">14.4 Flag types</h3>
+<p>An enumerated type declaration can be converted into a flag type declaration by annotating the declaration with "Flags".  A flag type represents a set of flags, any number of which can be combined in one instance of the flag type, in the same fashion as a bitfield in C.  For an explanation of the operations that can be performed on flag types, see <a href="Expressions.html#Flag_operations">Expressions/Flag operations</a>.  For how to use attributes, see <a href="Attributes.html#">Attributes</a>. </p>
+<p>Flag example follows: </p>
+<pre class="o-box c-program"><span class="c-program-comment">// ...</span>
+<span class="c-program-comment"></span>
+</pre>
+
+<h3 id="Error_domains">14.5 Error domains</h3>
+<p>Error domains are Vala's method for describing errors.  An error domain is declared using a similar syntax to enumerated types, but this does not define a type - instead it defines a class of errors, which is used to implicitly create a new error type for the error domain.  The error domain declaration syntax is effectively the same as for enumerated types, but the keyword <code>errordomain</code> is used instead of <code>enum</code>. </p>
+<p>For more information about handling errors in Vala, see <a href="Errors.html#">Errors</a>. </p>
+
+<h3 id="Examples">14.6 Examples</h3>
+<p>Demonstrating... </p>
+<pre class="o-box c-program"><span class="c-program-comment">// ...</span>
+<span class="c-program-comment"></span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8" />
+<title>Interfaces - Vala Reference Manual</title>
+<link rel="stylesheet" type="text/css" href="default.css"><meta name="viewport" content="initial-scale=1">
+</head>
+<body>
+<div class="o-fixedtop c-navbar"><div class="o-navbar">
+<span class="c-pageturner u-float-left"><a href="index.html">Contents</a></span><span>Vala Reference Manual</span><div class="u-float-right">
+<span class="c-pageturner o-inlinewidth-4"><a href="Classes.html">Prev</a></span><span class="c-pageturner o-inlinewidth-4"><a href="Generics.html">Next</a></span>
+</div>
+</div></div>
+<h2>11. Interfaces</h2>
+<ul class="page_toc">
+<li><a href="Interfaces.html#Interface_declaration">11.1 Interface declaration</a></li>
+<li><a href="Interfaces.html#Interface_fields">11.2 Interface fields</a></li>
+<li><a href="Interfaces.html#Interface_methods">11.3 Interface methods</a></li>
+<li><a href="Interfaces.html#Interface_properties">11.4 Interface properties</a></li>
+<li><a href="Interfaces.html#Interface_signals">11.5 Interface signals</a></li>
+<li><a href="Interfaces.html#Other_interface_members">11.6 Other interface members</a></li>
+<li><a href="Interfaces.html#Examples">11.7 Examples</a></li>
+</ul>
+<p>An interface in Vala is a non-instantiable type.  A class may implement any number of interfaces, thereby declaring that an instance of that class should also be considered an instance of those interfaces.  Interfaces are part of the GType system, and so compact classes may not implement interfaces (see <a href="Classes.html#Types_of_class">Classes/Types of class</a>.) </p>
+<p>The simplest interface declaration looks like this: </p>
+<pre class="o-box c-program"><span class="c-program-token">interface</span> <span class="c-program-methodname">InterfaceName</span> {
+}
+</pre>
+<p>Unlike C# or Java, Vala's interfaces may include implemented methods, and so provide premade functionality to an implementing class, similar to mixins in other languages.  All methods defined in a Vala interface are automatically considered to be virtual.  Interfaces in Vala may also have prerequisites - classes or other interfaces that implementing classes must inherit from or implement.  This is a more general form of the interface inheritence found in other languages.  It should be noted that if you want to guarantee that all implementors of an interface are GObject type classes, you should give that class as a prerequisite for the interface. </p>
+<p>Interfaces in Vala have a static scope, identified by the name of the interface.  This is the only scope associated with them (i.e. there is no class or instance scope created for them at any time.)  Non-instance members of the interface (static members and other declarations,) can be identified using this scope. </p>
+<p>For an overview of object oriented programming, see <a href="Concepts.html#Object_oriented_programming">Concepts/Object oriented programming</a>. </p>
+
+<h3 id="Interface_declaration">11.1 Interface declaration</h3>
+<blockquote class="o-box c-rules">interface-declaration:
+	[ access-modifier ] <span class="literal">interface</span> qualified-interface-name [ inheritance-list ] <span class="literal">{</span> [ interface-members ] <span class="literal">}</span>
+
+qualified-interface-name:
+	[ qualified-namespace-name <span class="literal">.</span> ] interface-name
+
+interface-name:
+	identifier
+
+inheritance-list:
+	<span class="literal">:</span> prerequisite-classes-and-interfaces
+
+prerequisite-classes-and-interfaces:
+	qualified-class-name [ <span class="literal">,</span> prerequisite-classes-and-interfaces ]
+	qualified-interface-name [ <span class="literal">,</span> prerequisite-classes-and-interfaces ]
+
+interface-members:
+	interface-member [ interface-members ]
+
+interface-member:
+	interface-constant-declaration
+	interface-delegate-declaration
+	interface-enum-declaration
+	interface-instance-member
+	interface-static-member
+	interface-inner-class-declaration
+	abstract-method-declaration
+
+interface-instance-member:
+	interface-instance-method-declaration
+	interface-instance-abstract-method-declaration
+	interface-instance-property-declaration
+	interface-instance-signal-declaration
+
+interface-static-member:
+	interface-static-field-declaration
+	interface-static-method-declaration
+
+</blockquote>
+
+<h3 id="Interface_fields">11.2 Interface fields</h3>
+<p>As an interface is not instantiable, it may not contain data on a per instance basis.  It is though allowable to define static fields in an interface.  These are equivalent to static fields in a class: they exist exactly once regardless of how many instances there are of classes that implement the interface. </p>
+<p>The syntax for static interface fields is the same as the static class fields: See <a href="Classes.html#Class_fields">Classes/Class fields</a>.  For more explanation of static vs instance members, see <a href="Classes.html#Types_of_class_members">Classes/Types of class members</a>. </p>
+
+<h3 id="Interface_methods">11.3 Interface methods</h3>
+<p>Interfaces can contain abstract and non abstract methods.  A non-abstract class that implements the interface must provide implementations of all abstract methods in the interface.  All methods defined in an interface are automatically virtual. </p>
+<p>Vala interfaces may also define static methods.  These are equivalent to static methods in classes. </p>
+<blockquote class="o-box c-rules">interface-instance-method-declaration:
+	[ class-member-visibility-modifier ] return-type method-name <span class="literal">(</span> [ params-list ] <span class="literal">)</span> method-contracts [ <span class="literal">throws</span> exception-list ] <span class="literal">{</span> statement-list <span class="literal">}</span>
+
+interface-instance-abstract-method-declaration:
+	[ class-member-visibility-modifier ] <span class="literal">abstract</span> return-type method-name <span class="literal">(</span> [ params-list ] <span class="literal">)</span> method-contracts [ <span class="literal">throws</span> exception-list ] <span class="literal">;</span>
+
+interface-static-method-declaration:
+	[ class-member-visibility-modifier ] <span class="literal">static</span> return-type method-name <span class="literal">(</span> [ params-list ] <span class="literal">)</span> method-contracts [ <span class="literal">throws</span> exception-list ] <span class="literal">{</span> statement-list <span class="literal">}</span>
+
+</blockquote>
+<p>For discussion of methods in classes, see: <a href="Classes.html#Class_methods">Classes/Class methods</a>.  For information about methods in general, see <a href="Methods.html#">Methods</a>.  Of particular note is that an abstract method of an interface defines a method that can always be called in an instance of an interface, because that instance is guaranteed to be of a non-abstract class that implements the interface's abstract methods. </p>
+
+<h3 id="Interface_properties">11.4 Interface properties</h3>
+<p>Interfaces can contain properties in a similar way to classes.  As interfaces can not contain per instance data, interface properties cannot be created automatically.  This means that all properties must either be declared abstract (and implemented by implementing classes,) or have explicit get and set clauses as appropriate.  Vala does not allow an abstract property to be partially implemented, instead it should just define which actions (get, set or both) should be implemented. </p>
+<p>Interfaces are not constructed, and so there is not concept of a construction property in an interface.  For more on properties in classes, see: <a href="Classes.html#Properties">Classes/Properties</a>. </p>
+<blockquote class="o-box c-rules">interface-instance-property-declaration:
+	[ class-member-visibility-modifier ] [ class-method-type-modifier ] qualified-type-name property-name <span class="literal">{</span> accessors [ default-value ] <span class="literal">}</span><span class="literal">;</span>
+	[ class-member-visibility-modifier ] <span class="literal">abstract</span> qualified-type-name property-name <span class="literal">{</span> automatic-accessors <span class="literal">}</span><span class="literal">;</span>
+
+</blockquote>
+
+<h3 id="Interface_signals">11.5 Interface signals</h3>
+<p>Signals can be defined in interfaces.  They have exactly the same semantics as when directly defined in the implementing class. </p>
+<blockquote class="o-box c-rules">interface-instance-signal-declaration:
+	class-instance-signal-declaration
+
+</blockquote>
+
+<h3 id="Other_interface_members">11.6 Other interface members</h3>
+<p>Constants, Enums, Delegates and Inner Classes all function the same as when they are declared in a class.  See <a href="Classes.html#">Classes</a>.  When declared in an interface, all these members can be accessed either using the name of the interface (that is, of the static interface scope), or through and instance of an implementing class. </p>
+
+<h3 id="Examples">11.7 Examples</h3>
+<p>Here is an example implementing (and overriding) an <strong>abstract</strong> interface method,  </p>
+<pre class="o-box c-program"><span class="c-program-comment">/*</span>
+<span class="c-program-comment">   This example gives you a simple interface, Speaker, with</span>
+<span class="c-program-comment">   - one abstract method, speak</span>
+<span class="c-program-comment"></span>
+<span class="c-program-comment">   It shows you three classes to demonstrate how these and overriding them behaves:</span>
+<span class="c-program-comment">   - Fox, implementing Speaker</span>
+<span class="c-program-comment">   - ArcticFox, extending Fox AND implementing Speaker</span>
+<span class="c-program-comment">     (ArcticFox.speak () replaces superclasses' .speak())</span>
+<span class="c-program-comment">   - RedFox, extending Fox BUT NOT implementing speaker</span>
+<span class="c-program-comment">     (RedFox.speak () does not replace superclasses' .speak())</span>
+<span class="c-program-comment"></span>
+<span class="c-program-comment">   Important notes:</span>
+<span class="c-program-comment">   - generally an object uses the most specific class's implementation</span>
+<span class="c-program-comment">   - ArcticFox extends Fox (which implements Speaker) and implements Speaker itself,</span>
+<span class="c-program-comment">     - ArcticFox defines speak () with new, so even casting to Fox or Speaker still</span>
+<span class="c-program-comment">       gives you ArcticFox.speak ()</span>
+<span class="c-program-comment">   - RedFox extends from Fox, but DOES NOT implement Speaker</span>
+<span class="c-program-comment">     - RedFox speak () gives you RedFox.speak ()</span>
+<span class="c-program-comment">     - casting RedFox to Speaker or Fox gives you Fox.speak ()</span>
+<span class="c-program-comment">*/</span>
+
+<span class="c-program-comment">/* Speaker: extends from GObject */</span>
+<span class="c-program-token">interface</span> <span class="c-program-methodname">Speaker</span> : <span class="c-program-methodname">Object</span> {
+  <span class="c-program-comment">/* speak: abstract without a body */</span>
+  <span class="c-program-token">public</span> <span class="c-program-token">abstract</span> <span class="c-program-token">void</span> <span class="c-program-methodname">speak</span> ();
+}
+
+<span class="c-program-comment">/* Fox: implements Speaker, implements speak () */</span>
+<span class="c-program-token">class</span> <span class="c-program-methodname">Fox</span> : <span class="c-program-methodname">Object</span>, <span class="c-program-methodname">Speaker</span> {
+  <span class="c-program-token">public</span> <span class="c-program-token">void</span> <span class="c-program-methodname">speak</span> () {
+    <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">  Fox says Ow-wow-wow-wow</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  }
+}
+
+<span class="c-program-comment">/* ArcticFox: extends Fox; must also implement Speaker to re-define</span>
+<span class="c-program-comment"> *            inherited methods and use them as Speaker */</span>
+<span class="c-program-token">class</span> <span class="c-program-methodname">ArcticFox</span> : <span class="c-program-methodname">Fox</span>, <span class="c-program-methodname">Speaker</span> {
+  <span class="c-program-comment">/* speak: uses 'new' to replace speak () from Fox */</span>
+  <span class="c-program-token">public</span> <span class="c-program-token">new</span> <span class="c-program-token">void</span> <span class="c-program-methodname">speak</span> () {
+    <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">  ArcticFox says Hatee-hatee-hatee-ho!</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  }
+}
+
+<span class="c-program-comment">/* RedFox: extends Fox, does not implement Speaker */</span>
+<span class="c-program-token">class</span> <span class="c-program-methodname">RedFox</span> : <span class="c-program-methodname">Fox</span> {
+  <span class="c-program-token">public</span> <span class="c-program-token">new</span> <span class="c-program-token">void</span> <span class="c-program-methodname">speak</span> () {
+    <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">  RedFox says Wa-pa-pa-pa-pa-pa-pow!</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  }
+}
+
+<span class="c-program-token">public</span> <span class="c-program-token">static</span> <span class="c-program-token">int</span> <span class="c-program-methodname">main</span> () {
+  <span class="c-program-methodname">Speaker</span> <span class="c-program-methodname">f</span> = <span class="c-program-token">new</span> <span class="c-program-methodname">Fox</span> ();
+  <span class="c-program-methodname">Speaker</span> <span class="c-program-methodname">a</span> = <span class="c-program-token">new</span> <span class="c-program-methodname">ArcticFox</span> ();
+  <span class="c-program-methodname">Speaker</span> <span class="c-program-methodname">r</span> = <span class="c-program-token">new</span> <span class="c-program-methodname">RedFox</span> ();
+
+  <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">\n\n</span><span class="c-program-phrase">// Fox implements Speaker, speak ()</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">Fox as Speaker:</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  (<span class="c-program-methodname">f</span> <span class="c-program-token">as</span> <span class="c-program-methodname">Speaker</span>).<span class="c-program-methodname">speak</span> ();   <span class="c-program-comment">/* Fox.speak () */</span>
+  <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">Fox as Fox:</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  (<span class="c-program-methodname">f</span> <span class="c-program-token">as</span> <span class="c-program-methodname">Fox</span>).<span class="c-program-methodname">speak</span> ();       <span class="c-program-comment">/* Fox.speak () */</span>
+
+  <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">\n\n</span><span class="c-program-phrase">// ArcticFox extends Fox, re-implements Speaker and </span><span class="c-program-phrase">"</span> +
+                 <span class="c-program-phrase">"</span><span class="c-program-phrase">replaces speak ()</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">ArcticFox as Speaker:</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  (<span class="c-program-methodname">a</span> <span class="c-program-token">as</span> <span class="c-program-methodname">Speaker</span>).<span class="c-program-methodname">speak</span> ();   <span class="c-program-comment">/* ArcticFox.speak () */</span>
+  <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">ArcticFox as Fox:</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  (<span class="c-program-methodname">a</span> <span class="c-program-token">as</span> <span class="c-program-methodname">Fox</span>).<span class="c-program-methodname">speak</span> ();       <span class="c-program-comment">/* ArcticFox.speak () */</span>
+  <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">ArcticFox as ArcticFox:</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  (<span class="c-program-methodname">a</span> <span class="c-program-token">as</span> <span class="c-program-methodname">ArcticFox</span>).<span class="c-program-methodname">speak</span> (); <span class="c-program-comment">/* ArcticFox.speak () */</span>
+
+  <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">\n\n</span><span class="c-program-phrase">// RedFox extends Fox, DOES NOT re-implement Speaker but</span><span class="c-program-phrase">"</span> +
+                 <span class="c-program-phrase">"</span><span class="c-program-phrase"> does replace speak () for itself</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">RedFox as Speaker:</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  (<span class="c-program-methodname">r</span> <span class="c-program-token">as</span> <span class="c-program-methodname">Speaker</span>).<span class="c-program-methodname">speak</span> ();   <span class="c-program-comment">/* Fox.speak () */</span>
+  <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">RedFox as Fox:</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  (<span class="c-program-methodname">r</span> <span class="c-program-token">as</span> <span class="c-program-methodname">Fox</span>).<span class="c-program-methodname">speak</span> ();       <span class="c-program-comment">/* Fox.speak () */</span>
+  <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">RedFox as RedFox:</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  (<span class="c-program-methodname">r</span> <span class="c-program-token">as</span> <span class="c-program-methodname">RedFox</span>).<span class="c-program-methodname">speak</span> ();    <span class="c-program-comment">/* RedFox.speak () */</span>
+
+  <span class="c-program-token">return</span> 0;
+}
+</pre>
+<p>Here is an example of implementing (and inheriting) a <strong>virtual</strong> interface method.  Note that the same rules for subclasses re-implementing methods that apply to the <strong>abstract</strong> interface method above apply here. </p>
+<pre class="o-box c-program"><span class="c-program-comment">/*</span>
+<span class="c-program-comment">   This example gives you a simple interface, Yelper, with</span>
+<span class="c-program-comment">   - one virtual default method, yelp</span>
+<span class="c-program-comment"></span>
+<span class="c-program-comment">   It shows you two classes to demonstrate how these and overriding them behaves:</span>
+<span class="c-program-comment">   - Cat, implementing Yelper (inheriting yelp)</span>
+<span class="c-program-comment">   - Fox, implementing Yelper (overriding yelp)</span>
+<span class="c-program-comment"></span>
+<span class="c-program-comment">   Important notes:</span>
+<span class="c-program-comment">   - generally an object uses the most specific class's implementation</span>
+<span class="c-program-comment">   - Yelper provides a default yelp (), but Fox overrides it</span>
+<span class="c-program-comment">     - Fox overriding yelp () means that even casting Fox to Yelper still gives</span>
+<span class="c-program-comment">       you Fox.yelp ()</span>
+<span class="c-program-comment">   - as with the Speaker/speak() example, if a subclass wants to override an</span>
+<span class="c-program-comment">     implementation (e.g. Fox.yelp ()) of a virtual interface method</span>
+<span class="c-program-comment">     (e.g. Yelper.yelp ()), it must use 'new'</span>
+<span class="c-program-comment">   - 'override' is used when overriding regular class virtual methods,</span>
+<span class="c-program-comment">     but not when implementing interface virtual methods.</span>
+<span class="c-program-comment">*/</span>
+
+<span class="c-program-token">interface</span> <span class="c-program-methodname">Yelper</span> : <span class="c-program-methodname">Object</span> {
+  <span class="c-program-comment">/* yelp: virtual, if we want to be able to override it */</span>
+  <span class="c-program-token">public</span> <span class="c-program-token">virtual</span> <span class="c-program-token">void</span> <span class="c-program-methodname">yelp</span> () {
+    <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">  Yelper yelps Yelp!</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  }
+}
+
+<span class="c-program-comment">/* Cat: implements Yelper, inherits virtual yelp () */</span>
+<span class="c-program-token">class</span> <span class="c-program-methodname">Cat</span> : <span class="c-program-methodname">Object</span>, <span class="c-program-methodname">Yelper</span> {
+}
+
+<span class="c-program-comment">/* Fox: implements Yelper, overrides virtual yelp () */</span>
+<span class="c-program-token">class</span> <span class="c-program-methodname">Fox</span> : <span class="c-program-methodname">Object</span>, <span class="c-program-methodname">Yelper</span> {
+  <span class="c-program-token">public</span> <span class="c-program-token">void</span> <span class="c-program-methodname">yelp</span> () {
+    <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">  Fox yelps Ring-ding-ding-ding-dingeringeding!</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  }
+}
+
+<span class="c-program-token">public</span> <span class="c-program-token">static</span> <span class="c-program-token">int</span> <span class="c-program-methodname">main</span> () {
+  <span class="c-program-methodname">Yelper</span> <span class="c-program-methodname">f</span> = <span class="c-program-token">new</span> <span class="c-program-methodname">Fox</span> ();
+  <span class="c-program-methodname">Yelper</span> <span class="c-program-methodname">c</span> = <span class="c-program-token">new</span> <span class="c-program-methodname">Cat</span> ();
+
+  <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">// Cat implements Yelper, inherits yelp</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">Cat as Yelper:</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  (<span class="c-program-methodname">c</span> <span class="c-program-token">as</span> <span class="c-program-methodname">Yelper</span>).<span class="c-program-methodname">yelp</span> ();  <span class="c-program-comment">/* Yelper.yelp () */</span>
+  <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">Cat as Cat:</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  (<span class="c-program-methodname">c</span> <span class="c-program-token">as</span> <span class="c-program-methodname">Cat</span>).<span class="c-program-methodname">yelp</span> ();     <span class="c-program-comment">/* Yelper.yelp () */</span>
+
+  <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">\n\n</span><span class="c-program-phrase">// Fox implements Yelper, overrides yelp ()</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">Fox as Yelper:</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  (<span class="c-program-methodname">f</span> <span class="c-program-token">as</span> <span class="c-program-methodname">Yelper</span>).<span class="c-program-methodname">yelp</span> ();  <span class="c-program-comment">/* Fox.yelp () */</span>
+  <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">Fox as Fox:</span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+  (<span class="c-program-methodname">f</span> <span class="c-program-token">as</span> <span class="c-program-methodname">Fox</span>).<span class="c-program-methodname">yelp</span> ();     <span class="c-program-comment">/* Fox.yelp () */</span>
+
+  <span class="c-program-token">return</span> 0;
+}
+</pre>
+</body>
+</html>

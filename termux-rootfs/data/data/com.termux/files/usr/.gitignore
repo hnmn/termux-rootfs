@@ -1,0 +1,13 @@
+## blkid
+etc/blkid.tab
+etc/blkid.tab.old
+
+## login data
+etc/login.pwd
+
+## man cache
+share/man/mandoc.db
+
+## python cache
+__pycache__
+*.pyc

@@ -1,0 +1,10 @@
+prefix=/data/data/com.termux/files/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libcrypto++
+Description: A C++ Class Library of Cryptographic Schemes
+Version: 5.6.5
+Libs: -L${libdir} -lcryptopp
+Cflags: -I${includedir}

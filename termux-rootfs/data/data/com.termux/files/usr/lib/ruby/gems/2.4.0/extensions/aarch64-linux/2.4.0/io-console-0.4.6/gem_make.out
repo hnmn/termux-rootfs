@@ -1,0 +1,21 @@
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/io-console-0.4.6
+/data/data/com.termux/files/usr/bin/ruby -r ./siteconf20170913-29880-jnj6oh.rb extconf.rb
+checking for termios.h... yes
+checking for cfmakeraw() in termios.h... yes
+checking for sys/ioctl.h... yes
+checking for rb_funcallv()... yes
+checking for rb_sym2str()... yes
+creating Makefile
+
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/io-console-0.4.6
+make "DESTDIR=" clean
+
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/io-console-0.4.6
+make "DESTDIR="
+compiling console.c
+linking shared-object io/console.so
+
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/io-console-0.4.6
+make "DESTDIR=" install
+install -c -m 0755 console.so ./.gem.20170913-29880-19g38rj/io
+installing default console libraries

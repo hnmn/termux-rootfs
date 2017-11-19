@@ -1,0 +1,256 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##  Termux backup script
+##
+
+## Termux base directory
+TERMUX_FILES="/data/data/com.termux/files"
+
+## By default encryption is disabled
+ENCRYPT=false
+
+## Default path of backup file
+BACKUP_NAME=termux-backup-$(date +%d.%m.%Y_%H.%M.%S).tar.bz2
+BACKUP_TEMP_PATH="${TERMUX_FILES}/${BACKUP_NAME}"
+DEFAULT_BACKUP_PATH="${HOME}/${BACKUP_NAME}"
+unset BACKUP_NAME
+
+## By default output is not suppressed
+QUIET=false
+
+## List of paths that should be backed up
+## Currently this variable is empty, but it will be
+## populated in 'prepare_backup_list'
+BACKUP_LIST=()
+
+usage()
+{
+    echo
+    echo " Usage: termux-backup [OPTIONS]"
+    echo
+    echo " Backup Termux files. The list of files that should be"
+    echo " backed up is stored in '\${PREFIX}/etc/termux-backup.list'."
+    echo
+    echo " Options:"
+    echo "   -e, --encrypt          Encrypt backup with GnuPG. The"
+    echo "                          passphrase will be prompted. Also"
+    echo "                          you can provide passphrase through"
+    echo "                          environment variable 'PASSPHRASE'."
+    echo
+    echo "   -p, --path <path>      Set path to backup file. By default"
+    echo "                          all backups will be stored in your"
+    echo "                          home directory and have name that"
+    echo "                          begins with 'termux-backup-*'."
+    echo
+    echo "   -q, --quiet            Don't write messages to console."
+    echo
+    echo " For more information see manpage for termux-backup(8)."
+    echo
+}
+
+prepare_backup_list()
+{
+    local BACKUP_LIST_FILE="${PREFIX}/etc/termux-backup.list"
+    local DEFAULT_BACKUP_LIST="usr/etc usr/var/lib/minecraft usr/var/lib/mysql usr/var/lib/postgresql usr/var/lib/redis usr/var/lib/tor/hidden usr/var/lib/tor/keys usr/var/lib/transfer.sh"
+    local LINE_COUNTER=0
+
+    if [ -f "${BACKUP_LIST_FILE}" ]; then
+        while IFS= read item; do
+            LINE_COUNTER=$((LINE_COUNTER + 1))
+
+            ## Lines that begin with '#' will be a comment
+            if grep -qP '^#' <<< "${item}"; then
+                continue
+            elif grep -qP '^/.*' <<< "${item}"; then
+                ! ${QUIET} && echo "[!] termux-backup.list:${LINE_COUNTER}: path cannot begin with '/'."
+                continue
+            else
+                if ! grep -qP '[^\s]+\s+[^\s]+' <<< "${item}"; then
+                    ## Clean line to get only path without
+                    ## whitespaces on both ends.
+                    item=$(echo "${item}" | awk '{ print $1 }')
+                else
+                    ! ${QUIET} && echo "[!] termux-backup.list:${LINE_COUNTER}: path cannot contain whitespaces."
+                    continue
+                fi
+
+                ## If line is not suitable for regex, then
+                ## skip it
+                if [ -z "${item}" ]; then
+                    continue
+                fi
+            fi
+
+            if [ -e "${TERMUX_FILES}/${item}" ]; then
+                BACKUP_LIST+=("${item}")
+            else
+                ! ${QUIET} && echo "[!] Cannot find path '${item}'."
+            fi
+        done < "${BACKUP_LIST_FILE}"
+    else
+        for item in ${DEFAULT_BACKUP_LIST}; do
+            if [ -e "${TERMUX_FILES}/${item}" ]; then
+                BACKUP_LIST+=("${item}")
+            else
+                ! ${QUIET} && echo "[!] Cannot find path '${item}'."
+            fi
+        done
+    fi
+
+    if [ ${#BACKUP_LIST[@]} -lt 1 ]; then
+        ! ${QUIET} && echo "[!] Nothing to backup."
+        exit 1
+    fi
+}
+
+while getopts "hep:q-:" opt; do
+    case "${opt}" in
+        -)
+            case "${OPTARG}" in
+                help)
+                    usage
+                    exit 0
+                    ;;
+                encrypt)
+                    ENCRYPT=true
+                    ;;
+                path)
+                    BACKUP_PATH=$(realpath "${!OPTIND}"); OPTIND=$((OPTIND + 1))
+
+                    if [[ ! -e $(dirname "${BACKUP_PATH}") ]]; then
+                        echo "[!] Directory '$(dirname "${BACKUP_PATH}")' is not exist."
+                        exit 1
+                    fi
+                    ;;
+                quiet)
+                    QUIET=true
+                    ;;
+                *)
+                    echo "[!] Invalid option '${OPTARG}'."
+                    usage
+                    exit 1
+                    ;;
+            esac
+            ;;
+        h)
+            usage
+            exit 0
+            ;;
+        e)
+            ENCRYPT=true
+            ;;
+        p)
+            BACKUP_PATH=$(realpath "${OPTARG}")
+
+            if [[ ! -e $(dirname "${BACKUP_PATH}") ]]; then
+                echo "[!] Directory '$(dirname "${BACKUP_PATH}")' is not exist."
+                exit 1
+            fi
+            ;;
+        q)
+            QUIET=true
+            ;;
+        *)
+            usage
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
+if ${QUIET} && ${ENCRYPT} && [ -z "${PASSPHRASE}" ]; then
+    echo "[!] Interactive passphrase input cannot be"
+    echo "    used in quiet mode."
+    echo
+    echo "    Use environment variable 'PASSPHRASE'"
+    echo "    to set passphrase."
+    exit 1
+fi
+
+## backup script will run in subshell
+(
+    ## we need to cd to /data/data/com.termux/files because all
+    ## paths for files & dirs that should be backed up are relative
+    cd "${TERMUX_FILES}"
+
+    if ${ENCRYPT}; then
+        [ -z "${BACKUP_PATH}" ] && BACKUP_PATH="${DEFAULT_BACKUP_PATH}.gpg"
+
+        if [ -z "${PASSPHRASE}" ]; then
+            echo -n "[@] Enter password: "
+            read -r -s PASSPHRASE
+            echo
+
+            if [ ! -z "${PASSPHRASE}" ]; then
+                echo -n "[@] Confirm password: "
+                read -r -s PASSPHRASE_CONF
+                echo
+
+                if [ "${PASSPHRASE}" != "${PASSPHRASE_CONF}" ]; then
+                    echo "[!] Passwords do not match."
+                    exit 1
+                else
+                    unset PASSPHRASE_CONF
+                fi
+            else
+                echo "[!] Password shouldn't be empty."
+                exit 1
+            fi
+        fi
+    else
+        [ -z "${BACKUP_PATH}" ] && BACKUP_PATH="${DEFAULT_BACKUP_PATH}"
+    fi
+
+    ## Populate list of items that need to be backed up
+    ! ${QUIET} && echo "[*] Building list of files to backup..."
+    prepare_backup_list
+
+
+    if [ ${#BACKUP_LIST[@]} -gt 0 ]; then
+        if [ -e "${BACKUP_TEMP_PATH}" ]; then
+            ! ${QUIET} && echo "[!] Backup file '${BACKUP_TEMP_PATH}' already exist."
+            exit 1
+        fi
+
+        if ${ENCRYPT}; then
+            ## backup and encrypt with GnuPG
+            ! ${QUIET} && echo -n "[*] Backing up data (with encryption)... "
+            if tar -jc ${BACKUP_LIST[@]} 2>/dev/null | gpg --symmetric --no-use-agent --passphrase "${PASSPHRASE}" > "${BACKUP_TEMP_PATH}"; then
+                ! ${QUIET} && echo "OK"
+            else
+                ! ${QUIET} && echo "FAIL"
+                exit 1
+            fi
+        else
+            ! ${QUIET} && echo -n "[*] Backing up data... "
+            if tar -jcf "${BACKUP_TEMP_PATH}" ${BACKUP_LIST[@]} 2>/dev/null; then
+                ! ${QUIET} && echo "OK"
+            else
+                ! ${QUIET} && echo "FAIL"
+                exit 1
+            fi
+        fi
+
+        if [ ! -e "${BACKUP_PATH}" ]; then
+            if mv "${BACKUP_TEMP_PATH}" "${BACKUP_PATH}" > /dev/null 2>&1; then
+                if ! ${QUIET}; then
+                    echo "[*] Backup successfully done."
+                    echo "    Backup file: ${BACKUP_PATH}"
+                fi
+                exit 0
+            else
+                if ! ${QUIET}; then
+                    echo "[!] Failed to place backup file to '${BACKUP_PATH}'."
+                    echo "    Backup file: ${BACKUP_TEMP_PATH}"
+                fi
+                exit 1
+            fi
+        else
+            ! ${QUIET} && echo "[!] Backup file '${BACKUP_PATH}' already exist."
+            exit 1
+        fi
+    else
+        ! ${QUIET} && echo "[!] Nothing to backup."
+        exit 1
+    fi
+)

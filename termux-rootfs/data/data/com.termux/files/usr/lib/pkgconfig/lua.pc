@@ -1,0 +1,5 @@
+Name: Lua
+Description: An Extensible Extension Language
+Version: 5.3.4
+Requires:
+Libs: -llua -lm

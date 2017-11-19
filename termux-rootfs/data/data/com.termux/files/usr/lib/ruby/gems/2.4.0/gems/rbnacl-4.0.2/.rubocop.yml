@@ -1,0 +1,37 @@
+AllCops:
+  DisplayCopNames: true
+  Include:
+    - '**/Rakefile'
+  Exclude:
+    - 'spec/**/*'
+    - 'vendor/**/*'
+    - 'lib/rbnacl/test_vectors.rb'
+
+#
+# Metrics
+#
+
+Metrics/AbcSize:
+  Max: 20
+
+Metrics/ClassLength:
+  Max: 150
+
+Metrics/MethodLength:
+  Max: 25
+
+#
+# Style
+#
+
+LineLength:
+  Max: 128
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/SpaceBeforeFirstArg:
+  Enabled: false
+
+Style/GlobalVars:
+  Enabled: false

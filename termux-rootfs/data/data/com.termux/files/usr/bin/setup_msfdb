@@ -1,0 +1,66 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##  Helper for creating PostgreSQL database for Metasploit Framework
+##
+
+## Ensure that service 'postgresql' is started
+echo "[*] Checking if PostgreSQL server running..."
+service postgresql start
+echo
+
+echo -n "[*] Creating database 'msf_database'... "
+if createdb 'msf_database' > /dev/null 2>&1; then
+    echo "OK"
+else
+    echo "FAIL"
+    exit 1
+fi
+
+echo -n "[*] Setting owner for database... "
+cat > "${PREFIX}/tmp/msf_new_user.sql" << EOF
+CREATE USER msf PASSWORD 'msf';
+ALTER DATABASE msf_database OWNER TO msf;
+EOF
+
+if [ "${?}" != "0" ]; then
+    echo "FAIL"
+    exit 1
+fi
+
+if psql --file="${PREFIX}/tmp/msf_new_user.sql" "msf_database" > /dev/null 2>&1; then
+    echo "OK"
+else
+    echo "FAIL"
+    exit 1
+fi
+
+rm -f "${PREFIX}/tmp/msf_new_user.sql" > /dev/null 2>&1
+
+echo -n "[*] Writing configuration file... "
+cat > "${PREFIX}/opt/metasploit-framework/config/database.yml" << EOF
+production:
+    adapter: postgresql
+    database: msf_database
+    username: msf
+    password: msf
+    host: 127.0.0.1
+    port: 5432
+    pool: 75
+    timeout: 5
+EOF
+
+if [ "${?}" = "0" ]; then
+    echo "OK"
+else
+    echo "FAIL"
+    exit 1
+fi
+
+echo "[*] Now you can access database with following credentials:"
+echo
+echo "    User name: msf"
+echo "    Password: msf"
+echo
+echo "    Configuration file for Metasploit database is stored"
+echo "    in '\${PREFIX}/opt/metasploit-framework/config/database.yml'."
+echo

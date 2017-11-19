@@ -1,0 +1,94 @@
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/grpc-1.6.1/src/ruby/ext/grpc
+/data/data/com.termux/files/usr/bin/ruby -r ./siteconf20170918-14379-1ijy294.rb extconf.rb
+Generating Makefile for grpc/grpc_c
+creating Makefile
+
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/grpc-1.6.1/src/ruby/ext/grpc
+make "DESTDIR=" clean
+
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/grpc-1.6.1/src/ruby/ext/grpc
+make "DESTDIR="
+compiling rb_byte_buffer.c
+compiling rb_call.c
+compiling rb_call_credentials.c
+compiling rb_channel.c
+rb_channel.c:227:3: warning: use of GNU statement expression extension [-Wgnu-statement-expression]
+  rb_scan_args(argc, argv, "3", &target, &channel_args, &credentials);
+  ^
+/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/ruby.h:2151:9: note: expanded from macro 'rb_scan_args'
+        rb_scan_args0(argc,argvp,fmt,\
+        ^
+/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/ruby.h:2324:9: note: expanded from macro 'rb_scan_args0'
+                     (rb_scan_args_verify(fmt, varc), vars))
+                      ^
+/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/ruby.h:2205:6: note: expanded from macro 'rb_scan_args_verify'
+    ({ \
+     ^
+rb_channel.c:302:3: warning: use of GNU statement expression extension [-Wgnu-statement-expression]
+  rb_scan_args(argc, argv, "01", &try_to_connect_param);
+  ^
+/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/ruby.h:2151:9: note: expanded from macro 'rb_scan_args'
+        rb_scan_args0(argc,argvp,fmt,\
+        ^
+/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/ruby.h:2324:9: note: expanded from macro 'rb_scan_args0'
+                     (rb_scan_args_verify(fmt, varc), vars))
+                      ^
+/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/ruby.h:2205:6: note: expanded from macro 'rb_scan_args_verify'
+    ({ \
+     ^
+2 warnings generated.
+compiling rb_channel_args.c
+compiling rb_channel_credentials.c
+rb_channel_credentials.c:153:3: warning: use of GNU statement expression extension [-Wgnu-statement-expression]
+  rb_scan_args(argc, argv, "03", &pem_root_certs, &pem_private_key,
+  ^
+/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/ruby.h:2151:9: note: expanded from macro 'rb_scan_args'
+        rb_scan_args0(argc,argvp,fmt,\
+        ^
+/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/ruby.h:2324:9: note: expanded from macro 'rb_scan_args0'
+                     (rb_scan_args_verify(fmt, varc), vars))
+                      ^
+/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/ruby.h:2205:6: note: expanded from macro 'rb_scan_args_verify'
+    ({ \
+     ^
+1 warning generated.
+compiling rb_completion_queue.c
+compiling rb_compression_options.c
+rb_compression_options.c:374:3: warning: use of GNU statement expression extension [-Wgnu-statement-expression]
+  rb_scan_args(argc, argv, "01", &hash_arg);
+  ^
+/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/ruby.h:2151:9: note: expanded from macro 'rb_scan_args'
+        rb_scan_args0(argc,argvp,fmt,\
+        ^
+/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/ruby.h:2324:9: note: expanded from macro 'rb_scan_args0'
+                     (rb_scan_args_verify(fmt, varc), vars))
+                      ^
+/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/ruby.h:2205:6: note: expanded from macro 'rb_scan_args_verify'
+    ({ \
+     ^
+1 warning generated.
+compiling rb_event_thread.c
+compiling rb_grpc.c
+compiling rb_grpc_imports.generated.c
+compiling rb_loader.c
+compiling rb_server.c
+rb_server.c:253:3: warning: use of GNU statement expression extension [-Wgnu-statement-expression]
+  rb_scan_args(argc, argv, "01", &timeout);
+  ^
+/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/ruby.h:2151:9: note: expanded from macro 'rb_scan_args'
+        rb_scan_args0(argc,argvp,fmt,\
+        ^
+/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/ruby.h:2324:9: note: expanded from macro 'rb_scan_args0'
+                     (rb_scan_args_verify(fmt, varc), vars))
+                      ^
+/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/ruby.h:2205:6: note: expanded from macro 'rb_scan_args_verify'
+    ({ \
+     ^
+1 warning generated.
+compiling rb_server_credentials.c
+linking shared-object grpc/grpc_c.so
+Stripping grpc_c.so
+
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/grpc-1.6.1/src/ruby/ext/grpc
+make "DESTDIR=" install
+install -c -m 0755 grpc_c.so ./.gem.20170918-14379-uhnk0o/grpc

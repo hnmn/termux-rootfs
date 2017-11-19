@@ -1,0 +1,119 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##  Simple service manager for Termux
+##
+
+SERVICE_DIR="${PREFIX}/etc/service.d"
+ALL_SERVICE_FILES=$(find "${SERVICE_DIR}" -type f -iname \*.service.sh -exec basename "{}" \; | sort)
+
+usage()
+{
+    echo
+    echo " Usage: service [SERVICE_NAME] [start|stop|restart|status]"
+    echo "        service list"
+    echo "        service [-h|--help]"
+    echo
+    echo " Send command to the specified service."
+    echo " For more info see manual service-manager(8)."
+    echo
+}
+
+get_service_file()
+{
+    if [ ! -z "${1}" ]; then
+        SAVEIFS="${IFS}"
+        IFS=$(echo -ne "\n\b")
+
+        for service_file in ${ALL_SERVICE_FILES}; do
+            if [ "${1}.service.sh" == "${service_file}" ]; then
+                echo "${service_file}"
+                return
+            fi
+        done
+
+        IFS="${SAVEIFS}"
+        unset SAVEIFS
+
+        echo "none"
+    fi
+}
+
+list_available_services()
+{
+    echo "Available services:"
+
+    SAVEIFS="${IFS}"
+    IFS=$(echo -ne "\n\b")
+
+    for service_file in ${ALL_SERVICE_FILES}; do
+        NAME="${service_file%.service.sh}"
+        DESC=$("${SERVICE_DIR}/${service_file}" --info)
+        echo " * ${NAME} - ${DESC}"
+    done
+
+    IFS="${SAVEIFS}"
+    unset SAVEIFS
+}
+
+if [ "$(id -u)" == "0" ]; then
+    echo "[!] Don't run this script as root."
+    exit 1
+fi
+
+if [ -e "/.termux-chroot" ] || [ ! -z "${PROOTED_SHELL}" ]; then
+    echo "[!] Don't run this script in prooted environment."
+    exit 1
+fi
+
+if [ -z "${1}" ]; then
+    usage
+    exit 1
+else
+    if grep -qP '^-.*$' <<< "${1}"; then
+        if [ "${1}" = "-h" ] || [ "${2}" = "--help" ]; then
+            usage
+            exit 0
+        else
+            echo "[!] Unknown option '${1}'."
+            usage
+            exit 1
+        fi
+    fi
+
+    if grep -qP '^-.*$' <<< "${2}"; then
+        echo "[!] Command name cannot begin with '-'."
+        usage
+        exit 1
+    fi
+
+    if [ -z "${2}" ]; then
+        if [ "${1}" == "list" ]; then
+            list_available_services
+        else
+            echo "[!] No action specified."
+            usage
+            exit 1
+        fi
+    else
+        SERVICE_FILE=$(get_service_file "${1}")
+
+        if [ "${SERVICE_FILE}" != "none" ]; then
+            if [ "${2}" == "restart" ]; then
+                ( cd "${HOME}" && "${SERVICE_DIR}/${SERVICE_FILE}" stop )
+
+                if [ "${?}" == "0" ]; then
+                    sync
+                    usleep 250000
+                fi
+
+                ( cd "${HOME}" && "${SERVICE_DIR}/${SERVICE_FILE}" start )
+            else
+                ( cd "${HOME}" && "${SERVICE_DIR}/${SERVICE_FILE}" "${2}" )
+                exit ${?}
+            fi
+        else
+            echo "[!] Service '${1}' does not exist"
+            exit 1
+        fi
+    fi
+fi

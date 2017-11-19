@@ -1,0 +1,13 @@
+#!/data/data/com.termux/files/usr/bin/sh
+##
+##	Run 128-bit test kernel riscvemu128
+##
+
+VM_CONFIG="/data/data/com.termux/files/usr/share/riscvemu/examples/rv128test.cfg"
+
+if [ -f "${VM_CONFIG}" ]; then
+    exec riscvemu128 "${VM_CONFIG}"
+else
+    echo " [!] Configuration file 'rv128test.cfg' is not found."
+    exit 1
+fi

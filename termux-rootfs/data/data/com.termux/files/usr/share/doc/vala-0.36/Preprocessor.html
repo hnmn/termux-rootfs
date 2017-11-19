@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8" />
+<title>Preprocessor - Vala Reference Manual</title>
+<link rel="stylesheet" type="text/css" href="default.css"><meta name="viewport" content="initial-scale=1">
+</head>
+<body>
+<div class="o-fixedtop c-navbar"><div class="o-navbar">
+<span class="c-pageturner u-float-left"><a href="index.html">Contents</a></span><span>Vala Reference Manual</span><div class="u-float-right">
+<span class="c-pageturner o-inlinewidth-4"><a href="Attributes.html">Prev</a></span><span class="c-pageturner o-inlinewidth-4"><a href="GIDL_metadata_format.html">Next</a></span>
+</div>
+</div></div>
+<h2>16. Preprocessor</h2>
+<ul class="page_toc">
+<li><a href="Preprocessor.html#Directives_syntax">16.1 Directives syntax</a></li>
+<li><a href="Preprocessor.html#Defining_symbols">16.2 Defining symbols</a></li>
+<li><a href="Preprocessor.html#Built-in_defines">16.3 Built-in defines</a></li>
+<li><a href="Preprocessor.html#Examples">16.4 Examples</a></li>
+</ul>
+<p>The Vala preprocessor is a particular part of Vala that acts at syntax level only, allowing you to conditionally write pieces of your software depending upon certain compile-time conditions. Preprocessor directives will never be generated in the resulting code. </p>
+
+<h3 id="Directives_syntax">16.1 Directives syntax</h3>
+<p>All preprocessor directives start with a hash (<strong>#</strong>), except for the first line of a file starting with <strong>#!</strong> (used for Vala scripts). </p>
+<blockquote class="o-box c-rules">vala-code:
+	[ any vala code ] [ pp-condition ] [ any vala code ]
+
+pp-condition:
+	<span class="literal">#if</span> pp-expression vala-code [ pp-elif ] [ pp-else ] <span class="literal">#endif</span>
+
+pp-elif:
+	<span class="literal">#elif</span> pp-expression vala-code [ pp-elif ]
+
+pp-else:
+	<span class="literal">#else</span> vala-code
+
+pp-expression:
+	pp-or-expression
+
+pp-or-expression:
+	pp-and-expression [ <span class="literal">||</span> pp-and-expression ]
+
+pp-and-expression:
+	pp-binary-expression [ <span class="literal">&amp;&amp;</span> pp-binary-expression ]
+
+pp-binary-expression:
+	pp-equality-expression
+	pp-inequality-expression
+
+pp-equality-expression:
+	pp-unary-expression [ <span class="literal">==</span> pp-unary-expression ]
+
+pp-inequality-expression:
+	pp-unary-expression [ <span class="literal">!=</span> pp-unary-expression ]
+
+pp-unary-expression:
+	pp-negation-expression
+	pp-primary-expression
+
+pp-negation-expression:
+	<span class="literal">!</span> pp-unary-expression
+
+pp-primary-expression:
+	pp-symbol
+	<span class="literal">(</span> pp-expression <span class="literal">)</span>
+	<span class="literal">true</span>
+	<span class="literal">false</span>
+
+pp-symbol:
+	identifier
+
+</blockquote>
+<p>The semantics of the preprocessor are very simple: if the condition is true then the Vala code surrounded by the preprocessor will be parsed, otherwise it will be ignored. A symbol evaluates to <strong>true</strong> if it is defined at compile-time. If a symbol in a preprocessor directive is not defined, it evaluates to <strong>false</strong>. </p>
+
+<h3 id="Defining_symbols">16.2 Defining symbols</h3>
+<p>It's not possible to define a preprocessor symbol inside the Vala code (like with C). The only way to define a symbol is to feed it through the <code>valac</code> option <code>-D</code>. </p>
+
+<h3 id="Built-in_defines">16.3 Built-in defines</h3>
+<table class="c-informaltable">
+<tr>
+<td align="" colspan=""><p> <strong>Name</strong> </p></td>
+<td align="" colspan=""><p> <strong>Description</strong> </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> POSIX </p></td>
+<td align="" colspan=""><p> Set if the profile is posix </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> GOBJECT </p></td>
+<td align="" colspan=""><p> Set if the profile is gobject </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> DOVA </p></td>
+<td align="" colspan=""><p> Set if the profile is dova </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> VALA_X_Y </p></td>
+<td align="" colspan=""><p> Set if Vala API version is equal or higher to version X.Y </p></td>
+</tr>
+<tr>
+<td align="" colspan=""><p> DBUS_GLIB </p></td>
+<td align="" colspan=""><p> Set if using dbus-glib-1 package </p></td>
+</tr>
+</table>
+
+<h3 id="Examples">16.4 Examples</h3>
+<p>How to conditionally compile code based on a <code>valac</code> option <code>-D</code>. </p>
+<p>Sample code: </p>
+<p> </p>
+<pre class="o-box c-program"><span class="c-program-comment">// Vala preprocessor example</span>
+<span class="c-program-comment"></span><span class="c-program-token">public</span> <span class="c-program-token">class</span> <span class="c-program-methodname">Preprocessor</span> : <span class="c-program-methodname">Object</span> {
+
+    <span class="c-program-token">public</span> <span class="c-program-methodname">Preprocessor</span> () {
+    }
+
+    <span class="c-program-comment">/* public instance method */</span>
+    <span class="c-program-token">public</span> <span class="c-program-token">void</span> <span class="c-program-methodname">run</span> () {
+#<span class="c-program-token">if</span> <span class="c-program-methodname">PREPROCESSOR_DEBUG</span>
+        <span class="c-program-comment">// Use "-D PREPROCESSOR_DEBUG" to run this code path</span>
+<span class="c-program-comment"></span>        <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">debug version </span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+#<span class="c-program-token">else</span>
+        <span class="c-program-comment">// Normally, we run this code path</span>
+<span class="c-program-comment"></span>        <span class="c-program-methodname">stdout</span>.<span class="c-program-methodname">printf</span> (<span class="c-program-phrase">"</span><span class="c-program-phrase">production version </span><span class="c-program-phrase">\n</span><span class="c-program-phrase">"</span>);
+#<span class="c-program-methodname">endif</span>
+    }
+
+    <span class="c-program-comment">/* application entry point */</span>
+    <span class="c-program-token">public</span> <span class="c-program-token">static</span> <span class="c-program-token">int</span> <span class="c-program-methodname">main</span> (<span class="c-program-token">string</span>[] <span class="c-program-methodname">args</span>) {
+        <span class="c-program-token">var</span> <span class="c-program-methodname">sample</span> = <span class="c-program-token">new</span> <span class="c-program-methodname">Preprocessor</span> ();
+        <span class="c-program-methodname">sample</span>.<span class="c-program-methodname">run</span> ();
+        <span class="c-program-token">return</span> 0;
+    }
+}
+</pre>
+<h4>Compile and Run<a name="Compile_and_Run"> </a>
+</h4>
+<p>Normal build/run: </p>
+<pre>$ valac -o preprocessor Preprocessor.vala
+$ ./preprocessor</pre>
+<p>Debug build/run: </p>
+<pre>$ valac -D PREPROCESSOR_DEBUG -o preprocessor-debug Preprocessor.vala
+$ ./preprocessor-debug</pre>
+</body>
+</html>

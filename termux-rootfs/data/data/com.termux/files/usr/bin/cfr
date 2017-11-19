@@ -1,0 +1,14 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##  Wrapper for CFR Java Decompiler
+##
+
+export CLASSPATH="${PREFIX}/share/dex/cfr.jar"
+
+unset LD_LIBRARY_PATH
+unset LD_PRELOAD
+exec /system/bin/app_process -Xmx512m -Djava.io.tmpdir="${TMPDIR}"  \
+                             "${PREFIX}/bin"                        \
+                             org.benf.cfr.reader.Main "$@"          \
+                             | sed '/MdfppReflectionUtils/d';       \
+                             exit ${PIPESTATUS}

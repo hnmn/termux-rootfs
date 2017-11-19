@@ -1,0 +1,170 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##  Simulate chroot environment
+##
+
+usage()
+{
+    echo
+    echo " Usage: fakechroot [-h|--help] [ROOTFS] [COMMAND]"
+    echo
+    echo " Run command in fake chroot environment."
+    echo
+    echo " If you want to have access for files that exists on"
+    echo " host (Termux home and sdcard), then you need to set"
+    echo " environment variable 'MOUNT_HOST_FS'."
+    echo
+}
+
+## Disable LD_PRELOAD in prooted environment
+unset LD_PRELOAD
+
+## Set right temporary directory for proot
+export PROOT_TMP_DIR="${TMPDIR}"
+
+if [[ $(getenforce | tr '[[:upper:]]' '[[:lower:]]') = "enforcing" ]]; then
+    export PROOT_NO_SECCOMP=1
+    export USE_LINK2SYMLINK=true
+fi
+
+## Don't run fakechroot under termux-chroot
+if [ -e "${ROOTFS}/.termux-chroot" ]; then
+    echo "[!] Don't run fakechroot under termux-chrooted environment."
+    exit 1
+fi
+
+if [ ! -z "${1}" ]; then
+    if [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
+        usage
+        exit 0
+    fi
+
+    ROOTFS="${1}"
+
+    if grep -qP '^-.*$' <<< "${ROOTFS}"; then
+        echo "[!] Rootfs directory name cannot begin with '-'."
+        usage
+        exit 1
+    fi
+
+    if [ ! -d "${ROOTFS}" ]; then
+        echo "[!] Invalid root directory '${ROOTFS}'"
+        usage
+        exit 1
+    fi
+
+    if grep -qP '^-.*$' <<< "${2}"; then
+        echo "[!] Command cannot begin with '-'."
+        usage
+        exit 1
+    fi
+else
+    usage
+    exit 1
+fi
+
+if [ -e "${ROOTFS}/.fakechrooted" ]; then
+    echo
+    echo "Possible, that fakechroot is already running in this rootfs."
+    echo "If not, delete file '${ROOTFS}/.fakechrooted' and try again."
+    echo
+    exit 1
+fi
+
+## Determine path to 'env'
+if [ -e "${ROOTFS}/bin/env" ]; then
+    TARGET_ENV="/bin/env"
+elif [ -e "${ROOTFS}/usr/bin/env" ]; then
+    TARGET_ENV="/usr/bin/env"
+else
+    echo "[!] Cannot find binary for 'env'."
+    exit 1
+fi
+
+if [ ${#} -gt 1 ]; then
+    shift 1
+else
+    ## Determine path to shell
+    if [ -e "${ROOTFS}/bin/bash" ]; then
+        TARGET_SHELL="/bin/bash"
+    elif [ -e "${ROOTFS}/bin/ash" ]; then
+        TARGET_SHELL="/bin/ash"
+    elif [ -e "${ROOTFS}/usr/bin/bash" ]; then
+        TARGET_SHELL="/usr/bin/bash"
+    elif [ -e "${ROOTFS}/usr/bin/ash" ]; then
+        TARGET_SHELL="/usr/bin/ash"
+    elif [ -e "${ROOTFS}/bin/sh" ]; then
+        TARGET_SHELL="/bin/sh"
+    elif [ -e "${ROOTFS}/usr/bin/sh" ]; then
+        TARGET_SHELL="/usr/bin/sh"
+    else
+        echo "[!] Cannot find shell."
+        exit 1
+    fi
+
+    set -- "${TARGET_SHELL}"
+fi
+
+## Prepend 'env -i {ENVIRONMENT}' to target command
+set -- "PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin" "${@}"
+set -- "${TARGET_ENV}" '-i' "TERM=${TERM}" 'HOME=/root' "${@}"
+
+## Use QEMU for x86 based rootfs
+if grep -qoi 'Intel 80386' <(file -L "${ROOTFS}${TARGET_ENV}"); then
+    set -- '-q' 'qemu-i386-static -cpu max' "${@}"
+elif grep -qoi 'x86-64' <(file -L "${ROOTFS}${TARGET_ENV}"); then
+    set -- '-q' 'qemu-x86_64-static -cpu max' "${@}"
+fi
+
+## Path to new root filesystem directory
+set -- '-r' "${ROOTFS}" "${@}"
+
+## Populate /dev
+[ -r "/dev/full" ] && set -- '-b' "/dev/full:/dev/full" "${@}"
+set -- '-b' "/dev/null:/dev/null" "${@}"
+set -- '-b' "/dev/ptmx:/dev/ptmx" "${@}"
+set -- '-b' "/dev/pts:/dev/pts" "${@}"
+set -- '-b' "/dev/random:/dev/random" "${@}"
+set -- '-b' "/dev/tty:/dev/tty" "${@}"
+set -- '-b' "/dev/urandom:/dev/urandom" "${@}"
+set -- '-b' "/dev/zero:/dev/zero" "${@}"
+set -- '-b' "/proc/self/fd:/dev/fd" "${@}"
+set -- '-b' "/proc/self/fd/0:/dev/stdin" "${@}"
+set -- '-b' "/proc/self/fd/1:/dev/stdout" "${@}"
+set -- '-b' "/proc/self/fd/2:/dev/stderr" "${@}"
+
+## Bind procfs and sysfs
+set -- '-b' "/proc:/proc" "${@}"
+set -- '-b' "/sys:/sys" "${@}"
+
+if [ ! -z "${MOUNT_HOST_FS}" ]; then
+    ## Add links for Android's filesystems to /mnt
+    set -- '-b' "/storage:/mnt/storage" "${@}"
+    set -- '-b' "/storage/emulated/0:/mnt/media" "${@}"
+
+    ## Bind Termux home
+    set -- '-b' "${HOME}:/mnt/termux-home" "${@}"
+fi
+
+## Emulate root UID/GID and set working directory to '/root'
+set -- '--root-id' "${@}"
+set -- '--cwd=/root' "${@}"
+
+## Use link2symlink on SELinux-enabled devices
+${USE_LINK2SYMLINK} && set -- '--link2symlink' "${@}"
+
+## Create lock file to avoid running a multiple instances of 'proot' on
+## the same rootfs directory
+if ! touch "${ROOTFS}/.fakechrooted" > /dev/null 2>&1; then
+    echo "[!] Failed to create lock file"
+fi
+
+## Remove lock file on exit
+on_exit()
+{
+    rm -f "${ROOTFS}/.fakechrooted" > /dev/null 2>&1
+}
+trap on_exit SIGHUP SIGINT SIGQUIT SIGTERM
+
+proot --kill-on-exit "${@}"
+on_exit

@@ -1,0 +1,536 @@
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby  -lgmp -ldl -lm   -lc "
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return 0;
+6: }
+/* end */
+
+"aarch64-linux-android-clang -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC    -Werror -c conftest.c"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main() {return 0;}
+/* end */
+
+"pkg-config --exists libxml-2.0"
+| pkg-config --libs libxml-2.0
+=> "-L/data/data/com.termux/files/usr/lib -lxml2\n"
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  -g -DXP_UNIX conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby -L/data/data/com.termux/files/usr/lib -lxml2 -lgmp -ldl -lm   -lc "
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return 0;
+6: }
+/* end */
+
+| pkg-config --cflags-only-I libxml-2.0
+=> "-I/data/data/com.termux/files/usr/include/libxml2\n"
+| pkg-config --cflags-only-other libxml-2.0
+=> "\n"
+| pkg-config --libs-only-l libxml-2.0
+=> "-lxml2\n"
+package configuration for libxml-2.0
+cflags: 
+ldflags: -L/data/data/com.termux/files/usr/lib
+libs: -lxml2
+
+"pkg-config --exists libxslt"
+| pkg-config --libs libxslt
+=> "-L/data/data/com.termux/files/usr/lib -lxslt -lxml2 -lm -lxml2\n"
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  -g -DXP_UNIX  conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic -L/data/data/com.termux/files/usr/lib     -lxml2 -lruby -L/data/data/com.termux/files/usr/lib -lxslt -lxml2 -lm -lxml2 -lgmp -ldl -lm   -lc "
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return 0;
+6: }
+/* end */
+
+| pkg-config --cflags-only-I libxslt
+=> "-I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2\n"
+| pkg-config --cflags-only-other libxslt
+=> "\n"
+| pkg-config --libs-only-l libxslt
+=> "-lxslt -lxml2 -lm -lxml2\n"
+package configuration for libxslt
+cflags: 
+ldflags: -L/data/data/com.termux/files/usr/lib
+libs: -lxslt -lxml2 -lm -lxml2
+
+"pkg-config --exists libexslt"
+| pkg-config --libs libexslt
+=> "-L/data/data/com.termux/files/usr/lib -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2\n"
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  -g -DXP_UNIX   conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib     -lxml2 -lxslt -lxml2 -lm -lxml2 -lruby -L/data/data/com.termux/files/usr/lib -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lgmp -ldl -lm   -lc "
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return 0;
+6: }
+/* end */
+
+| pkg-config --cflags-only-I libexslt
+=> "-I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2\n"
+| pkg-config --cflags-only-other libexslt
+=> "\n"
+| pkg-config --libs-only-l libexslt
+=> "-lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2\n"
+package configuration for libexslt
+cflags: 
+ldflags: -L/data/data/com.termux/files/usr/lib
+libs: -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2
+
+"aarch64-linux-android-cpp -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    conftest.c -o conftest.i"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <libxml/xmlversion.h>
+/* end */
+
+"aarch64-linux-android-cpp -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    conftest.c -o conftest.i"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <libxml/xmlversion.h>
+4: #if LIBXML_VERSION < 20621
+5: #error libxml2 is older than 2.6.21
+6: #endif
+/* end */
+
+"aarch64-linux-android-cpp -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    conftest.c -o conftest.i"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <libxml/xmlversion.h>
+4: #if LIBXML_VERSION < 20903
+5: #error libxml2 is older than 2.9.3
+6: #endif
+/* end */
+
+have_func: checking for xmlParseDoc() in libxml/parser.h... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  -g -DXP_UNIX    conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib     -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lruby  -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lgmp -ldl -lm   -lc "
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <libxml/parser.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+15: int t(void) { void ((*volatile p)()); p = (void ((*)()))xmlParseDoc; return !p; }
+/* end */
+
+--------------------
+
+have_func: checking for xsltParseStylesheetDoc() in libxslt/xslt.h... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  -g -DXP_UNIX    conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib     -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lruby  -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lgmp -ldl -lm   -lc "
+conftest.c:15:57: error: use of undeclared identifier 'xsltParseStylesheetDoc'
+int t(void) { void ((*volatile p)()); p = (void ((*)()))xsltParseStylesheetDoc; return !p; }
+                                                        ^
+1 error generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <libxslt/xslt.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+15: int t(void) { void ((*volatile p)()); p = (void ((*)()))xsltParseStylesheetDoc; return !p; }
+/* end */
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  -g -DXP_UNIX    conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib     -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lruby  -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lgmp -ldl -lm   -lc "
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <libxslt/xslt.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+15: extern void xsltParseStylesheetDoc();
+16: int t(void) { xsltParseStylesheetDoc(); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for exsltFuncRegister() in libexslt/exslt.h... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  -g -DXP_UNIX    conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib     -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lruby  -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lgmp -ldl -lm   -lc "
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <libexslt/exslt.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+15: int t(void) { void ((*volatile p)()); p = (void ((*)()))exsltFuncRegister; return !p; }
+/* end */
+
+--------------------
+
+have_func: checking for xmlHasFeature()... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  -g -DXP_UNIX    conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib     -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lruby  -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lgmp -ldl -lm   -lc "
+conftest.c:13:57: error: use of undeclared identifier 'xmlHasFeature'
+int t(void) { void ((*volatile p)()); p = (void ((*)()))xmlHasFeature; return !p; }
+                                                        ^
+1 error generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+13: int t(void) { void ((*volatile p)()); p = (void ((*)()))xmlHasFeature; return !p; }
+/* end */
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  -g -DXP_UNIX    conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib     -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lruby  -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lgmp -ldl -lm   -lc "
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+13: extern void xmlHasFeature();
+14: int t(void) { xmlHasFeature(); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for xmlFirstElementChild()... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  -g -DXP_UNIX    conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib     -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lruby  -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lgmp -ldl -lm   -lc "
+conftest.c:13:57: error: use of undeclared identifier 'xmlFirstElementChild'
+int t(void) { void ((*volatile p)()); p = (void ((*)()))xmlFirstElementChild; return !p; }
+                                                        ^
+1 error generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+13: int t(void) { void ((*volatile p)()); p = (void ((*)()))xmlFirstElementChild; return !p; }
+/* end */
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  -g -DXP_UNIX    conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib     -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lruby  -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lgmp -ldl -lm   -lc "
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+13: extern void xmlFirstElementChild();
+14: int t(void) { xmlFirstElementChild(); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for xmlRelaxNGSetParserStructuredErrors()... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  -g -DXP_UNIX    conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib     -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lruby  -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lgmp -ldl -lm   -lc "
+conftest.c:13:57: error: use of undeclared identifier 'xmlRelaxNGSetParserStructuredErrors'
+int t(void) { void ((*volatile p)()); p = (void ((*)()))xmlRelaxNGSetParserStructuredErrors; return !p; }
+                                                        ^
+1 error generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+13: int t(void) { void ((*volatile p)()); p = (void ((*)()))xmlRelaxNGSetParserStructuredErrors; return !p; }
+/* end */
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  -g -DXP_UNIX    conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib     -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lruby  -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lgmp -ldl -lm   -lc "
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+13: extern void xmlRelaxNGSetParserStructuredErrors();
+14: int t(void) { xmlRelaxNGSetParserStructuredErrors(); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for xmlRelaxNGSetParserStructuredErrors()... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  -g -DXP_UNIX    conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib     -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lruby  -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lgmp -ldl -lm   -lc "
+conftest.c:13:57: error: use of undeclared identifier 'xmlRelaxNGSetParserStructuredErrors'
+int t(void) { void ((*volatile p)()); p = (void ((*)()))xmlRelaxNGSetParserStructuredErrors; return !p; }
+                                                        ^
+1 error generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+13: int t(void) { void ((*volatile p)()); p = (void ((*)()))xmlRelaxNGSetParserStructuredErrors; return !p; }
+/* end */
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  -g -DXP_UNIX    conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib     -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lruby  -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lgmp -ldl -lm   -lc "
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+13: extern void xmlRelaxNGSetParserStructuredErrors();
+14: int t(void) { xmlRelaxNGSetParserStructuredErrors(); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for xmlRelaxNGSetValidStructuredErrors()... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  -g -DXP_UNIX    conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib     -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lruby  -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lgmp -ldl -lm   -lc "
+conftest.c:13:57: error: use of undeclared identifier 'xmlRelaxNGSetValidStructuredErrors'
+int t(void) { void ((*volatile p)()); p = (void ((*)()))xmlRelaxNGSetValidStructuredErrors; return !p; }
+                                                        ^
+1 error generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+13: int t(void) { void ((*volatile p)()); p = (void ((*)()))xmlRelaxNGSetValidStructuredErrors; return !p; }
+/* end */
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  -g -DXP_UNIX    conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib     -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lruby  -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lgmp -ldl -lm   -lc "
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+13: extern void xmlRelaxNGSetValidStructuredErrors();
+14: int t(void) { xmlRelaxNGSetValidStructuredErrors(); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for xmlSchemaSetValidStructuredErrors()... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  -g -DXP_UNIX    conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib     -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lruby  -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lgmp -ldl -lm   -lc "
+conftest.c:13:57: error: use of undeclared identifier 'xmlSchemaSetValidStructuredErrors'
+int t(void) { void ((*volatile p)()); p = (void ((*)()))xmlSchemaSetValidStructuredErrors; return !p; }
+                                                        ^
+1 error generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+13: int t(void) { void ((*volatile p)()); p = (void ((*)()))xmlSchemaSetValidStructuredErrors; return !p; }
+/* end */
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  -g -DXP_UNIX    conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib     -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lruby  -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lgmp -ldl -lm   -lc "
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+13: extern void xmlSchemaSetValidStructuredErrors();
+14: int t(void) { xmlSchemaSetValidStructuredErrors(); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for xmlSchemaSetParserStructuredErrors()... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  -g -DXP_UNIX    conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib     -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lruby  -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lgmp -ldl -lm   -lc "
+conftest.c:13:57: error: use of undeclared identifier 'xmlSchemaSetParserStructuredErrors'
+int t(void) { void ((*volatile p)()); p = (void ((*)()))xmlSchemaSetParserStructuredErrors; return !p; }
+                                                        ^
+1 error generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+13: int t(void) { void ((*volatile p)()); p = (void ((*)()))xmlSchemaSetParserStructuredErrors; return !p; }
+/* end */
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -I/data/data/com.termux/files/usr/include/libxml2 -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Oz -fPIC  -g -DXP_UNIX    conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib -L/data/data/com.termux/files/usr/lib     -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lruby  -lxml2 -lxslt -lxml2 -lm -lxml2 -lexslt -lxslt -lxml2 -lm -lgcrypt -lgpg-error -lxml2 -lgmp -ldl -lm   -lc "
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+13: extern void xmlSchemaSetParserStructuredErrors();
+14: int t(void) { xmlSchemaSetParserStructuredErrors(); return 0; }
+/* end */
+
+--------------------
+

@@ -1,0 +1,44 @@
+##
+##  Syntax highlighting for shell (ash,bash,dash,ksh)
+##
+
+syntax "sh" "\.sh$" "bash.bash(rc|_logout)$" "\.bash(rc|_profile|_logout)$" "/etc/profile$"
+header "^#![[:space:]]*/.*/((a|ba|da|k)?sh|env[[:space:]]+(a|ba|da|k)?sh).*"
+magic "(POSIX|Bourne.*) shell script text"
+linter dash -n
+comment "#"
+
+# keywords and built-ins
+color green "\<(alias|bg|bind|break|builtin|caller|case|cd|command|compgen|complete|compopt|continue|coproc|declare|dirs|disown)\>"
+color green "\<(do|done|echo|elif|else|enable|esac|eval|exec|exit|export|false|fc|fg|fi|for|function|getopts|hash|help|history)\>"
+color green "\<(if|in|jobs|kill|let|local|logout|mapfile|popd|printf|pushd|pwd|read|readarray|readonly|return|select|set|shift)\>"
+color green "\<(shopt|source|suspend|test|then|time|times|trap|true|type|typeset|ulimit|umask|unalias|unset|until|variables|wait|while)\>"
+
+# special characters
+color green "(^|[[:space:]]+)\.[[:space:]]"
+color green "[{}():;|`$<>!=&\\]" "(\]|\[)"
+
+# conditions
+color green "\[.+-(a|b|c|d|e|f|g|h|k|n|o|p|r|s|t|u|w|x|z|O|G|L|N|S|ef|eq|ge|gt|ne|le|lt|nt|ot).+\]"
+
+# variable names
+color brightred "\$[-0-9@*#?$!]" "\$[[:alpha:]_][[:alnum:]_]*"
+color brightred "\$\{?[0-9a-zA-Z_!@#$*?-]+\}?"
+
+# function definitions
+icolor brightgreen "^[[:space:]]*[a-zA-Z_]+[a-zA-Z0-9_-]*\(\)"
+
+# highlight tabs
+color ,red "	"
+
+# strings
+color brightyellow ""(\\.|[^"])*"" "'(\\.|[^'])*'"
+
+# comments
+color cyan "(^|[[:space:]])#.*$"
+
+# shebang
+color brightblack "^#![[:space:]]*/.*/((a|ba|da|k|z)?sh|env[[:space:]]+(a|ba|da|k|z)?sh).*"
+
+# trailing whitespaces
+color ,green "[[:space:]]+$"

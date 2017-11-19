@@ -1,0 +1,10 @@
+*.rbc
+*.swp
+.DS_Store
+/.rdoc
+/.rvmrc
+/TAGS
+/html
+/pkg
+/tmp
+Gemfile.lock

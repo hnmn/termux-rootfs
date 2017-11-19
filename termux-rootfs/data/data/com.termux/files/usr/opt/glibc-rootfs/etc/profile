@@ -1,0 +1,38 @@
+umask 0022
+
+#############################################################################
+##
+##  Environment
+##
+#############################################################################
+
+if [ "$(id -u)" == "0" ]; then
+    export HOME=/root
+else
+    export HOME=/home
+fi
+
+export EDITOR=/usr/bin/nano
+export GCC_SPECS=''
+export LANG='en_US.UTF-8'
+export LESS='-R -M --shift 5'
+export LESSOPEN='|lesspipe %s'
+export PATH=/usr/aarch64-unknown-linux-gnu/toolchain/5.4.0:/usr/bin
+export TERMINFO=/usr/share/terminfo
+export TERMUX_PREFIX=/data/data/com.termux/files/usr
+export TMPDIR=/tmp
+export TZ=UTC
+
+#############################################################################
+##
+##  Load bashrc
+##
+#############################################################################
+
+if [ "$BASH" ]; then
+    if [[ "$-" == *"i"* ]]; then
+        if [ -r "/etc/bash.bashrc" ]; then
+            source "/etc/bash.bashrc"
+        fi
+    fi
+fi

@@ -1,0 +1,11 @@
+prefix=/data/data/com.termux/files/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libzmq
+Description: 0MQ c++ library
+Version: 4.2.2
+Libs: -L${libdir} -lzmq
+Libs.private: -lstdc++  -L/data/data/com.termux/files/usr/lib -lsodium
+Cflags: -I${includedir} -DZMQ_BUILD_DRAFT_API=1

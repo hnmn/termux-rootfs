@@ -1,0 +1,9 @@
+Name: libecpg
+Description: PostgreSQL libecpg library
+Url: http://www.postgresql.org/
+Version: 10.1
+Requires: 
+Requires.private: libpq libpgtypes
+Cflags: -I/data/data/com.termux/files/usr/include
+Libs: -L/data/data/com.termux/files/usr/lib -lecpg
+Libs.private: -L/data/data/com.termux/files/usr/lib -lm

@@ -1,0 +1,23 @@
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/google-protobuf-3.4.1/ext/google/protobuf_c
+/data/data/com.termux/files/usr/bin/ruby -r ./siteconf20170918-13260-10tdrrl.rb extconf.rb
+creating Makefile
+
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/google-protobuf-3.4.1/ext/google/protobuf_c
+make "DESTDIR=" clean
+
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/google-protobuf-3.4.1/ext/google/protobuf_c
+make "DESTDIR="
+compiling protobuf.c
+compiling defs.c
+compiling storage.c
+compiling message.c
+compiling repeated_field.c
+compiling map.c
+compiling encode_decode.c
+compiling upb.c
+compiling wrap_memcpy.c
+linking shared-object google/protobuf_c.so
+
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/google-protobuf-3.4.1/ext/google/protobuf_c
+make "DESTDIR=" install
+install -c -m 0755 protobuf_c.so ./.gem.20170918-13260-7k40yk/google

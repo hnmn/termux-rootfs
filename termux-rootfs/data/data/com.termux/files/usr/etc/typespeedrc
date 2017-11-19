@@ -1,0 +1,4 @@
+cheat = no
+highorder = score cps tcps
+ruledir = /data/data/com.termux/files/usr/share/typespeed/rules
+worddir = /data/data/com.termux/files/usr/share/typespeed/words

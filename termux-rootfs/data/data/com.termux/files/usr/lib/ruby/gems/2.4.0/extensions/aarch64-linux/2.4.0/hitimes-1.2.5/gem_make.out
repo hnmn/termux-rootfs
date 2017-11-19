@@ -1,0 +1,21 @@
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/hitimes-1.2.5/ext/hitimes/c
+/data/data/com.termux/files/usr/bin/ruby -r ./siteconf20170913-27859-6u32xg.rb extconf.rb
+checking for clock_gettime() in -lrt... yes
+creating Makefile
+
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/hitimes-1.2.5/ext/hitimes/c
+make "DESTDIR=" clean
+
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/hitimes-1.2.5/ext/hitimes/c
+make "DESTDIR="
+compiling hitimes.c
+compiling hitimes_instant_clock_gettime.c
+compiling hitimes_instant_osx.c
+compiling hitimes_instant_windows.c
+compiling hitimes_interval.c
+compiling hitimes_stats.c
+linking shared-object hitimes/2.4/hitimes.so
+
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/hitimes-1.2.5/ext/hitimes/c
+make "DESTDIR=" install
+install -c -m 0755 hitimes.so ./.gem.20170913-27859-1k8j0hu/hitimes/2.4

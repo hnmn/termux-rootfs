@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8" />
+<title>Namespaces - Vala Reference Manual</title>
+<link rel="stylesheet" type="text/css" href="default.css"><meta name="viewport" content="initial-scale=1">
+</head>
+<body>
+<div class="o-fixedtop c-navbar"><div class="o-navbar">
+<span class="c-pageturner u-float-left"><a href="index.html">Contents</a></span><span>Vala Reference Manual</span><div class="u-float-right">
+<span class="c-pageturner o-inlinewidth-4"><a href="Statements.html">Prev</a></span><span class="c-pageturner o-inlinewidth-4"><a href="Methods.html">Next</a></span>
+</div>
+</div></div>
+<h2>6. Namespaces</h2>
+<ul class="page_toc">
+<li><a href="Namespaces.html#The_global_namespace">6.1 The global namespace</a></li>
+<li><a href="Namespaces.html#Namespace_declaration">6.2 Namespace declaration</a></li>
+<li><a href="Namespaces.html#Members">6.3 Members</a></li>
+<li><a href="Namespaces.html#Fields">6.4 Fields</a></li>
+<li><a href="Namespaces.html#Constants">6.5 Constants</a></li>
+<li><a href="Namespaces.html#The_%22using%22_statement">6.6 The "using" statement</a></li>
+</ul>
+<p>Namespaces are named scopes (see <a href="Concepts.html#Scope_and_naming">Concepts/Scope and naming</a>).  Definitions in different namespaces can use the same names without causing conflicts.  A namespace can be declared across any number of Vala source files, and there can be multiple namespaces defined in a single Vala source file.  Namespaces can be nested to any depth. </p>
+<p>When code needs to access definitions from other namespaces, it must either refer to them using a fully qualified name, or be written in a file with an appropriate using statement. </p>
+<p>The simplest namespace declaration looks like this: </p>
+<pre class="o-box c-program"><span class="c-program-token">namespace</span> <span class="c-program-methodname">NameSpaceName</span> {
+}
+</pre>
+<p>Namespace nesting is achieved either by nesting the declarations, or by providing multiple names in one declaration: </p>
+<pre class="o-box c-program"><span class="c-program-token">namespace</span> <span class="c-program-methodname">NameSpaceName1</span> {
+        <span class="c-program-token">namespace</span> <span class="c-program-methodname">NameSpaceName2</span> {
+        }
+}
+
+<span class="c-program-token">namespace</span> <span class="c-program-methodname">NameSpaceName1.NameSpaceName2</span> {
+}
+</pre>
+
+<h3 id="The_global_namespace">6.1 The global namespace</h3>
+<p>Everything not declared within a particular namespace declaration is automatically in the global namespace.  All defined namespaces are nested inside the global namespace at some depth.  This is also where the fundamental types are defined. </p>
+<p>If there is ever a need to explictly refer to an identifier in the global namespace, the identifier can be prefixed with <code>global::</code>.  This will allow you, for example, to refer to a namespace which has the same name as a local variable. </p>
+
+<h3 id="Namespace_declaration">6.2 Namespace declaration</h3>
+<blockquote class="o-box c-rules">namespace-declaration:
+	<span class="literal">namespace</span> qualified-namespace-name <span class="literal">{</span> [ namespace-members ] <span class="literal">}</span>
+
+qualified-namespace-name:
+	[ qualified-namespace-name <span class="literal">.</span> ] namespace-name
+
+namespace-name:
+	identifier
+
+namespace-members:
+	namespace-member [ namespace-members ]
+
+namespace-member:
+	class-declaration
+	abstract-class-declaration
+	constant-declaration
+	delegate-declaration
+	enum-declaration
+	errordomain-declaration
+	field-declaration
+	interface-declaration
+	method-declaration
+	namespace-declaration
+	struct-declaration
+
+</blockquote>
+
+<h3 id="Members">6.3 Members</h3>
+<p>Namespaces members exist in the namespace's scope.  They fall into two broad categories: data and definitions.  Data members are fields which contain type instances. Definitions are things that can be invoked or instantiated.  Namespace members can be declared either private or public.  Public data can be accessed from anywhere, whilst private data can only be accessed from inside the namespace.  Public definitions are visible to code defined in a different namespace, and thus can be invoked or instantiated from anywhere, private definitions are only visible to code inside the namespace, and so can only be invoked or instantiated from there. </p>
+<blockquote class="o-box c-rules">access-modifier:
+	<span class="literal">public</span>
+	<span class="literal">private</span>
+
+</blockquote>
+<p>For the types of namespace members that are not described on this page: see <a href="Classes.html#">Classes</a>, <a href="Structs.html#">Structs</a>, <a href="Delegates.html#">Delegates</a>, <a href="Enumerated_types__Enums_.html#">Enumerated types (Enums)</a>, and <a href="Enumerated_types__Enums_.html#Error_domains">Enumerated types (Enums)/Error domains</a>. </p>
+
+<h3 id="Fields">6.4 Fields</h3>
+<p>Variables that exist directly in a namespace are known as namespace fields.  These exist only once, and within the scope of the namespace which exists for the application's entire run time.  They are therefore similar to global variables in C but without the risk of naming clashes. </p>
+<blockquote class="o-box c-rules">field-declaration:
+	[ access-modifier ] qualified-type-name field-name [ <span class="literal">=</span> expression ] ;
+
+field-name:
+	identifier
+
+</blockquote>
+<p>Fields in general are described at <a href="Concepts.html#Variables,_fields_and_parameters">Concepts/Variables, fields and parameters</a>. </p>
+
+<h3 id="Constants">6.5 Constants</h3>
+<p>Constants are similar to variables but can only be assigned to once.  It is therefore required that the expression that initialises the constant be executable at the time the constant comes into scope.  For namespaces this means that the expressions must be evaluable at the beginning of the application's execution. </p>
+<blockquote class="o-box c-rules">constant-declaration:
+	[ access-modifier ] <span class="literal">const</span> qualified-type-name constant-name <span class="literal">=</span> expression ;
+
+constant-name:
+	identifier
+
+</blockquote>
+
+<h3 id='The_"using"_statement'>6.6 The "using" statement</h3>
+<p><code>using</code> statements can be used to avoid having to qualify names fully on a file-by-file basis.  For all identifiers in the same file as the using statement, Vala will first try to resolve them following the usual rules (see <a href="Concepts.html#Scope_and_naming">Concepts/Scope and naming</a>).  If the identifier cannot be resolved in any scope, each namespace that is referenced in a <code>using</code> will be searched in turn. </p>
+<blockquote class="o-box c-rules">using-statement:
+	<span class="literal">using</span> namespace-list <span class="literal">;</span>
+
+namespace-list:
+	qualified-namespace-name [ <span class="literal">,</span> namespace-list ]
+
+</blockquote>
+<p>There can be any number of using statements in a Vala source file, but they must all appear outside any other declarations.  Note that <code>using</code> is not like import statements in other languages - it does not load anything, it just allows for automatic searching of namespace scopes, in order to allow frugal code to be written. </p>
+<p>Most code depends on members of the GLib namespace, and so many source files begin with: </p>
+<pre class="o-box c-program"><span class="c-program-token">using</span> <span class="c-program-methodname">GLib</span>;
+</pre>
+<p>TODO: Include examples. </p>
+</body>
+</html>

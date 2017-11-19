@@ -1,0 +1,113 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# datamash bash-completion
+#
+## Copyright (C) 2014-2017 Assaf Gordon <assafgordon@gmail.com>
+##
+## This file is part of GNU Datamash.
+##
+## This file is free software; as a special exception the author gives
+## unlimited permission to copy and/or distribute it, with or without
+## modifications, as long as this notice is preserved.
+##
+## This program is distributed in the hope that it will be useful, but
+## WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
+## implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+##
+
+_datamash ()
+{
+  local cur prev words cword split=false
+  _get_comp_words_by_ref cur prev words cword
+
+  local modes="check crosstab groupby reverse rmdup transpose"
+  local modes_re=${modes// /|}
+
+  #NOTE: do not change the spaces (or indentation or backslashes)
+  #      or the regex will fail.
+  local groupby_ops="sum min max absmin absmax range \
+count first last rand \
+unique collapse countunique \
+mean median q1 q3 iqr perc mode antimode \
+pstdev sstdev pvar svar mad madraw \
+pskew sskew pkurt skurt dpo jarque \
+pcov scov ppearson spearson strbin"
+ local groupby_ops_re=${groupby_ops// /|}
+
+  local line_ops="base64 debase64 md5 sha1 sha256 sha512 \
+round floor ceil trunc frac bin"
+  local line_ops_re=${line_ops// /|}
+
+  local datamash_short_options="-f -g -H -i -s -t -W -z"
+
+  local datamash_long_options="--full --group --header-in --header-out --headers
+  --ignore-case --sort --no-strict --filler --field-separator --whitespace
+  --zero-terminated --help --version"
+
+  local all_ops_re="$modes_re|$groupby_ops_re|$line_ops_re"
+
+  # IF the previous word as an operator, the next parameter should
+  # be a numeric value, so don't offer any completion.
+  if [[ "$prev" =~ $all_ops_re ]] ; then
+    return 0
+  fi
+
+  # Based on current parameteres, check which mode we're in.
+  local suggest_modes=1
+  local suggest_groupby_ops=1
+  local suggest_line_ops=1
+  local i=$((cword-1))
+
+  while [ "$i" -gt 0 ] ; do
+    local tmp_word=${words[$i]}
+
+    if [[ "$tmp_word" =~ $modes_re ]] ; then
+      suggest_modes=0
+      case "$tmp_word" in
+        crosstab|groupby) suggest_line_ops=0
+      esac
+    fi
+
+    if [[ "$tmp_word" =~ $groupby_ops_re ]]; then
+      suggest_modes=0
+      suggest_line_ops=0
+    fi
+    # if the user specified -g, we're in "groupby" mode
+    if [[ "$tmp_word" = "-g" ]] ; then
+      suggest_modes=0
+      suggest_line_ops=0
+    fi
+
+    if [[ "$tmp_word" =~ $line_ops_re ]]; then
+      suggest_modes=0
+      suggest_groupby_ops=0
+    fi
+
+    i=$((i-1))
+  done
+
+  # Options trump everything (if the user typed '-')
+  if [[ "$cur" = "-"* ]] ; then
+    COMPREPLY=( $(compgen -W \
+        "$datamash_short_options $datamash_long_options" -- "$cur") )
+    return 0
+  fi
+
+  # suggest other possibilities
+  local suggest=""
+  if [ "$suggest_modes" -eq 1 ] ; then
+    suggest="$modes"
+  fi
+  if [ "$suggest_groupby_ops" -eq 1 ] ; then
+    suggest="$suggest $groupby_ops"
+  fi
+  if [ "$suggest_line_ops" -eq 1 ] ; then
+    suggest="$suggest $line_ops"
+  fi
+
+  COMPREPLY=( $(compgen -W "$suggest" -- "$cur") )
+  return 0
+}
+
+complete -F _datamash datamash
+
+# ex: ts=4 sw=4 et filetype=sh

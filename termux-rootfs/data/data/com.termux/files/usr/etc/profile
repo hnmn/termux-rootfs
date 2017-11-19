@@ -1,0 +1,28 @@
+###############################################################
+##
+##  Profile for bash
+##
+###############################################################
+
+## source basic environment (do not remove this line)
+source "${PREFIX}/etc/basic_environment.sh"
+
+## load additional profiles
+if [ -d "${PREFIX}/etc/profile.d" ]; then
+    FILES=$(find "${PREFIX}/etc/profile.d" -type f -iname \*.sh)
+
+    if [ ! -z "${FILES}" ]; then
+        for file in ${FILES}; do
+            source "${file}"
+        done
+    fi
+fi
+
+## load bashrc
+if [ "${BASH}" ]; then
+    if [[ "$-" == *"i"* ]]; then
+        if [ -r "${PREFIX}/etc/bash.bashrc" ]; then
+            . "${PREFIX}/etc/bash.bashrc"
+        fi
+    fi
+fi

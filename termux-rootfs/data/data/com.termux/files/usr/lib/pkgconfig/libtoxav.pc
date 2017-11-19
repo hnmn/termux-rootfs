@@ -1,0 +1,11 @@
+prefix=/data/data/com.termux/files/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libtoxav
+Description: Tox A/V library
+Requires: libtoxcore
+Version: 0.1.10
+Libs: -L${libdir} -ltoxav -L/data/data/com.termux/files/usr/lib -lopus -L/data/data/com.termux/files/usr/lib -lvpx -lm
+Cflags: -I${includedir}

@@ -1,0 +1,11 @@
+prefix=/data/data/com.termux/files/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libdpkg
+Description: Debian package management system library
+Version: 1.18.24
+Libs: -L${libdir} -ldpkg
+Libs.private:  -lz -llzma 
+Cflags: -I${includedir}

@@ -1,0 +1,364 @@
+# ISO Currency Codes
+
+ATS                    austriaschilling
+BEF                    belgiumfranc
+CYP                    cypruspound
+EEK                    estoniakroon
+FIM                    finlandmarkka
+FRF                    francefranc
+DEM                    germanymark
+GRD                    greecedrachma
+IEP                    irelandpunt
+ITL                    italylira
+LVL                    latvialat
+LTL                    lithuanialita
+LUF                    luxembourgfranc
+MTL                    maltalira
+SKK                    slovakiakornua
+SIT                    sloveniatolar
+ESP                    spainpeseta
+NLG                    netherlandsguilder
+PTE                    portugalescudo
+CVE                    capeverdeescudo
+BGN                    bulgarialev
+BAM                    bosniaconvertiblemark
+KMF                    comorosfranc
+XOF                    westafricanfranc
+XPF                    cfpfranc
+XAF                    centralafricancfafranc
+AED                    uaedirham
+AFN                    afghanafghani
+ALL                    albanialek
+AMD                    armeniadram
+AOA                    angolakwanza
+ARS                    argentinapeso
+AUD                    australiadollar
+AWG                    arubaflorin
+AZN                    azerbaijanmanat
+BBD                    barbadosdollar
+BDT                    bangladeshtaka
+BHD                    bahraindinar
+BIF                    burundifranc
+BMD                    bermudadollar
+BND                    bruneidollar
+BOB                    boliviaboliviano
+BRL                    brazilreal
+BSD                    bahamasdollar
+BTN                    bhutanngultrum
+BWP                    botswanapula
+BYN                    belarusruble
+BYR                    oldbelarusruble
+BZD                    belizedollar
+CAD                    canadadollar
+CDF                    drcfranccongolais
+CHF                    swissfranc
+CLP                    chilepeso
+CNY                    chinayuan
+COP                    colombiapeso
+CRC                    costaricacolon
+CUP                    cubapeso
+CZK                    czechkoruna
+DJF                    djiboutifranc
+DKK                    denmarkkrona
+DOP                    dominicanrepublicpeso
+DZD                    algeriadinar
+EGP                    egyptpound
+ERN                    eritreanakfa
+ETB                    ethiopianbirr
+EUR                    euro
+FJD                    fijidollar
+FKP                    falklandislandspound
+GBP                    ukpound
+GEL                    georgialari
+GHS                    ghanacedi
+GIP                    gibraltarpound
+GMD                    gambiadalasi
+GNF                    guineafranc
+GTQ                    guatemalaquetzal
+GYD                    guyanadollar
+HKD                    hongkongdollar
+HNL                    honduraslempira
+HRK                    croatiakuna
+HTG                    haitigourde
+HUF                    hungariaforint
+IDR                    indonesiarupiah
+ILS                    israelnewshekel
+INR                    indiarupee
+IQD                    iraqdinar
+IRR                    iranrial
+ISK                    icelandkrona
+JMD                    jamaicadollar
+JOD                    jordandinar
+JPY                    japanyen
+KES                    kenyaschilling
+KGS                    kyrgyzstansom
+KHR                    cambodiariel
+KPW                    northkoreawon
+KRW                    southkoreawon
+KWD                    kuwaitdinar
+KYD                    caymanislandsdollar
+KZT                    kazakhstantenge
+LAK                    laokip
+LBP                    lebanonpound
+LKR                    srilankanrupee
+LRD                    liberiadollar
+LYD                    libyadinar
+MAD                    moroccodirham
+MDL                    moldovaleu
+MGA                    madagascarariary
+MKD                    macedoniadenar
+MMK                    myanmarkyat
+MNT                    mongoliatugrik
+MOP                    macaupataca
+MRO                    mauritaniaouguiya
+MUR                    mauritiusrupee
+MVR                    maldiverufiyaa
+MWK                    malawikwacha
+MXN                    mexicopeso
+MYR                    malaysiaringgit
+MZN                    mozambicanmetical
+NAD                    namibiadollar
+NGN                    nigerianaira
+NIO                    nicaraguacordobaoro
+NOK                    norwaykrone
+NPR                    nepalrupee
+NZD                    newzealanddollar
+OMR                    omanrial
+PAB                    panamabalboa
+PEN                    perunuevosol
+PGK                    papuanewguineakina
+PHP                    philippinepeso
+PKR                    pakistanrupee
+PLN                    polandzloty
+PYG                    paraguayguarani
+QAR                    qatarrial
+RON                    romanianewlei
+RSD                    serbiadinar
+RUB                    russiaruble
+RWF                    rwandafranc
+SAR                    saudiarabiariyal
+SBD                    solomonislandsdollar
+SCR                    seychellesrupee
+SDG                    sudanpound
+SEK                    swedenkrona
+SGD                    singaporedollar
+SHP                    sainthelenapound
+SLL                    sierraleoneleone
+SOS                    somaliaschilling
+SRD                    surinamedollar
+STD                    saotome&principedobra
+SVC                    elsalvadorcolon
+SYP                    syriapound
+SZL                    swazilandlilangeni
+THB                    thailandbaht
+TJS                    tajikistansomoni
+TMT                    turkmenistanmanat
+TND                    tunisiadinar
+TOP                    tongapa'anga
+TRY                    turkeylira
+TTD                    trinidadandtobagodollar
+TWD                    taiwandollar
+TZS                    tanzaniashilling
+UAH                    ukrainehryvnia
+UGX                    ugandaschilling
+UYU                    uruguaypeso
+UZS                    uzbekistansum
+VEF                    venezuelabolivar
+VEB                    venezuelaoldbolivar
+VND                    vietnamdong
+VUV                    vanuatuvatu
+WST                    samoatala
+XCD                    eastcaribbeandollar
+XDR                    specialdrawingrights
+YER                    yemenrial
+ZAR                    southafricarand
+ZMW                    zambiakwacha
+ZWL                    zimbabwedollar
+
+# Currency exchange rates from Yahoo Finance (finance.yahoo.com)
+
+!message Currency exchange rates from finance.yahoo.com on 2017-10-28
+
+austriaschilling         1|13.7603 euro
+belgiumfranc             1|40.3399 euro
+cypruspound              1|0.585274 euro
+estoniakroon             1|15.6466 euro # Equal to 1|8 germanymark
+finlandmarkka            1|5.94573 euro
+francefranc              1|6.55957 euro
+germanymark              1|1.95583 euro
+greecedrachma            1|340.75 euro
+irelandpunt              1|0.787564 euro
+italylira                1|1936.27 euro
+latvialat                1|0.620550 US$
+lithuanialita            1|3.048700 US$
+luxembourgfranc          1|40.3399 euro
+maltalira                1|0.4293 euro
+slovakiakornua           1|30.1260 euro
+sloveniatolar            1|239.640 euro
+spainpeseta              1|166.386 euro
+netherlandsguilder       1|2.20371 euro
+portugalescudo           1|200.482 euro
+capeverdeescudo          1|94.989998 US$
+bulgarialev              1|1.685300 US$
+bosniaconvertiblemark    1|1.687100 US$
+comorosfranc             1|415.200012 US$
+westafricanfranc         1|655.957 euro
+cfpfranc                 1|119.33 euro
+centralafricancfafranc   1|564.539978 US$
+uaedirham                1|3.672000 US$
+afghanafghani            1|68.169998 US$
+albanialek               1|114.949997 US$
+armeniadram              1|481.739990 US$
+angolakwanza             1|165.097000 US$
+argentinapeso            1|17.583000 US$
+australiadollar          1|1.301000 US$
+arubaflorin              1|1.780000 US$
+azerbaijanmanat          1|1.699700 US$
+barbadosdollar           1|2.000000 US$
+bangladeshtaka           1|82.760002 US$
+bahraindinar             1|0.376800 US$
+burundifranc             1|1740.550049 US$
+bermudadollar            1|1.000000 US$
+bruneidollar             1|1.364200 US$
+boliviaboliviano         1|6.860000 US$
+brazilreal               1|3.235800 US$
+bahamasdollar            1|1.000000 US$
+bhutanngultrum           1|64.750000 US$
+botswanapula             1|10.588200 US$
+belarusruble             1|1.950000 US$
+oldbelarusruble          10000 BYN
+belizedollar             1|1.997800 US$
+canadadollar             1|1.281200 US$
+drcfranccongolais        1|1565.500000 US$
+swissfranc               1|0.997350 US$
+chilepeso                1|634.809998 US$
+chinayuan                1|6.649700 US$
+colombiapeso             1|3009.000000 US$
+costaricacolon           1|567.210022 US$
+cubapeso                 1|1.000000 US$
+czechkoruna              1|22.041000 US$
+djiboutifranc            1|176.830002 US$
+denmarkkrona             1|6.406600 US$
+dominicanrepublicpeso    1|47.080002 US$
+algeriadinar             1|114.947998 US$
+egyptpound               1|17.600000 US$
+eritreanakfa             1|15.280000 US$
+ethiopianbirr            1|27.000000 US$
+euro                     1|0.861100 US$
+fijidollar               1|2.087500 US$
+falklandislandspound     1|0.761400 US$
+ukpound                  1|0.761710 US$
+georgialari              1|2.539600 US$
+ghanacedi                1|4.378500 US$
+gibraltarpound           1|0.761600 US$
+gambiadalasi             1|47.099998 US$
+guineafranc              1|8998.000000 US$
+guatemalaquetzal         1|7.343000 US$
+guyanadollar             1|204.399994 US$
+hongkongdollar           1|7.802200 US$
+honduraslempira          1|23.464001 US$
+croatiakuna              1|6.464400 US$
+haitigourde              1|61.480000 US$
+hungariaforint           1|267.149994 US$
+indonesiarupiah          1|13613.000000 US$
+israelnewshekel          1|3.529200 US$
+indiarupee               1|65.044998 US$
+iraqdinar                1|1166.000000 US$
+iranrial                 1|34489.000000 US$
+icelandkrona             1|105.010002 US$
+jamaicadollar            1|126.459999 US$
+jordandinar              1|0.707500 US$
+japanyen                 1|113.639999 US$
+kenyaschilling           1|103.550003 US$
+kyrgyzstansom            1|68.600998 US$
+cambodiariel             1|4022.699951 US$
+northkoreawon            1|900.000000 US$
+southkoreawon            1|1124.469971 US$
+kuwaitdinar              1|0.302300 US$
+caymanislandsdollar      1|0.820000 US$
+kazakhstantenge          1|334.350006 US$
+laokip                   1|8301.000000 US$
+lebanonpound             1|1505.500000 US$
+srilankanrupee           1|153.500000 US$
+liberiadollar            1|118.660004 US$
+libyadinar               1|1.365000 US$
+moroccodirham            1|9.509500 US$
+moldovaleu               1|17.209999 US$
+madagascarariary         1|3100.000000 US$
+macedoniadenar           1|52.740002 US$
+myanmarkyat              1|1363.000000 US$
+mongoliatugrik           1|2446.000000 US$
+macaupataca              1|8.036300 US$
+mauritaniaouguiya        1|351.320007 US$
+mauritiusrupee           1|34.150002 US$
+maldiverufiyaa           1|15.570000 US$
+malawikwacha             1|716.169983 US$
+mexicopeso               1|19.132000 US$
+malaysiaringgit          1|4.241000 US$
+mozambicanmetical        1|60.180000 US$
+namibiadollar            1|14.104000 US$
+nigerianaira             1|353.000000 US$
+nicaraguacordobaoro      1|30.330000 US$
+norwaykrone              1|8.139100 US$
+nepalrupee               1|103.550003 US$
+newzealanddollar         1|1.453400 US$
+omanrial                 1|0.383900 US$
+panamabalboa             1|1.000000 US$
+perunuevosol             1|3.241100 US$
+papuanewguineakina       1|3.241000 US$
+philippinepeso           1|51.590000 US$
+pakistanrupee            1|105.150002 US$
+polandzloty              1|3.655100 US$
+paraguayguarani          1|5631.000000 US$
+qatarrial                1|3.764800 US$
+romanianewlei            1|3.969500 US$
+serbiadinar              1|102.305901 US$
+russiaruble              1|58.153801 US$
+rwandafranc              1|831.270020 US$
+saudiarabiariyal         1|3.750000 US$
+solomonislandsdollar     1|7.810000 US$
+seychellesrupee          1|13.661000 US$
+sudanpound               1|6.659700 US$
+swedenkrona              1|8.348220 US$
+singaporedollar          1|1.363830 US$
+sainthelenapound         1|0.761600 US$
+sierraleoneleone         1|7620.000000 US$
+somaliaschilling         1|559.000000 US$
+surinamedollar           1|7.380000 US$
+saotome&principedobra    1|21106.099609 US$
+elsalvadorcolon          1|8.750000 US$
+syriapound               1|514.979980 US$
+swazilandlilangeni       1|14.105000 US$
+thailandbaht             1|33.209999 US$
+tajikistansomoni         1|8.803200 US$
+turkmenistanmanat        1|3.410000 US$
+tunisiadinar             1|2.505000 US$
+tongapa'anga             1|2.280600 US$
+turkeylira               1|3.788800 US$
+trinidadandtobagodollar  1|6.629500 US$
+taiwandollar             1|30.135000 US$
+tanzaniashilling         1|2238.000000 US$
+ukrainehryvnia           1|26.770000 US$
+ugandaschilling          1|3642.000000 US$
+uruguaypeso              1|29.360001 US$
+uzbekistansum            1|8060.000000 US$
+venezuelabolivar         1|9.974500 US$
+venezuelaoldbolivar      1000 VEF
+vietnamdong              1|22699.000000 US$
+vanuatuvatu              1|106.139999 US$
+samoatala                1|2.576800 US$
+eastcaribbeandollar      1|2.700000 US$
+specialdrawingrights     1|0.713278 US$
+yemenrial                1|249.949997 US$
+southafricarand          1|14.056400 US$
+zambiakwacha             1|9.980000 US$
+zimbabwedollar           1|322.355011 US$
+bitcoin                  5763.56 US$ # From services.packetizer.com/btc
+
+
+# Precious metals prices from Packetizer (services.packetizer.com/spotprices)
+
+goldprice          1273.35 US$/troyounce
+silverprice        16.86 US$/troyounce
+platinumprice      917.00 US$/troyounce
+

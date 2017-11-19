@@ -1,0 +1,60 @@
+###############################################################
+##
+##  Profile for interactive zsh
+##
+###############################################################
+
+if [ "$(id -u)" = "0" ]; then
+    export PROMPT='%B%F{red}[su]%f%b %B%F{blue}%~%f %(?,%F{green},%F{red})➤ %b%f'
+else
+    export PROMPT='%B%F{blue}%~%f %(?,%F{green},%F{red})➤ %b%f'
+fi
+
+export HISTFILE="${HOME}/.zsh_history"
+export HISTSIZE=512
+export SAVEHIST=16384
+
+###############################################################
+##
+##  Options
+##
+###############################################################
+
+setopt HIST_IGNORE_DUPS
+
+###############################################################
+##
+##  Load plugins
+##
+###############################################################
+
+## syntax highlighting
+source "${PREFIX}/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+
+## a frontend for libtermux-exec.so
+source "${PREFIX}/lib/shell/libtermux-exec.sh"
+
+## default shell aliases for Termux
+source "${PREFIX}/lib/shell/termux-aliases.sh"
+
+###############################################################
+##
+##  Set XTerm/Termux title
+##
+###############################################################
+
+autoload -Uz add-zsh-hook
+
+function xterm_title_precmd() {
+    print -Pn '\e]2;termux\a'
+}
+
+function xterm_title_preexec() {
+    print -Pn '\e]2;termux '
+    print -n "[${(q)1}]\a"
+}
+
+if [[ "${TERM}" == (screen*|xterm*|rxvt*) ]]; then
+    add-zsh-hook -Uz precmd xterm_title_precmd
+    add-zsh-hook -Uz preexec xterm_title_preexec
+fi

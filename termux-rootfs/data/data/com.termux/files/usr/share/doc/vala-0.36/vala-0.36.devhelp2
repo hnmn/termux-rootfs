@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+<book xmlns="http://www.devhelp.net/book" title="Vala Reference Manual" link="index.html" author="" name="vala" language="vala" version="2">
+  <chapters>
+    <sub name="Overview" link="Overview.html">
+      <sub name="Getting started" link="Overview.html#Getting_started"/>
+      <sub name="Documentation conventions" link="Overview.html#Documentation_conventions"/>
+      <sub name="Vala source files" link="Overview.html#Vala_source_files"/>
+      <sub name="Vala conventions" link="Overview.html#Vala_conventions"/>
+      <sub name="Vala syntax" link="Overview.html#Vala_syntax"/>
+      <sub name="GType and GObject" link="Overview.html#GType_and_GObject"/>
+      <sub name="Memory management" link="Overview.html#Memory_management"/>
+      <sub name="Vala compilation" link="Overview.html#Vala_compilation"/>
+      <sub name="Application entry point" link="Overview.html#Application_entry_point"/>
+    </sub>
+    <sub name="Concepts" link="Concepts.html">
+      <sub name="Variables, fields and parameters" link="Concepts.html#Variables,_fields_and_parameters"/>
+      <sub name="Scope and naming" link="Concepts.html#Scope_and_naming"/>
+      <sub name="Object oriented programming" link="Concepts.html#Object_oriented_programming"/>
+      <sub name="References and ownership" link="Concepts.html#References_and_ownership"/>
+    </sub>
+    <sub name="Types" link="Types.html">
+      <sub name="Value types" link="Types.html#Value_types"/>
+      <sub name="Reference types" link="Types.html#Reference_types"/>
+      <sub name="Parameterised types" link="Types.html#Parameterised_types"/>
+      <sub name="Nullable types" link="Types.html#Nullable_types"/>
+      <sub name="Pointer types" link="Types.html#Pointer_types"/>
+      <sub name="Type conversions" link="Types.html#Type_conversions"/>
+    </sub>
+    <sub name="Expressions" link="Expressions.html">
+      <sub name="Literal expressions" link="Expressions.html#Literal_expressions"/>
+      <sub name="Member access" link="Expressions.html#Member_access"/>
+      <sub name="Element access" link="Expressions.html#Element_access"/>
+      <sub name="Arithmetic operations" link="Expressions.html#Arithmetic_operations"/>
+      <sub name="Relational operations" link="Expressions.html#Relational_operations"/>
+      <sub name="Increment/decrement operations" link="Expressions.html#Increment/decrement_operations"/>
+      <sub name="Logical operations" link="Expressions.html#Logical_operations"/>
+      <sub name="Bitwise operations" link="Expressions.html#Bitwise_operations"/>
+      <sub name="Assignment operations" link="Expressions.html#Assignment_operations"/>
+      <sub name="Invocation expressions" link="Expressions.html#Invocation_expressions"/>
+      <sub name="Class instantiation" link="Expressions.html#Class_instantiation"/>
+      <sub name="Struct instantiation" link="Expressions.html#Struct_instantiation"/>
+      <sub name="Array instantiation" link="Expressions.html#Array_instantiation"/>
+      <sub name="Conditional expressions" link="Expressions.html#Conditional_expressions"/>
+      <sub name="Coalescing expressions" link="Expressions.html#Coalescing_expressions"/>
+      <sub name="Flag operations" link="Expressions.html#Flag_operations"/>
+      <sub name="Type operations" link="Expressions.html#Type_operations"/>
+      <sub name="Ownership transfer expressions" link="Expressions.html#Ownership_transfer_expressions"/>
+      <sub name="Lambda expressions" link="Expressions.html#Lambda_expressions"/>
+      <sub name="Pointer expressions" link="Expressions.html#Pointer_expressions"/>
+    </sub>
+    <sub name="Statements" link="Statements.html">
+      <sub name="Simple statements" link="Statements.html#Simple_statements"/>
+      <sub name="Variable declaration" link="Statements.html#Variable_declaration"/>
+      <sub name="Selection statements" link="Statements.html#Selection_statements"/>
+      <sub name="Iteration statements" link="Statements.html#Iteration_statements"/>
+      <sub name="Jump Statements" link="Statements.html#Jump_Statements"/>
+      <sub name="Try Statement" link="Statements.html#Try_Statement"/>
+      <sub name="Lock Statement" link="Statements.html#Lock_Statement"/>
+    </sub>
+    <sub name="Namespaces" link="Namespaces.html">
+      <sub name="The global namespace" link="Namespaces.html#The_global_namespace"/>
+      <sub name="Namespace declaration" link="Namespaces.html#Namespace_declaration"/>
+      <sub name="Members" link="Namespaces.html#Members"/>
+      <sub name="Fields" link="Namespaces.html#Fields"/>
+      <sub name="Constants" link="Namespaces.html#Constants"/>
+      <sub name="The &quot;using&quot; statement" link="Namespaces.html#The_&quot;using&quot;_statement"/>
+    </sub>
+    <sub name="Methods" link="Methods.html">
+      <sub name="Parameter directions" link="Methods.html#Parameter_directions"/>
+      <sub name="Method declaration" link="Methods.html#Method_declaration"/>
+      <sub name="Invocation" link="Methods.html#Invocation"/>
+      <sub name="Scope" link="Methods.html#Scope"/>
+      <sub name="Lambdas" link="Methods.html#Lambdas"/>
+      <sub name="Contract programming" link="Methods.html#Contract_programming"/>
+      <sub name="Examples" link="Methods.html#Examples"/>
+    </sub>
+    <sub name="Delegates" link="Delegates.html">
+      <sub name="Types of delegate" link="Delegates.html#Types_of_delegate"/>
+      <sub name="Delegate declaration" link="Delegates.html#Delegate_declaration"/>
+      <sub name="Using delegates" link="Delegates.html#Using_delegates"/>
+      <sub name="Examples" link="Delegates.html#Examples"/>
+    </sub>
+    <sub name="Errors" link="Errors.html">
+      <sub name="Error throwing" link="Errors.html#Error_throwing"/>
+      <sub name="Error catching" link="Errors.html#Error_catching"/>
+      <sub name="Examples" link="Errors.html#Examples"/>
+    </sub>
+    <sub name="Classes" link="Classes.html">
+      <sub name="Types of class" link="Classes.html#Types_of_class"/>
+      <sub name="Types of class members" link="Classes.html#Types_of_class_members"/>
+      <sub name="Class scope" link="Classes.html#Class_scope"/>
+      <sub name="Class member visibility" link="Classes.html#Class_member_visibility"/>
+      <sub name="Class declaration" link="Classes.html#Class_declaration"/>
+      <sub name="Controlling instantiation" link="Classes.html#Controlling_instantiation"/>
+      <sub name="Construction" link="Classes.html#Construction"/>
+      <sub name="Class fields" link="Classes.html#Class_fields"/>
+      <sub name="Class constants" link="Classes.html#Class_constants"/>
+      <sub name="Class methods" link="Classes.html#Class_methods"/>
+      <sub name="Properties" link="Classes.html#Properties"/>
+      <sub name="Signals" link="Classes.html#Signals"/>
+      <sub name="Class enums" link="Classes.html#Class_enums"/>
+      <sub name="Class delegates" link="Classes.html#Class_delegates"/>
+      <sub name="Examples" link="Classes.html#Examples"/>
+    </sub>
+    <sub name="Interfaces" link="Interfaces.html">
+      <sub name="Interface declaration" link="Interfaces.html#Interface_declaration"/>
+      <sub name="Interface fields" link="Interfaces.html#Interface_fields"/>
+      <sub name="Interface methods" link="Interfaces.html#Interface_methods"/>
+      <sub name="Interface properties" link="Interfaces.html#Interface_properties"/>
+      <sub name="Interface signals" link="Interfaces.html#Interface_signals"/>
+      <sub name="Other interface members" link="Interfaces.html#Other_interface_members"/>
+      <sub name="Examples" link="Interfaces.html#Examples"/>
+    </sub>
+    <sub name="Generics" link="Generics.html">
+      <sub name="Generics declaration" link="Generics.html#Generics_declaration"/>
+      <sub name="Instantiation" link="Generics.html#Instantiation"/>
+      <sub name="Examples" link="Generics.html#Examples"/>
+    </sub>
+    <sub name="Structs" link="Structs.html">
+      <sub name="Struct declaration" link="Structs.html#Struct_declaration"/>
+      <sub name="Controlling instantiation" link="Structs.html#Controlling_instantiation"/>
+      <sub name="Struct fields" link="Structs.html#Struct_fields"/>
+      <sub name="Struct constants" link="Structs.html#Struct_constants"/>
+      <sub name="Struct methods" link="Structs.html#Struct_methods"/>
+      <sub name="Examples" link="Structs.html#Examples"/>
+    </sub>
+    <sub name="Enumerated types (Enums)" link="Enumerated_types__Enums_.html">
+      <sub name="Enum declaration" link="Enumerated_types__Enums_.html#Enum_declaration"/>
+      <sub name="Enum members" link="Enumerated_types__Enums_.html#Enum_members"/>
+      <sub name="Methods" link="Enumerated_types__Enums_.html#Methods"/>
+      <sub name="Flag types" link="Enumerated_types__Enums_.html#Flag_types"/>
+      <sub name="Error domains" link="Enumerated_types__Enums_.html#Error_domains"/>
+      <sub name="Examples" link="Enumerated_types__Enums_.html#Examples"/>
+    </sub>
+    <sub name="Attributes" link="Attributes.html">
+      <sub name="Applying attributes" link="Attributes.html#Applying_attributes"/>
+      <sub name="CCode Attribute" link="Attributes.html#CCode_Attribute"/>
+      <sub name="Version attribute" link="Attributes.html#Version_attribute"/>
+      <sub name="SimpleType attribute" link="Attributes.html#SimpleType_attribute"/>
+      <sub name="BooleanType Attribute" link="Attributes.html#BooleanType_Attribute"/>
+      <sub name="IntegerType Attribute" link="Attributes.html#IntegerType_Attribute"/>
+      <sub name="FloatingType Attribute" link="Attributes.html#FloatingType_Attribute"/>
+      <sub name="Signal Attribute" link="Attributes.html#Signal_Attribute"/>
+      <sub name="Description Attribute" link="Attributes.html#Description_Attribute"/>
+      <sub name="DBus Attribute" link="Attributes.html#DBus_Attribute"/>
+      <sub name="Gtk attributes" link="Attributes.html#Gtk_attributes"/>
+      <sub name="Other attributes" link="Attributes.html#Other_attributes"/>
+      <sub name="Deprecated Attributes" link="Attributes.html#Deprecated_Attributes"/>
+      <sub name="Examples" link="Attributes.html#Examples"/>
+    </sub>
+    <sub name="Preprocessor" link="Preprocessor.html">
+      <sub name="Directives syntax" link="Preprocessor.html#Directives_syntax"/>
+      <sub name="Defining symbols" link="Preprocessor.html#Defining_symbols"/>
+      <sub name="Built-in defines" link="Preprocessor.html#Built-in_defines"/>
+      <sub name="Examples" link="Preprocessor.html#Examples"/>
+    </sub>
+    <sub name="GIDL metadata format" link="GIDL_metadata_format.html">
+      <sub name="Comments" link="GIDL_metadata_format.html#Comments"/>
+      <sub name="Other Lines" link="GIDL_metadata_format.html#Other_Lines"/>
+      <sub name="Specifiers" link="GIDL_metadata_format.html#Specifiers"/>
+      <sub name="Specifying Different Things" link="GIDL_metadata_format.html#Specifying_Different_Things"/>
+      <sub name="Properties Reference" link="GIDL_metadata_format.html#Properties_Reference"/>
+      <sub name="Examples" link="GIDL_metadata_format.html#Examples"/>
+    </sub>
+    <sub name="GIR metadata format" link="GIR_metadata_format.html">
+      <sub name="Locating metadata" link="GIR_metadata_format.html#Locating_metadata"/>
+      <sub name="Comments" link="GIR_metadata_format.html#Comments"/>
+      <sub name="Syntax" link="GIR_metadata_format.html#Syntax"/>
+      <sub name="Valid arguments" link="GIR_metadata_format.html#Valid_arguments"/>
+      <sub name="Examples" link="GIR_metadata_format.html#Examples"/>
+    </sub>
+  </chapters>
+</book>

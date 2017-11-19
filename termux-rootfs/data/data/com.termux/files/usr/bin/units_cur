@@ -1,0 +1,352 @@
+#!/data/data/com.termux/files/usr/bin/python
+#
+# For Python 2 & 3 compatibility
+from __future__ import absolute_import, division, print_function
+#
+#
+
+version = '4.1'
+
+# 30 October 2017
+#
+# Fixed to include USD in the list of currency codes.  
+#
+# Version 4
+# 2 October 2017
+#
+# Complete rewrite to use Yahoo YQL API due to removal of TimeGenie RSS feed.
+# Switched to requests library using JSON.  One program now runs under
+# Python 2 or Python 3.  Thanks to Ray Hamel for some help with this update.  
+
+# Normal imports
+import requests
+import codecs
+from argparse import ArgumentParser
+from collections import OrderedDict
+from datetime import date
+from os import linesep
+from sys import exit, stderr, stdout
+
+outfile_name='/data/data/com.termux/files/usr/share/units/currency.units'
+
+# This exchange rate table lists the currency ISO 4217 codes, their
+# long text names, and any fixed definitions.  If the definition is
+# empty then units_cur will query the server for a value.
+
+currency = OrderedDict([
+    ('ATS', ['austriaschilling',  '1|13.7603 euro']),
+    ('BEF', ['belgiumfranc',      '1|40.3399 euro']),
+    ('CYP', ['cypruspound',       '1|0.585274 euro']),
+    ('EEK', ['estoniakroon',      '1|15.6466 euro # Equal to 1|8 germanymark']),
+    ('FIM', ['finlandmarkka',     '1|5.94573 euro']),
+    ('FRF', ['francefranc',       '1|6.55957 euro']),
+    ('DEM', ['germanymark',       '1|1.95583 euro']),
+    ('GRD', ['greecedrachma',     '1|340.75 euro']),
+    ('IEP', ['irelandpunt',       '1|0.787564 euro']),
+    ('ITL', ['italylira',         '1|1936.27 euro']),
+    ('LVL', ['latvialats',        '1|0.702804 euro']),
+    ('LTL', ['lithuanialitas',    '1|3.4528 euro']),
+    ('LUF', ['luxembourgfranc',   '1|40.3399 euro']),
+    ('MTL', ['maltalira',         '1|0.4293 euro']),
+    ('SKK', ['slovakiakornua',    '1|30.1260 euro']),
+    ('SIT', ['sloveniatolar',     '1|239.640 euro']),
+    ('ESP', ['spainpeseta',       '1|166.386 euro']),
+    ('NLG', ['netherlandsguilder','1|2.20371 euro']),
+    ('PTE', ['portugalescudo',    '1|200.482 euro']),
+    ('CVE', ['capeverdeescudo',   '1|110.265 euro']),
+    ('BGN', ['bulgarialev',       '1|1.9558 euro']),
+    ('BAM', ['bosniaconvertiblemark','germanymark']),
+    ('KMF', ['comorosfranc',      '1|491.96775 euro']),
+    ('XOF', ['westafricanfranc',  '1|655.957 euro']),
+    ('XPF', ['cfpfranc',          '1|119.33 euro']),
+    ('XAF', ['centralafricancfafranc','1|655.957 euro']),
+    ('AED', ['uaedirham','']),
+    ('AFN', ['afghanafghani','']),
+    ('ALL', ['albanialek','']),
+    ('AMD', ['armeniadram','']),
+    ('AOA', ['angolakwanza','']),
+    ('ARS', ['argentinapeso','']),
+    ('AUD', ['australiadollar','']),
+    ('AWG', ['arubaflorin','']),
+    ('AZN', ['azerbaijanmanat','']),
+    ('BAM', ['bosniaconvertiblemark','']),
+    ('BBD', ['barbadosdollar','']),
+    ('BDT', ['bangladeshtaka','']),
+    ('BGN', ['bulgarialev','']),
+    ('BHD', ['bahraindinar','']),
+    ('BIF', ['burundifranc','']),
+    ('BMD', ['bermudadollar','']),
+    ('BND', ['bruneidollar','']),
+    ('BOB', ['boliviaboliviano','']),
+    ('BRL', ['brazilreal','']),
+    ('BSD', ['bahamasdollar','']),
+    ('BTN', ['bhutanngultrum','']),
+    ('BWP', ['botswanapula','']),
+    ('BYN', ['belarusruble','']),
+    ('BYR', ['oldbelarusruble','10000 BYN']),  
+    ('BZD', ['belizedollar','']),
+    ('CAD', ['canadadollar','']),
+    ('CDF', ['drcfranccongolais','']),
+    ('CHF', ['swissfranc','']),
+    ('CLP', ['chilepeso','']),
+    ('CNY', ['chinayuan','']),
+    ('COP', ['colombiapeso','']),
+    ('CRC', ['costaricacolon','']),
+    ('CUP', ['cubapeso','']),
+    ('CVE', ['capeverdeescudo','']),
+    ('CZK', ['czechkoruna','']),
+    ('DJF', ['djiboutifranc','']),
+    ('DKK', ['denmarkkrona','']),
+    ('DOP', ['dominicanrepublicpeso','']),
+    ('DZD', ['algeriadinar','']),
+    ('EGP', ['egyptpound','']),
+    ('ERN', ['eritreanakfa','']),
+    ('ETB', ['ethiopianbirr','']),
+    ('EUR', ['euro','']),
+    ('FJD', ['fijidollar','']),
+    ('FKP', ['falklandislandspound','']),
+    ('GBP', ['ukpound','']),
+    ('GEL', ['georgialari','']),
+    ('GHS', ['ghanacedi','']),
+    ('GIP', ['gibraltarpound','']),
+    ('GMD', ['gambiadalasi','']),
+    ('GNF', ['guineafranc','']),
+    ('GTQ', ['guatemalaquetzal','']),
+    ('GYD', ['guyanadollar','']),
+    ('HKD', ['hongkongdollar','']),
+    ('HNL', ['honduraslempira','']),
+    ('HRK', ['croatiakuna','']),
+    ('HTG', ['haitigourde','']),
+    ('HUF', ['hungariaforint','']),
+    ('IDR', ['indonesiarupiah','']),
+    ('ILS', ['israelnewshekel','']),
+    ('INR', ['indiarupee','']),
+    ('IQD', ['iraqdinar','']),
+    ('IRR', ['iranrial','']),
+    ('ISK', ['icelandkrona','']),
+    ('JMD', ['jamaicadollar','']),
+    ('JOD', ['jordandinar','']),
+    ('JPY', ['japanyen','']),
+    ('KES', ['kenyaschilling','']),
+    ('KGS', ['kyrgyzstansom','']),
+    ('KHR', ['cambodiariel','']),
+    ('KMF', ['comorosfranc','']),
+    ('KPW', ['northkoreawon','']),
+    ('KRW', ['southkoreawon','']),
+    ('KWD', ['kuwaitdinar','']),
+    ('KYD', ['caymanislandsdollar','']),
+    ('KZT', ['kazakhstantenge','']),
+    ('LAK', ['laokip','']),
+    ('LBP', ['lebanonpound','']),
+    ('LKR', ['srilankanrupee','']),
+    ('LRD', ['liberiadollar','']),
+    ('LTL', ['lithuanialita','']), 
+    ('LVL', ['latvialat','']),
+    ('LYD', ['libyadinar','']),
+    ('MAD', ['moroccodirham','']),
+    ('MDL', ['moldovaleu','']),
+    ('MGA', ['madagascarariary','']),
+    ('MKD', ['macedoniadenar','']),
+    ('MMK', ['myanmarkyat','']),
+    ('MNT', ['mongoliatugrik','']),  
+    ('MOP', ['macaupataca','']),
+    ('MRO', ['mauritaniaouguiya','']),
+    ('MUR', ['mauritiusrupee','']),
+    ('MVR', ['maldiverufiyaa','']),
+    ('MWK', ['malawikwacha','']),
+    ('MXN', ['mexicopeso','']),
+    ('MYR', ['malaysiaringgit','']),
+    ('MZN', ['mozambicanmetical','']),
+    ('NAD', ['namibiadollar','']),
+    ('NGN', ['nigerianaira','']),
+    ('NIO', ['nicaraguacordobaoro','']),
+    ('NOK', ['norwaykrone','']),
+    ('NPR', ['nepalrupee','']),
+    ('NZD', ['newzealanddollar','']),
+    ('OMR', ['omanrial','']),
+    ('PAB', ['panamabalboa','']),
+    ('PEN', ['perunuevosol','']),
+    ('PGK', ['papuanewguineakina','']),
+    ('PHP', ['philippinepeso','']),
+    ('PKR', ['pakistanrupee','']),
+    ('PLN', ['polandzloty','']),
+    ('PYG', ['paraguayguarani','']),
+    ('QAR', ['qatarrial','']),
+    ('RON', ['romanianewlei','']),
+    ('RSD', ['serbiadinar','']),
+    ('RUB', ['russiaruble','']),
+    ('RWF', ['rwandafranc','']),
+    ('SAR', ['saudiarabiariyal','']),
+    ('SBD', ['solomonislandsdollar','']),
+    ('SCR', ['seychellesrupee','']),
+    ('SDG', ['sudanpound','']),
+    ('SEK', ['swedenkrona','']),
+    ('SGD', ['singaporedollar','']),
+    ('SHP', ['sainthelenapound','']),
+    ('SLL', ['sierraleoneleone','']),
+    ('SOS', ['somaliaschilling','']),
+    ('SRD', ['surinamedollar','']),
+    ('STD', ['saotome&principedobra','']),
+    ('SVC', ['elsalvadorcolon','']),
+    ('SYP', ['syriapound','']),
+    ('SZL', ['swazilandlilangeni','']),
+    ('THB', ['thailandbaht','']),
+    ('TJS', ['tajikistansomoni','']),
+    ('TMT', ['turkmenistanmanat','']),
+    ('TND', ['tunisiadinar','']),
+    ('TOP', ["tongapa'anga",'']),
+    ('TRY', ['turkeylira','']),
+    ('TTD', ['trinidadandtobagodollar','']),
+    ('TWD', ['taiwandollar','']),
+    ('TZS', ['tanzaniashilling','']),
+    ('UAH', ['ukrainehryvnia','']),
+    ('UGX', ['ugandaschilling','']),
+    ('USD', ['unitedstatesdollar', 'US$']),
+    ('UYU', ['uruguaypeso','']),
+    ('UZS', ['uzbekistansum','']),
+    ('VEF', ['venezuelabolivar','']),
+    ('VEB', ['venezuelaoldbolivar', '1000 VEF']),
+    ('VND', ['vietnamdong','']),
+    ('VUV', ['vanuatuvatu','']),
+    ('WST', ['samoatala','']),
+    ('XAF', ['centralafricancfafranc','']),
+    ('XCD', ['eastcaribbeandollar','']),
+    ('XDR', ['specialdrawingrights','']),
+    ('YER', ['yemenrial','']),
+    ('ZAR', ['southafricarand','']),
+    ('ZMW', ['zambiakwacha','']),
+    ('ZWL', ['zimbabwedollar','']),
+])
+
+ap = ArgumentParser(
+    description="Update currency information for 'units' "
+    "into the specified filename or if no filename is "
+    "given, the default: '{}'.  The special filename '-' "
+    "will send the currency data to stdout.".format(outfile_name),
+)
+
+ap.add_argument(
+    'output_file',
+    default=outfile_name,
+    help='the file to update',
+    metavar='filename',
+    nargs='?',
+    type=str,
+)
+
+ap.add_argument('-V','--version',
+                action='version',
+                version='%(prog)s version ' + version,
+                help='display units_cur version',
+)
+
+ap.add_argument('-v','--verbose',
+                action='store_true',
+                help='display details when fetching currency data',
+)
+
+outfile_name = ap.parse_args().output_file
+verbose = ap.parse_args().verbose
+
+try:
+  res = requests.get('http://finance.yahoo.com/webservice/v1/symbols'
+                     '/allcurrencies/quote?format=json')
+  res.raise_for_status()
+  webdata = res.json()['list']['resources']
+except requests.exceptions.RequestException as e:
+  stderr.write('Error connecting to currency server:\n{}.\n'.
+               format(e))
+  exit(1)
+      
+rates = [ data['resource']['fields']['price'] for data in webdata]
+codes = [ data['resource']['fields']['symbol'][0:3] for data in webdata]
+
+rate_index = 1
+
+for (code,rate) in zip(codes,rates):
+  if code not in currency.keys():
+    if (verbose):
+      stderr.write('Got unknown currency with code {}\n'.format(code))
+  else:
+    if not currency[code][rate_index]:
+      currency[code][rate_index] = '1|{} US$'.format(rate)
+    elif verbose:
+      stderr.write('Got value "{}" for currency "{}" but '
+                   'it is already defined\n'.format(rate, code))
+
+# Delete currencies where we have no rate data
+for code in currency.keys():
+  if not currency[code][rate_index]:
+    if verbose:
+      stderr.write('No data for {}'.format(code))
+    del currency[code]
+  
+try:
+  req = requests.get('http://services.packetizer.com/spotprices/?f=json')
+  req.raise_for_status()
+  metals = req.json()
+except requests.exceptions.RequestException as e:
+  stderr.write('Error connecting to spotprices server:\n{}\n'.format(e))
+  exit(1)
+
+del metals['date']
+
+try:
+  req = requests.get('http://services.packetizer.com/btc/?f=json')
+  req.raise_for_status()
+  bitcoin = req.json()
+except requests.exceptions.RequestException as e:
+  stderr.write('Error connecting to bitcoin server:\n{}\n'.format(e))
+  exit(1)
+
+cnames = [currency[code][0] for code in currency.keys()]
+crates = [currency[code][1] for code in currency.keys()]
+
+codestr = '\n'.join('{:23}{}'.
+   format(code, name) for (code,name) in zip(currency.keys(), cnames))
+
+datestr = date.today().isoformat()
+
+maxlen = max(len(name) for name in cnames) + 2
+
+ratestr = '\n'.join(
+    '{:{}}{}'.format(name, maxlen, rate) for (name, rate) in zip(cnames, crates)
+    )
+
+ozzystr = '\n'.join('{:19}{} US$/troyounce'.format(
+    metal + 'price',
+    price,
+    ) for metal, price in metals.items())
+
+bitcoinstr = '{:{}}{} US$ # From services.packetizer.com/btc\n'.format(
+                'bitcoin',maxlen,bitcoin['usd'])
+
+outstr = (
+"""# ISO Currency Codes
+
+{codestr}
+
+# Currency exchange rates from Yahoo Finance (finance.yahoo.com)
+
+!message Currency exchange rates from finance.yahoo.com on {datestr}
+
+{ratestr}
+{bitcoinstr}
+
+# Precious metals prices from Packetizer (services.packetizer.com/spotprices)
+
+{ozzystr}
+
+""".format(codestr=codestr, datestr=datestr, ratestr=ratestr, ozzystr=ozzystr,
+           bitcoinstr=bitcoinstr)
+).replace('\n', linesep)
+
+try:
+    if outfile_name == '-':
+        codecs.StreamReader(stdout, codecs.getreader('utf8')).write(outstr)
+    else:    
+        with codecs.open(outfile_name, 'w', 'utf8') as of:
+            of.write(outstr)
+except IOError as e:
+    stderr.write('Unable to write to output file:\n{}\n'.format(e))
+    exit(1)

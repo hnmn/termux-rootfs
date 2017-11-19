@@ -1,0 +1,16 @@
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/eventmachine-1.2.3/ext/fastfilereader
+/data/data/com.termux/files/usr/bin/ruby -r ./siteconf20170913-27496-twype8.rb extconf.rb
+creating Makefile
+
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/eventmachine-1.2.3/ext/fastfilereader
+make "DESTDIR=" clean
+
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/eventmachine-1.2.3/ext/fastfilereader
+make "DESTDIR="
+compiling mapper.cpp
+compiling rubymain.cpp
+linking shared-object fastfilereaderext.so
+
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/eventmachine-1.2.3/ext/fastfilereader
+make "DESTDIR=" install
+install -c -m 0755 fastfilereaderext.so ./.gem.20170913-27496-ytn763

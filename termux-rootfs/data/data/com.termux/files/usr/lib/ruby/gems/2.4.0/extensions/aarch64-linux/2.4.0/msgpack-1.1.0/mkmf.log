@@ -1,0 +1,207 @@
+have_header: checking for ruby/st.h... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby  -lgmp -ldl -lm   -lc"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return 0;
+6: }
+/* end */
+
+"aarch64-linux-android-cpp -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC  conftest.c -o conftest.i"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <ruby/st.h>
+/* end */
+
+--------------------
+
+have_header: checking for st.h... -------------------- yes
+
+"aarch64-linux-android-cpp -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC  conftest.c -o conftest.i"
+In file included from conftest.c:3:0:
+/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward/st.h:2:2: warning: #warning use "ruby/st.h" instead of bare "st.h" [-Wcpp]
+ #warning use "ruby/st.h" instead of bare "st.h"
+  ^~~~~~~
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <st.h>
+/* end */
+
+--------------------
+
+have_func: checking for rb_str_replace() in ruby.h... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby  -lgmp -ldl -lm   -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <ruby.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+15: int t(void) { void ((*volatile p)()); p = (void ((*)()))rb_str_replace; return !p; }
+/* end */
+
+--------------------
+
+have_func: checking for rb_intern_str() in ruby.h... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby  -lgmp -ldl -lm   -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <ruby.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+15: int t(void) { void ((*volatile p)()); p = (void ((*)()))rb_intern_str; return !p; }
+/* end */
+
+--------------------
+
+have_func: checking for rb_sym2str() in ruby.h... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby  -lgmp -ldl -lm   -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <ruby.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+15: int t(void) { void ((*volatile p)()); p = (void ((*)()))rb_sym2str; return !p; }
+/* end */
+
+--------------------
+
+have_func: checking for rb_str_intern() in ruby.h... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby  -lgmp -ldl -lm   -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <ruby.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+15: int t(void) { void ((*volatile p)()); p = (void ((*)()))rb_str_intern; return !p; }
+/* end */
+
+--------------------
+
+have_func: checking for rb_block_lambda() in ruby.h... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby  -lgmp -ldl -lm   -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <ruby.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+15: int t(void) { void ((*volatile p)()); p = (void ((*)()))rb_block_lambda; return !p; }
+/* end */
+
+--------------------
+
+have_func: checking for rb_hash_dup() in ruby.h... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby  -lgmp -ldl -lm   -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <ruby.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+15: int t(void) { void ((*volatile p)()); p = (void ((*)()))rb_hash_dup; return !p; }
+/* end */
+
+--------------------
+
+have_func: checking for rb_hash_clear() in ruby.h... -------------------- yes
+
+"aarch64-linux-android-clang -o conftest -I/data/data/com.termux/files/usr/include/ruby-2.4.0/aarch64-linux-android -I/data/data/com.termux/files/usr/include/ruby-2.4.0/ruby/backward -I/data/data/com.termux/files/usr/include/ruby-2.4.0 -I. -I/data/data/com.termux/files/usr/include -isystem /data/data/com.termux/files/usr/include/libandroid-support    -Os -fPIC conftest.c  -L. -L/data/data/com.termux/files/usr/lib -L. -L/data/data/com.termux/files/usr/lib -landroid-support -fstack-protector -rdynamic -Wl,-export-dynamic     -lruby  -lgmp -ldl -lm   -lc"
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <ruby.h>
+ 4: 
+ 5: /*top*/
+ 6: extern int t(void);
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+15: int t(void) { void ((*volatile p)()); p = (void ((*)()))rb_hash_clear; return !p; }
+/* end */
+
+--------------------
+

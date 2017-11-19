@@ -1,0 +1,32 @@
+#!/data/data/com.termux/files/usr/bin/sh
+##
+##  Update config.sub and config.guess scripts in directory
+##  with GNU source code
+##
+
+FORCE_REPLACE=false
+
+if [ $# -gt 0 ]; then
+    if [ "${1}" = "--force" ] || [ "${1}" = "-f" ]; then
+        FORCE_REPLACE=true
+    else
+        echo "[!] Invalid parameter '${1}'."
+        echo
+        echo "Usage: update-config-guess [-f|--force]"
+        echo
+        echo "Find and update all 'config.sub' and 'config.guess'"
+        echo "scripts."
+        echo
+        exit 1
+    fi
+fi
+
+if [ -e "${PWD}/configure" ] || ${FORCE_REPLACE}; then
+    find . -name 'config.sub' -exec echo "Updating {}" \; -exec chmod u+w '{}' \; -exec cp -f "${PREFIX}/share/libtool/build-aux/config.sub" '{}' \;
+    find . -name 'config.guess' -exec echo "Updating {}" \; -exec chmod u+w '{}' \; -exec cp -f "${PREFIX}/share/libtool/build-aux/config.guess" '{}' \;
+else
+    echo "[!] Looks like that you are not in a source directory."
+    echo "    Use '--force' parameter to do force searching and"
+    echo "    replacing of scripts 'config.sub' and 'config.guess'."
+    exit 1
+fi

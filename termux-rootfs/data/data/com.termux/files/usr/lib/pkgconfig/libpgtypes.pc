@@ -1,0 +1,9 @@
+Name: libpgtypes
+Description: PostgreSQL libpgtypes library
+Url: http://www.postgresql.org/
+Version: 10.1
+Requires: 
+Requires.private: 
+Cflags: -I/data/data/com.termux/files/usr/include
+Libs: -L/data/data/com.termux/files/usr/lib -lpgtypes
+Libs.private: -L/data/data/com.termux/files/usr/lib -lm

@@ -1,0 +1,396 @@
+@charset "UTF-8";
+/* CSS Document */
+
+
+/* Aardvark specific styles, mostly layout and nav bar styles.  ================= */
+p.author {
+	font-style: normal;
+	text-align: right;
+}
+p.navbar {
+	background-color:transparent;
+	margin-top: 0.1em;
+	margin-bottom: 0.2em;
+	margin-left: 0.3em;
+	margin-right: 0.5em;
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
+	padding-left: 0.4em;
+	padding-right: 0.6em;
+	font-weight: bold;
+	font-size: 100%;
+}
+.navbar a:link {
+	color: #0058C0;
+	text-decoration: underline
+}
+.navbar a:visited {
+	color: #6699CC;
+	text-decoration: underline
+}
+.navbar a:hover {
+	color: #F84040;
+	background-color: transparent;
+	text-decoration: none
+}
+.navbar a:active {
+	color: #F84080;
+	background-color: transparent;
+	text-decoration: none
+}
+.navbar a:focus {
+	color: #F86800;
+	text-decoration: none
+}
+.navbar .current_link {
+	background-color:transparent;
+    padding-left: 0em;
+	padding-right: 0em;
+	color: #F86800;
+	text-decoration: none;
+	font-weight: bold;
+}
+p.copyright {
+	font-family: verdana;
+	font-size: 80%;
+}
+p.sequence {
+	font-weight: bold;
+	font-size: 120%;
+	background-color:#FFFFD0;
+}
+
+.rounded a:link {
+	color: #FFFFFF;
+	text-decoration: underline
+}
+.rounded a:visited {
+	color: #EEEEEE;
+	text-decoration: underline
+}
+.rounded a:hover {
+	color: #FFFFFF;
+	background-color: transparent;
+	text-decoration: none
+}
+.rounded a:active {
+	color: #FFFFFF;
+	background-color: transparent;
+	text-decoration: none
+}
+.rounded a:focus {
+	color: #FFFFFF;
+	text-decoration: none
+}
+
+.rounded {
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	-khtml-border-radius:10px;
+	border-radius:10px;
+	/*behavior:url("/aardvark/border-radius.htc"); */
+	
+	padding: 10px;
+	background-color: #6699CC;
+	border: 1px solid grey;
+	color: #FFFFFF;
+	font-size: 0.9em;
+}
+
+td.money {
+	text-align:right;
+}
+
+blockquote {
+	font-style: italic;
+	padding: 5px 5px;
+	margin-left: 10%;
+	margin-right: 10%;
+}
+/********************************************************** footer */
+#footer {
+	border-top: 1px solid #06F;
+	clear: both;
+	color:#444;
+	text-align: center;
+}
+/*******************************************************************/
+/*************** Layout ********************************************/
+/*******************************************************************/
+
+#container {
+	/* If this width is not set here then the page will go blank if the content is smaller than the sidebars in IE6! */
+	width: 100%;
+	background-color: #FFF;
+	margin: 0;
+	padding: 0;
+	max-width: 1250px;
+	margin-right: auto;
+	margin-left: auto;
+	text-align: left;
+}
+.clearfloat {
+	/* this class should be placed on a div or break element and should be the final element before the close of a container that should fully contain a float */
+	clear:both;
+	height:0;
+	font-size: 1px;
+	line-height: 0px;
+}
+#header {
+	background: #FFF;
+	height: 120px;
+	margin-bottom: 5px;
+	border-bottom-style: none;
+	margin-left: auto;
+	margin-right: auto;
+}
+#leftheader {
+	float: left;
+	padding-top: 8px;
+}
+#midtheader {
+	margin-top: 0;
+	margin-right: 30%;
+	margin-bottom: 0;
+	margin-left: 30%;
+	padding: 10px;
+	text-align: center;
+	vertical-align: top;
+	border-bottom: 4px solid red;
+}
+#header h1 {
+	margin-top: 0;
+	padding-left: 5.0em;
+	color: #33C;
+	font-size: 150%;
+}
+#header h2 {
+	margin-top: 0;
+	padding-left: 5.0em;
+	color: #33C;
+}
+#rightbox {
+	float: right;
+	width: 240px;
+	background-color:#FFC;
+}
+ @media screen {
+/********************************************************** header */
+
+#rightheader {
+	float: right;
+	padding-top: 8px;
+}
+/********************************************************** topnav */
+.current_link {
+	background-color:transparent;
+	padding-left: 0.3em;
+	padding-right: 0.3em;
+}
+#topnav {
+	background: #fff;
+	text-align: center;
+	border-bottom: 1px solid #fff;
+	margin: 0;
+}
+#topnav ul {
+	margin: 0;
+	padding: 4px;
+}
+#topnav li {
+	color:#112;
+	display: inline;
+	list-style: none;
+	padding-left: 0.4em;
+	padding-right: 0.4em;
+	padding-top: 0.0em;
+	padding-bottom: 0.0em;
+	border-left: 1px solid black;
+}
+#topnav a:link {
+	color: #128;
+	text-decoration: none
+}
+#topnav a:visited {
+	color: #005;
+	text-decoration: none
+}
+#topnav a:hover {
+	color: #FCF;
+	background-color: #123;
+	text-decoration: underline
+}
+#topnav a:active {
+	color: #F80;
+	background-color: #08F;
+	text-decoration: underline
+}
+#topnav a:focus {
+	color: #C0C000;
+	text-decoration: none
+}
+/********************************************************** leftside */
+#leftside {
+	float: left;
+	width: 8em; /* Should match margin-left in content id. */
+	background: #FFF;
+}
+#leftside_inner {
+	margin: 8px;
+	padding-top: 8px;
+	padding-right: 8px;
+	padding-bottom: 8px;
+	padding-left: 2px;
+	border-right: 1px solid #0058C0;
+}
+#leftside ul {
+	margin: 0;
+	padding: 4px;
+}
+#leftside li {
+	color:#0058C0;
+	list-style: none;
+	padding-left: 0.1em;
+	padding-right: 0.1em;
+	padding-top: 0.1em;
+	padding-bottom: 0.1em;
+}
+#leftside a {
+	padding-left: 0.1em;
+	padding-right: 0.3em;
+	font-weight:bold;
+}
+#leftside a:link {
+	color: #0058C0;
+	text-decoration: none;
+}
+#leftside a:visited {
+	color: #6699CC;
+	text-decoration: none;
+}
+#leftside a:hover {
+	color: #F84040;
+	background-color: transparent;
+	text-decoration: underline;
+	font-weight: bold;
+}
+#leftside a:active {
+	color: #F86800;
+	background-color: transparent;
+	text-decoration: underline;
+	font-weight: bold;
+}
+#leftside a:focus {
+	color: #F86800;
+	text-decoration: none;
+		font-weight: bold;
+}
+
+#leftside .current_link {
+	background-color:transparent;
+	padding-left: 0.2em;
+	padding-right: 0.3em;
+		color: #F86800;
+	text-decoration: none;
+		font-weight: bold;
+}
+/********************************************************** rightside */
+
+#rightside {
+	float: right;
+	width: 180px;
+}
+/* We use an inner div so that we can use padding and margin without messing up the widths for layout. */
+#rightside_inner {
+	margin: 4px;
+	padding: 5px;
+	font-size: .9em;
+}
+#rightside_inner h {
+	margin: 4px;
+}
+/********************************************************** content */
+#content {
+	margin-top: 0;
+	margin-right: 180px;  /* Should match width in rightside id. */
+	margin-bottom: 0;
+	margin-left: 8em;  /* Should match width in leftside id. */
+	padding: 16px;
+	line-height: 1.1em;
+	color: #444444;
+	font-size: .9em;
+}
+#content form table tbody tr td div {
+	color: #444444;
+}
+.contact table {
+	margin-left: 2em;
+}
+.contact tbody tr td form p {
+	color: #444444;
+}
+.contact tbody tr td form table tbody tr td {
+	color: #FFF;
+	font-size: .9em;
+}
+.contact tbody tr td {
+	color: #FFF;
+}
+.contact tbody tr td form table tbody tr td {
+	color: #444;
+}
+
+.payment tbody tr td div {
+	font-weight: bold;
+	font-size: .9em;
+}
+#content form .payment {
+	margin-right: auto;
+	margin-left: auto;
+}
+#container #rightside #rightside_inner table tbody tr td{
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+}
+#container #content .video {
+	border: 3px solid #0058C0;
+	width: 646px;
+	margin-left: auto;
+	margin-right: auto;
+}
+}
+
+/***********************************************************/
+/* Version of layout divs for printing. */
+@media print {
+#header {
+	background: #FFF;
+	/* Use border to prevent gap between divs. */
+	border: 1px solid #DDE;
+}
+#header h1 {
+	color: #123;
+	padding: 5px;
+}
+#topnav {
+	display:none;
+}
+#rightheader {
+	display:none;
+}
+#leftside {
+	display:none;
+}
+#rightside {
+	display:none;
+}
+#content {
+	margin-left: 0;
+	margin-right: 0;
+	padding: 10px;
+	background: #FFFFFF;
+}
+}
+

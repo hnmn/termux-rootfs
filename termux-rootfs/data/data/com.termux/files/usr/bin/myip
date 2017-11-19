@@ -1,0 +1,46 @@
+#!/data/data/com.termux/files/usr/bin/python
+##
+##  ifconfig.co - show information about your public IP address
+##
+
+from io import StringIO
+import requests
+import json
+import sys
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        if sys.argv[1] == '-h' or sys.argv[1] == '--help':
+            print("")
+            print(" Usage: myip [-h|--help]")
+            print("")
+            print(" Show your external IP address.")
+            print("")
+            sys.exit(0)
+
+    resp = requests.get('http://ifconfig.co/json')
+
+    if resp.status_code == 200:
+        if resp.text is not None:
+            try:
+                str_io = StringIO(resp.text)
+                parsed = json.load(str_io)
+
+                print("IP: {}".format(parsed['ip']))
+                print("Hostname: {}".format(parsed['hostname']))
+                print("Country: {}".format(parsed['country']))
+                print("City: {}".format(parsed['city']))
+            except:
+                print("Error while decoding response from server.")
+                sys.exit(1)
+        else:
+            print("Got an empty response from server.")
+            sys.exit(1)
+    elif resp.status_code == 429:
+        print("Too many requests from are sent your IP.")
+        print("Try again later.")
+        sys.exit(1)
+    else:
+        printf("Error while sending request to server.")
+        printf("Server response: {}".format(resp.status_code))
+        sys.exit(1)

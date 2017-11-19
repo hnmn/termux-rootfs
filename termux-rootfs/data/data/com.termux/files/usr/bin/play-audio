@@ -1,0 +1,4 @@
+#!/data/data/com.termux/files/usr/bin/sh
+
+unset LD_LIBRARY_PATH
+exec ${PREFIX}/libexec/play-audio "$@"

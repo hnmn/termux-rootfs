@@ -1,0 +1,5 @@
+#!/data/data/com.termux/files/usr/bin/sh
+##
+##  Execute fasmarm with QEMU
+##
+exec qemu-i386-static "${PREFIX}/libexec/x86bin/fasmarm" "${@}"

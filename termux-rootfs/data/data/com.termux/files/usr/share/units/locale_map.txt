@@ -1,0 +1,225 @@
+Afrikaans_South Africa	af_ZA
+Albanian_Albania	sq_AL
+Alsatian_France	gsw_FR
+Amharic_Ethiopia	am_ET
+Arabic_Algeria	ar_DZ
+Arabic_Bahrain	ar_BH
+Arabic_Egypt	ar_EG
+Arabic_Iraq	ar_IQ
+Arabic_Jordan	ar_JO
+Arabic_Kuwait	ar_KW
+Arabic_Lebanon	ar_LB
+Arabic_Libya	ar_LY
+Arabic_Morocco	ar_MA
+Arabic_Oman	ar_OM
+Arabic_Qatar	ar_QA
+Arabic_Saudi Arabia	ar_SA
+Arabic_Syria	ar_SY
+Arabic_Tunisia	ar_TN
+Arabic_U.A.E.	ar_AE
+Arabic_Yemen	ar_YE
+Armenian_Armenia	hy_AM
+Assamese_India	as_IN
+Azeri_Azerbaijan, Cyrillic	az_AZ
+Azeri_Azerbaijan, Latin	az_AZ
+Bashkir_Russia	ba_RU
+Basque_Basque	eu_ES
+Belarusian_Belarus	be_BY
+Bengali_Bangladesh	bn_??
+Bengali_India	bn_IN
+Bosnian_Neutral	bs_??
+Bosnian_Bosnia and Herzegovina, Cyrillic	bs_BA
+Bosnian_Bosnia and Herzegovina, Latin	bs_BA
+Breton_France	br_FR
+Bulgarian_Bulgaria	bg_BG
+Central Kurdish_Iraq	ku_IQ
+Cherokee_Cherokee	chr_Cher
+Catalan_Spain	ca_ES
+Chinese_Hong Kong SAR, PRC	zh_HK
+Chinese_Macao SAR	zh_MO
+Chinese_Singapore	zh_SG
+Chinese_Simplified	zh_Hans
+Chinese_Traditional	zh_Hant
+Corsican_France	co_FR
+Croatian_Neutral	hr_??
+Croatian_Bosnia and Herzegovina, Latin	hr_BA
+Croatian_Croatia	hr_HR
+Czech_Czech Republic	cs_CZ
+Danish_Denmark	da_DK
+Dari_Afghanistan	prs_AF
+Divehi_Maldives	dv_MV
+Dutch_Belgium	nl_BE
+Dutch_Netherlands	nl_NL
+English_Australia	en_AU
+English_Belize	en_BZ
+English_Canada	en_CA
+English_Caribbean	en_029
+English_India	en_IN
+English_Ireland	en_IE
+English_Ireland	en_IE
+English_Jamaica	en_JM
+English_Malaysia	en_MY
+English_New Zealand	en_NZ
+English_Philippines	en_PH
+English_Singapore	en_SG
+English_South Africa	en_ZA
+English_Trinidad and Tobago	en_TT
+English_United Kingdom	en_GB
+English_United States	en_US
+English_Zimbabwe	en_ZW
+Estonian_Estonia	et_EE
+Faroese_Faroe Islands	fo_FO
+Filipino_Philippines	fil_PH
+Finnish_Finland	fi_FI
+French_Belgium	fr_BE
+French_Canada	fr_CA
+French_France	fr_FR
+French_Luxembourg	fr_LU
+French_Monaco	fr_MC
+French_Switzerland	fr_CH
+Frisian_Netherlands	fy_NL
+Galician_Spain	gl_ES
+Georgian_Georgia	ka_GE
+German_Austria	de_AT
+German_Germany	de_DE
+German_Liechtenstein	de_LI
+German_Luxembourg	de_LU
+German_Switzerland	de_CH
+Greek_Greece	el_GR
+Greenlandic_Greenland	kl_GL
+Gujarati_India	gu_IN
+Hausa_Nigeria	ha_NG
+Hawiian_United States	haw_US
+Hebrew_Israel	he_IL
+Hindi_India	hi_IN
+Hungarian_Hungary	hu_HU
+Icelandic_Iceland	is_IS
+Igbo_Nigeria	ig_NG
+Indonesian_Indonesia	id_ID
+Inuktitut_Canada	iu_CA, Latin
+Inuktitut_Canada	iu_CA, Canadian Syllabics
+Irish_Ireland	ga_IE
+isiXhosa_South Africa	xh_ZA
+isiZulu_South Africa	zu_ZA
+Italian_Italy	it_IT
+Italian_Switzerland	it_CH
+Japanese_Japan	ja_JP
+Kannada_India	kn_IN
+Kazakh_Kazakhstan	kk_KZ
+Khmer_Cambodia	kh_KH
+K'iche_Guatemala	qut_GT
+Kinyarwanda_Rwanda	rw_RW
+Konkani_India	kok_IN
+Korean_Korea	ko_KR
+Kyrgyz_Kyrgyzstan	ky_KG
+Lao_Lao PDR	lo_LA
+Latvian_Latvia	lv_LV
+Lithuanian_Lithuanian	lt_LT
+Lower Sorbian_Germany	dsb_DE
+Luxembourgish_Luxembourg	lb_LU
+Macedonian_Macedonia, FYROM	mk_MK
+Malay_Brunei Darassalam	ms_BN
+Malay_Malaysia	ms_MY
+Malayalam_India	ml_IN
+Maltese_Malta	mt_MT
+Maori_New Zealand	mi_NZ
+Mapudungun_Chile	arn_CL
+Marathi_India	mr_IN
+Mohawk_Canada	moh_CA
+Mongolian_Mongolia, Cyrillic	mn_MN
+Mongolian_Mongolia, Mong	mn_MN
+Nepali_Nepal	ne_NP
+Nepali_India	ne_IN
+Norwegian_Bokmål, Norway	no_NO
+Norwegian_Nynorsk, Norway	no_NO
+Occitan_France	oc_FR
+Oriya_India	or_IN
+Pashto_Afghanistan	ps_AF
+Persian_Iran	fa_IR
+Polish_Poland	pl_PL
+Portuguese_Brazil	pt_BR
+Portuguese_Portugal	pt_PT
+Pular_Senegal	ff_SN
+Punjabi_India, Gurmukhi script	pa_IN
+Punjabi_Pakistan, Arabic script	pa_PK
+Quechua_Bolivia	quz_BO
+Quechua_Ecuador	quz_EC
+Quechua_Peru	quz_PE
+Romanian_Romania	ro_RO
+Romansh_Switzerland	rm_CH
+Russian_Russia	ru_RU
+Sakha_Russia	sah_RU
+Sami_Inari, Finland	smn_FI
+Sami_Lule, Norway	smj_NO
+Sami_Lule, Sweden	smj_SE
+Sami_Northern, Finland	se_FI
+Sami_Northern, Norway	se_NO
+Sami_Northern, Sweden	se_SE
+Sami_Skolt, Finland	sms_FI
+Sami_Southern, Norway	sma_NO
+Sami_Southern, Sweden	sma_SE
+Sanskrit_India	sa_IN
+Serbian_Neutral	sr_??
+Serbian_Bosnia and Herzegovina, Cyrillic	sr_BA
+Serbian_Bosnia and Herzegovina, Latin	sr_BA
+Serbian_Croatia	sr_HR
+Serbian_Serbia and Montenegro, Former, Cyrillic	sr_CS
+Serbian_Serbia and Montenegro, Former, Latin	sr_CS
+Sesotho sa Leboa_South Africa	nso_ZA
+Setswana / Tswana_Botswana	tn_BW
+Setswana / Tswana_South Africa	tn_ZA
+Sindhi_Pakistan	sd_PK
+Sinhala_Sri Lanka	si_LK
+Slovak_Slovakia	sk_SK
+Slovenian_Slovenia	sl_SI
+Spanish_Argentina	es_AR
+Spanish_Bolivia	es_BO
+Spanish_Chile	es_CL
+Spanish_Colombia	es_CO
+Spanish_Costa Rica	es_CR
+Spanish_Dominican Republic	es_DO
+Spanish_Ecuador	es_EC
+Spanish_El Salvador	es_SV
+Spanish_Guatemala	es_GT
+Spanish_Honduras	es_HN
+Spanish_Mexico	es_MX
+Spanish_Nicaragua	es_NI
+Spanish_Panama	es_PA
+Spanish_Paraguay	es_PY
+Spanish_Peru	es_PE
+Spanish_Puerto Rico	es_PR
+Spanish_Spain, Modern Sort	es_ES
+Spanish_Spain, Traditional Sort	es_ES
+Spanish_United States	es_US
+Spanish_Uruguay	es_UY
+Spanish_Venezuela	es_VE
+Swahili_Kenya	sw_KE
+Swedish_Finland	sv_FI
+Swedish_Sweden	sv_SE
+Swedish_Sweden	sv_SE
+Syriac_Syria	syr_SY
+Tajik_Tajikistan, Cyrillic	tg_TJ
+Tamazight_Algeria, Latin	tzm_DZ
+Tamil_India	ta_IN
+Tamil_Sri Lanka	ta_LK
+Tatar_Russia	tt_RU
+Telugu_India	te_IN
+Thai_Thailand	th_TH
+Tibetan_PRC	bo_CN
+Tigrinya_Eritrea	ti_ER
+Tigrinya_Ethiopia	ti_ET
+Turkish_Turkey	tr_TR
+Turkmen_Turkmenistan	tk_TM
+Ukrainian_Ukraine	uk_UA
+Upper Sorbian_Germany	hsb_DE
+Urdu_(reserved)	ur_??
+Urdu_Pakistan	ur_PK
+Uyghur_PRC	ug_CN
+Uzbek_Uzbekistan, Cyrillic	uz_UZ
+Uzbek_Uzbekistan, Latin	uz_UZ
+Valencian_Valencia	ca_ES-Valencia
+Vietnamese_Vietnam	vi_VN
+Welsh_United Kingdom	cy_GB
+Wolof_Senegal	wo_SN
+Yi_PRC	ii_CN
+Yoruba_Nigeria	yo_NG

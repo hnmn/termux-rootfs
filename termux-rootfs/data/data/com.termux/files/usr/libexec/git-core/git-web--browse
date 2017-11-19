@@ -1,0 +1,132 @@
+#!/data/data/com.termux/files/usr/bin/sh
+#
+# This program launch a web browser on the html page
+# describing a git command.
+#
+# Copyright (c) 2007 Christian Couder
+# Copyright (c) 2006 Theodore Y. Ts'o
+#
+# This file is heavily stolen from git-mergetool.sh, by
+# Theodore Y. Ts'o (thanks) that is:
+#
+# Copyright (c) 2006 Theodore Y. Ts'o
+#
+# This file is licensed under the GPL v2, or a later version
+# at the discretion of Junio C Hamano or any other official
+# git maintainer.
+#
+
+USAGE='[--browser=browser|--tool=browser] [--config=conf.var] url/file ...'
+
+# This must be capable of running outside of git directory, so
+# the vanilla git-sh-setup should not be used.
+NONGIT_OK=Yes
+. git-sh-setup
+
+valid_custom_tool()
+{
+    browser_cmd="$(git config "browser.$1.cmd")"
+    test -n "$browser_cmd"
+}
+
+valid_tool() {
+    case "$1" in
+        termux-open-url | elinks | lynx)
+            ;; # happy
+        *)
+            valid_custom_tool "$1" || return 1
+            ;;
+    esac
+}
+
+init_browser_path() {
+    browser_path=$(git config "browser.$1.path")
+    : ${browser_path:="$1"}
+}
+
+while test $# != 0; do
+    case "$1" in
+        -b|--browser*|-t|--tool*)
+            case "$#,$1" in
+                *,*=*)
+                    browser=$(expr "z$1" : 'z-[^=]*=\(.*\)')
+                    ;;
+                1,*)
+                    usage ;;
+                *)
+                    browser="$2"
+                    shift ;;
+            esac
+            ;;
+        -c|--config*)
+            case "$#,$1" in
+                *,*=*)
+                    conf=$(expr "z$1" : 'z-[^=]*=\(.*\)')
+                    ;;
+                1,*)
+                    usage ;;
+                *)
+                    conf="$2"
+                    shift ;;
+            esac
+            ;;
+        --)
+            break
+            ;;
+        -*)
+            usage
+            ;;
+        *)
+            break
+            ;;
+    esac
+    shift
+done
+
+[ $# = 0 ] && usage
+
+if [ -z "$browser" ]; then
+    for opt in "$conf" "web.browser"; do
+        [ -z "$opt" ] && continue
+        browser="$(git config $opt)"
+        [ -z "$browser" ] || break
+    done
+
+    if [ ! -z "$browser" ] && ! valid_tool "$browser"; then
+        echo >&2 "git config option $opt set to unknown browser: $browser"
+        echo >&2 "Resetting to default..."
+        unset browser
+    fi
+fi
+
+if [ -z "$browser" ]; then
+    browser_candidates="termux-open-url elinks lynx"
+
+    for i in $browser_candidates; do
+        init_browser_path $i
+        if type "$browser_path" > /dev/null 2>&1; then
+            browser=$i
+            break
+        fi
+    done
+
+    [ -z "$browser" ] && die "No known browser available."
+else
+    valid_tool "$browser" || die "Unknown browser '$browser'."
+    init_browser_path "$browser"
+
+    if [ -z "$browser_cmd" ] && ! type "$browser_path" > /dev/null 2>&1; then
+        die "The browser $browser is not available as '$browser_path'."
+    fi
+fi
+
+case "$browser" in
+    termux-open-url|elinks|lynx)
+        "$browser_path" "$@"
+        ;;
+    *)
+        if [ ! -z "$browser_cmd" ]; then
+            ( eval "$browser_cmd \"\$@\"" )
+        fi
+        ;;
+esac

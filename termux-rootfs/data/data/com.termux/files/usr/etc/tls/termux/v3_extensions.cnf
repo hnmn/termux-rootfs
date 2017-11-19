@@ -1,0 +1,23 @@
+##
+## This file contains v3 x509 extensions that needed
+## for setting altnames (for example IP).
+##
+
+req_extensions = v3_req
+
+[ v3_req ]
+subjectAltName = @alt_names
+
+[ alt_names ]
+# localhost hostname and IP
+IP.1 = 127.0.0.1
+DNS.1 = localhost
+DNS.2 = localhost.localdomain
+
+# Android's network tethering IP
+IP.2 = 192.168.42.129
+IP.3 = 192.168.43.1
+
+# Your custom IP (for example, your device's IP
+# on home router)
+IP.4 = 192.168.1.3

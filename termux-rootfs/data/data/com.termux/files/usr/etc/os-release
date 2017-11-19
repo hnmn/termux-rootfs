@@ -1,0 +1,5 @@
+NAME="Termux RootFS"
+PRETTY_NAME="Termux Root File System"
+ID=termux-rootfs
+ID_LIKE=termux-rootfs
+ANSI_COLOR="0;36"

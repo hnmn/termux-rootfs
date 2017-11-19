@@ -1,0 +1,8 @@
+## Setup hidden services
+HiddenServiceDir /data/data/com.termux/files/usr/var/lib/tor/hidden
+
+## SSH
+#HiddenServicePort 22 127.0.0.1:8022
+
+## Nginx (don't use https here)
+#HiddenServicePort 80 127.0.0.1:8000

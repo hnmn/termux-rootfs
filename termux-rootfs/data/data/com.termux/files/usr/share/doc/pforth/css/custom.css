@@ -1,0 +1,128 @@
+@charset "UTF-8";
+/* CSS Document */
+
+
+body {
+	background-color: #FFFFF8;
+	/* Set margin and padding to avoid cross browser differences in default values. */
+	margin: 0;
+	padding: 0;
+	font-family: Verdana, "Trebuchet MS", Arial, sans-serif;
+	font-size: 100%;
+	border-top-width: 9px;
+	border-top-style: solid;
+	border-top-color: #F86800;
+	text-align: center;
+}
+a:link {
+	color: #0058C0;
+	text-decoration: underline
+}
+a:visited {
+	color: #6699CC;
+	text-decoration: underline
+}
+a:hover {
+	color: #F84040;
+	background-color: transparent;
+	text-decoration: none
+}
+a:active {
+	color: #F86800;
+	background-color: transparent;
+	text-decoration: none
+}
+a:focus {
+	color: #F86800;
+	text-decoration: none
+}
+h1, h2, h3, h4, h5 {
+	color: #605850;
+	font-weight: bold;
+}
+h1 {
+	font-size: 130%;
+}
+h2 {
+	font-size:120%;
+	margin-left: 10px;
+}
+h3 {
+	font-size:115%;
+	margin-left: 16px;
+}
+h4 {
+	font-size:110%;
+	margin-left: 16px;
+}
+h5 {
+	font-style:italic;
+	font-size:105%;
+	margin-left: 16px;
+}
+tt {
+	font-family: "Courier New", Courier, monospace;
+}
+pre {
+	/*font-family: "Courier New", Courier, monospace; */
+	margin-left: 1.5em;
+	padding-left: 1.5em;
+	padding-bottom: 0.5em;
+	line-height: 1.2em;
+	font-size: 90%;
+	overflow:auto;
+}
+pre, code {
+	background-color:#FFFFF0;
+}
+li {
+	margin-top: 0.6em;
+	margin-bottom: 0.7em;
+}
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+	padding-left: 1.0em;
+	padding-right: 1em;
+	color: #444444;
+}
+
+table {
+	border-collapse:collapse;
+	margin-left: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+td {
+	border: 1px solid #888;
+	padding: 5px;
+}
+th {
+	border: 1px solid #999;
+	padding: 5px;
+	background-color:#f8f0f8;
+}
+table.invisible {
+	background-color:#FCFCFF;
+}
+td.invisible {
+	border: none;
+	padding: 5px;
+}
+th.invisible {
+	border: none;
+}
+
+p.question {
+	font-weight: bold;
+	font-size: 110%;
+	color: #FFFFFF;
+	background-color:#6699CC;
+	margin-top: 20pt;
+	padding-top: 3pt;
+	padding-bottom: 3pt;
+}
+p.answer {
+	margin-left: 14pt;
+}
+

@@ -1,0 +1,506 @@
+=head2 Sun May 28 19:26:51 2017: C<Module> L<Sub::Uplevel|Sub::Uplevel>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/site_perl/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.2800>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sun May 28 19:27:01 2017: C<Module> L<Test::Warn|Test::Warn>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/site_perl/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.32>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sun May 28 19:27:18 2017: C<Module> L<Test::Deep|Test::Deep>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/site_perl/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.127>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sun May 28 19:27:24 2017: C<Module> L<Test::NoWarnings|Test::NoWarnings>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/site_perl/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.04>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sun May 28 19:27:31 2017: C<Module> L<HTML::Tagset|HTML::Tagset>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/site_perl/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 3.20>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sun May 28 19:27:48 2017: C<Module> L<HTML::Parser|HTML::Parser>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/site_perl/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 3.72>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sun May 28 19:27:55 2017: C<Module> L<HTTP::Date|HTTP::Date>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/site_perl/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 6.02>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sun May 28 19:28:03 2017: C<Module> L<Date::Parse|Date::Parse>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/site_perl/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.30>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sun May 28 19:28:07 2017: C<Module> L<LWP::MediaTypes|LWP::MediaTypes>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/site_perl/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 6.02>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sun May 28 19:28:13 2017: C<Module> L<Encode::Locale|Encode::Locale>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/site_perl/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.05>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sun May 28 19:28:30 2017: C<Module> L<URI|URI>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/site_perl/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.71>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sun May 28 19:28:37 2017: C<Module> L<IO::HTML|IO::HTML>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/site_perl/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.001>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sun May 28 19:28:46 2017: C<Module> L<HTTP::Message|HTTP::Message>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/site_perl/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 6.11>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sun May 28 19:29:08 2017: C<Module> L<CGI|CGI>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/site_perl/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 4.36>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jun  2 21:12:28 2017: C<Module> L<DBI|DBI>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/site_perl/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.636>
+
+=item *
+
+C<EXE_FILES: dbiproxy dbiprof dbilogstrip>
+
+=back
+
+=head2 Fri Jun  2 21:21:47 2017: C<Module> L<CPAN|CPAN>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.16>
+
+=item *
+
+C<EXE_FILES: scripts/cpan scripts/cpan-mirrors>
+
+=back
+
+=head2 Fri Jun  2 21:24:34 2017: C<Module> L<Log::Log4perl|Log::Log4perl>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/site_perl/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.49>
+
+=item *
+
+C<EXE_FILES: eg/l4p-tmpl>
+
+=back
+
+=head2 Sat Jun  3 00:22:57 2017: C<Module> L<Term::ReadKey|Term::ReadKey>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/site_perl/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.37>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sat Jun  3 00:46:45 2017: C<Module> L<Sys::Syslog|Sys::Syslog>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/site_perl/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.35>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sat Jun  3 00:48:55 2017: C<Module> L<Net::Daemon|Net::Daemon>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/site_perl/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.48>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sat Jun  3 00:49:07 2017: C<Module> L<RPC::PlServer|RPC::PlServer>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/site_perl/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.2020>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sat Jun  3 01:01:37 2017: C<Module> L<RPC::PlServer|RPC::PlServer>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/site_perl/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.2020>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Oct 12 14:56:26 2017: C<Module> L<nginx|nginx>
+
+=over 4
+
+=item *
+
+C<installed into: /data/data/com.termux/files/usr/lib/perl5/5.24.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.13.6>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+

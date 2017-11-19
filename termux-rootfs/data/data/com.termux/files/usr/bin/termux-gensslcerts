@@ -1,0 +1,189 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##  Helper for generating SSL certificates
+##
+
+TERMUX_CACERT="${PREFIX}/etc/tls/termux/termux_ca.pem"
+TERMUX_CAKEY="${PREFIX}/etc/tls/termux/termux_ca.key"
+TERMUX_DEFAULT_CA_BUNDLE="${PREFIX}/etc/tls/cert_default.pem"
+TERMUX_CA_BUNDLE="${PREFIX}/etc/tls/cert.pem"
+
+REGULAR_CERT_DAYS="365"
+CA_CERT_DAYS="1095"
+
+if [ "${1}" = "--force" ]; then
+    OVERWRITE_CERTS=true
+    OVERWRITE_CA=false
+elif [ "${1}" = "--force-ca" ]; then
+    OVERWRITE_CERTS=true
+    OVERWRITE_CA=true
+else
+    OVERWRITE_CERTS=false
+    OVERWRITE_CA=false
+fi
+
+##
+##  Generate RSA private key
+##
+##  Usage: gen_private_key [output path]
+##
+gen_private_key()
+{
+    local SIZE="4096"
+
+    if openssl genrsa -out "${1}" "${SIZE}" > /dev/null 2>&1; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+get_expiration_date()
+{
+    echo $(date +%d.%m.%Y --date="$(openssl x509 -enddate -noout -in "${1}" | cut -d= -f2)")
+}
+
+##
+##  Generate SSL certificate
+##
+##  Usage: gen_cert_request [org unit] [privkey output] [request output] [serial output] [cert output]
+##
+gen_ssl_cert()
+{
+    local DAYS="${REGULAR_CERT_DAYS}"
+    [ -z "${DAYS}" ] && DAYS="365"
+
+    local EXTFILE_PATH="${PREFIX}/etc/tls/termux/v3_extensions.cnf"
+
+    if openssl x509 -in "${5}" -noout -checkend 0 > /dev/null 2>&1 && ! ${OVERWRITE_CERTS}; then
+        echo "[!] Certificate for '${1}' is not expired."
+        echo "    Expiration date: `get_expiration_date "${5}"`"
+        return 0
+    fi
+
+    echo -n "[*] Generating SSL private key for '${1}'... "
+    if gen_private_key "${2}"; then
+        echo "OK"
+    else
+        echo "FAIL"
+        exit 1
+    fi
+
+    echo -n "[*] Generating SSL cert request for '${1}'... "
+    if openssl req -new -key "${2}" -out "${3}" -subj "/O=Termux/OU=${1}/CN=localhost" > /dev/null 2>&1; then
+        echo "OK"
+    else
+        echo "FAIL"
+        exit 1
+    fi
+
+    echo -n "[*] Signing SSL cert request for '${1}'... "
+    if openssl x509                 \
+        -req                        \
+        -in "${3}"                  \
+        -CA "${TERMUX_CACERT}"      \
+        -CAkey "${TERMUX_CAKEY}"    \
+        -CAcreateserial             \
+        -CAserial "${4}"            \
+        -out "${5}"                 \
+        -days "${DAYS}"             \
+        -extensions v3_req          \
+        -extfile "${EXTFILE_PATH}" > /dev/null 2>&1; then
+        echo "OK"
+
+        echo "[*] Done. Certificate expiration date: `get_expiration_date "${5}"`"
+    else
+        echo "FAIL"
+        exit 1
+    fi
+}
+
+##############################################################################
+##
+##  Generating CA certificate
+##
+##############################################################################
+if ! openssl x509 -in "${TERMUX_CACERT}" -noout -checkend 0 > /dev/null 2>&1 || ${OVERWRITE_CA}; then
+    echo -n "[*] Generating private key for Termux CA... "
+    if gen_private_key "${TERMUX_CAKEY}"; then
+        echo "OK"
+    else
+        echo "FAIL"
+        exit 1
+    fi
+
+    echo -n "[*] Generating Termux CA certificate... "
+    if openssl req \
+        -x509      \
+        -new \
+        -key "${TERMUX_CAKEY}" \
+        -days "${CA_CERT_DAYS}" \
+        -out "${TERMUX_CACERT}" \
+        -subj "/O=Termux Certificate Authority/CN=Termux" > /dev/null 2>&1; then
+        echo "OK"
+    else
+        echo "FAIL"
+        exit 1
+    fi
+
+    echo -n "[*] Adding Termux CA to bundle... "
+    ## Add default certificates
+    if ! cat "${TERMUX_DEFAULT_CA_BUNDLE}" > "${TERMUX_CA_BUNDLE}" 2>&1; then
+        echo "FAIL"
+        exit 1
+    fi
+
+    ## Add comment
+    if ! echo -e "\nTermux Certificate Authority" >> "${TERMUX_CA_BUNDLE}" 2>&1; then
+        echo "FAIL"
+        exit 1
+    fi
+    if ! echo "============================" >> "${TERMUX_CA_BUNDLE}" 2>&1; then
+        echo "FAIL"
+        exit 1
+    fi
+
+    ## Add Termux CA certificate
+    if cat "${TERMUX_CACERT}" >> "${TERMUX_CA_BUNDLE}" 2>&1; then
+        echo "OK"
+    else
+        echo "FAIL"
+        exit 1
+    fi
+else
+    echo "[!] Termux CA certificate is not expired."
+    echo "    Expiration date: `get_expiration_date "${TERMUX_CACERT}"`"
+fi
+
+echo
+
+##############################################################################
+##
+##  Generating certificate for services
+##
+##############################################################################
+
+TERMUX_TLS_DIR="${PREFIX}/etc/tls/termux"
+
+## Nginx
+gen_ssl_cert "Jupyter Notebook" \
+             "${TERMUX_TLS_DIR}/jupyter/cert.key" \
+             "${TERMUX_TLS_DIR}/jupyter/cert.csr" \
+             "${TERMUX_TLS_DIR}/jupyter/cert.srl" \
+             "${TERMUX_TLS_DIR}/jupyter/cert.pem"
+echo
+
+## Nginx
+gen_ssl_cert "Nginx - web server" \
+             "${TERMUX_TLS_DIR}/nginx/cert.key" \
+             "${TERMUX_TLS_DIR}/nginx/cert.csr" \
+             "${TERMUX_TLS_DIR}/nginx/cert.srl" \
+             "${TERMUX_TLS_DIR}/nginx/cert.pem"
+echo
+
+## Nginx
+gen_ssl_cert "Transfer.sh - file sharing server" \
+             "${TERMUX_TLS_DIR}/transfersh/cert.key" \
+             "${TERMUX_TLS_DIR}/transfersh/cert.csr" \
+             "${TERMUX_TLS_DIR}/transfersh/cert.srl" \
+             "${TERMUX_TLS_DIR}/transfersh/cert.pem"

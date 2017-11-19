@@ -1,0 +1,25 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##  Disable password login for Termux
+##
+
+
+if [ -e "${PREFIX}/etc/login.pwd" ]; then
+    echo -n "Do you want to disable password login (Y/n): "
+    read -r CHOICE
+    if [ "${CHOICE}" = "Y" ] || [ "${CHOICE}" = "y" ]; then
+        if rm "${PREFIX}/etc/login.pwd" > /dev/null 2>&1; then
+            echo "Password login successfully disabled."
+        else
+            echo "Failed to disable password login."
+            exit 1
+        fi
+    else
+        echo "Cancelling."
+        exit 0
+    fi
+
+else
+    echo "Password login is not enabled."
+    exit 1
+fi

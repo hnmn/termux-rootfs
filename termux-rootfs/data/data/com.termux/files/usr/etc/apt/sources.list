@@ -1,0 +1,8 @@
+# The main termux repository:
+deb [arch=all,aarch64] http://termux.net stable main
+
+# The addons for Termux RootFS
+deb [arch=aarch64] https://xeffyr.github.io/termux-rootfs-addons/ termux-rootfs addons
+
+# Miscellaneous termux repositories (unofficial):
+# deb [arch=all,aarch64] https://its-pointless.github.io/files/ termux extras

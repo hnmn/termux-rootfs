@@ -1,0 +1,9 @@
+Name: libecpg_compat
+Description: PostgreSQL libecpg_compat library
+Url: http://www.postgresql.org/
+Version: 10.1
+Requires: 
+Requires.private: libecpg libpgtypes
+Cflags: -I/data/data/com.termux/files/usr/include
+Libs: -L/data/data/com.termux/files/usr/lib -lecpg_compat
+Libs.private: -L/data/data/com.termux/files/usr/lib -lpq -lm

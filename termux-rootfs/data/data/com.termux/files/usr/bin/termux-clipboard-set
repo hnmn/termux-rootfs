@@ -1,0 +1,6 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##  Print clipboard content to stdout via Termux:API
+##
+
+exec clipboard -s "${@}"

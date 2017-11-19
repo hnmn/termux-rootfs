@@ -1,0 +1,52 @@
+## This is a list of files and directories that should be
+## backed up with command 'termux-backup'
+##
+## Format:
+##  1) Comments should begin with '#'
+##  2) Path should be relative to '/data/data/com.termux/files',
+##     so it shouldn't begin with '/'.
+##     For example, if you want to backup ${PREFIX}/etc, then the
+##     line in config should be 'usr/etc'.
+##  3) Paths shouldn't contain spaces.
+
+##
+##  Essential files in home directory
+##
+
+# .ssh directory contains local configuration file and keys
+home/.ssh
+
+##
+##  Essential files & dirs of termux-rootfs
+##
+
+# The directory where all configuration files located
+usr/etc
+
+# Score files for games
+usr/var/games
+
+# LVM2 files
+usr/var/lib/lvm
+
+# Minecraft server's files
+usr/var/lib/minecraft
+
+# MySQL database
+usr/var/lib/mysql
+
+# PostgreSQL database
+usr/var/lib/postgresql
+
+# Redis files
+usr/var/lib/redis
+
+# TOR keys & hidden service directory
+usr/var/lib/tor/hidden
+usr/var/lib/tor/keys
+
+# Transfer.sh server's files
+usr/var/lib/transfer.sh
+
+# Web server's root
+usr/var/www

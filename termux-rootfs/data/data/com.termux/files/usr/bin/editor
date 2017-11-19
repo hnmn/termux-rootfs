@@ -1,0 +1,11 @@
+#!/data/data/com.termux/files/usr/bin/sh
+
+if [ -z "${EDITOR}" ]; then
+    exec nano "${@}"
+else
+    if [ -x "${EDITOR}" ]; then
+        exec "${EDITOR}"
+    else
+        exec nano "${@}"
+    fi
+fi

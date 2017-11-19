@@ -1,0 +1,11 @@
+prefix=/data/data/com.termux/files/usr
+exec_prefix=${prefix}
+libdir=/data/data/com.termux/files/usr/lib
+includedir=${prefix}/include
+
+Name: r_bin
+Description: radare foundation libraries
+Version: 2.0.1
+Requires:
+Libs: -L${libdir} -lr_bin -lr_util -lr_io -lr_socket -lr_magic
+Cflags: -I${includedir}/libr

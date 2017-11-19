@@ -1,0 +1,147 @@
+##############################################################################
+##
+##  Basic configuration
+##
+##############################################################################
+
+## Run tor as daemon
+RunAsDaemon 1
+
+## Listen on port 9050 and allow connections
+## from local networks
+SOCKSPort 0.0.0.0:9050
+SocksPolicy accept 10.0.0.0/8
+SocksPolicy accept 127.0.0.0/8
+SocksPolicy accept 172.16.0.0/12
+SocksPolicy accept 192.168.0.0/16
+SocksPolicy reject *
+
+## Setup resolver
+AutomapHostsOnResolve 1
+AutomapHostsSuffixes .onion,.exit
+VirtualAddrNetwork 10.192.0.0/10
+
+## Store caches and other data in this directory
+DataDirectory /data/data/com.termux/files/usr/var/lib/tor
+
+## Store PID in this file
+PidFile /data/data/com.termux/files/usr/var/run/tor.pid
+
+## Don't write to disk frequently
+AvoidDiskWrites 1
+
+## Log messages to this file
+TruncateLogFile 1
+Log notice file /data/data/com.termux/files/usr/var/log/tor.log
+
+## Print heartbeat notice every hour
+HeartbeatPeriod 3600
+
+##############################################################################
+##
+##  Bridges (list created on 27.10.2017)
+##
+##  Use bridges if you suspect your access to the Tor network is being
+##  blocked. There is a preset of bridges with various pluggable transports.
+##  Note that if provided bridges are not working, you may want to set custom
+##  which can be obtained through site:
+##
+##    https://bridges.torproject.org/bridges
+##
+##  Or through mailing to bridges@torproject.org with empty subject and
+##  text 'get bridges' (without quotes).
+##
+##############################################################################
+
+##
+## Uncomment this to use bridges
+##
+#UseBridges 1
+
+##
+## Transport plugins
+##
+ClientTransportPlugin obfs3 exec /data/data/com.termux/files/usr/bin/obfs4proxy
+ClientTransportPlugin obfs4 exec /data/data/com.termux/files/usr/bin/obfs4proxy
+ClientTransportPlugin meek exec /data/data/com.termux/files/usr/bin/meek-client
+ClientTransportPlugin scramblesuit exec /data/data/com.termux/files/usr/bin/obfs4proxy
+
+##
+## Regular bridges (no pluggable transport)
+##
+#Bridge 151.236.10.14:9001 768077FF44D590004E3A4C354978243408662672
+#Bridge 162.243.70.63:8443 397BE00F9EE2BBD38A5CC88EE261CD29E121A236
+#Bridge 185.62.150.183:9001 C181CC40CC49559D079C247D8B0B232B272D5E21
+#Bridge 192.36.31.181:35444 3189748017897CCB46D3CDC20E2A0A120963E2DC
+#Bridge 192.36.31.203:4930 AE4A57FD5DA83F2DEC8717AD557C8F3045A6D177
+#Bridge 193.205.148.250:443 AB1782FC1FFA3DDFC91CB58E39813632CC210D83
+#Bridge 217.103.172.9:9001 9BB583DCB3A9B18C3E34899C99D7634680A4D0A4
+#Bridge 46.185.89.120:9001 520DBEE1551DB2BD026ABCAECA546DFB178F12DC
+#Bridge 47.188.138.9:443 D879A0F6828E52509A84F8AA85FED74FFEF4A22A
+#Bridge 83.212.97.47:443 80FCA5A349AE7E5C2C8503BFB908D4204FDB9C3E
+#Bridge 91.134.213.255:9001 F11E4CF21BE4B4AED27C202A5786A7B130A5AA86
+#Bridge 91.215.153.42:400 F45F1A8943D43A99D68AFE1D8E910BF413A62207
+
+##
+## Bridges with Meek transport
+##
+#Bridge meek 0.0.2.0:1 url=https://d2cly7j4zqgua7.cloudfront.net/ front=a0.awsstatic.com
+#Bridge meek 0.0.2.0:2 url=https://meek.azureedge.net/ front=ajax.aspnetcdn.com
+
+##
+## Bridges with obfs3 transport
+##
+#Bridge obfs3 107.191.58.23:34344 225A895211B179FDE2E8F8E35BE8EE5C8BECC0B0
+#Bridge obfs3 192.36.31.129:51981 62287A5CC5D3832F724604FC2FB828A0D0235B92
+#Bridge obfs3 192.36.31.75:55070 92602F72512AD4564432A68A3E1A534AC3BF1A3F
+#Bridge obfs3 193.205.148.250:47802 AB1782FC1FFA3DDFC91CB58E39813632CC210D83
+#Bridge obfs3 50.53.10.182:54197 93BBD8F80D5F5A8A55829A3168278327BABC14D7
+#Bridge obfs3 70.69.106.161:57220 B4BA94C26FA87E647261D734BB9E4D700B748A7B
+#Bridge obfs3 78.46.223.54:52795 C0B6748FD3F781798A264A74D7AB5436E248A309
+#Bridge obfs3 94.242.249.2:52031 C7BE8154678E7537CCAC60B097D51A8A7EF8BCDF
+
+##
+## Bridges with obfs4 transport
+##
+#Bridge obfs4 107.191.58.23:34345 225A895211B179FDE2E8F8E35BE8EE5C8BECC0B0 cert=ycPoC2wDjJnKPZlrV/BGe9dC7uGrFbYyc2UcyhUvlSx1EQ7C6GQQZbagzKEmHm+KebPRaA iat-mode=0
+#Bridge obfs4 138.197.216.251:9443 8C0E0EA66AC41363A4055345B26A077C778C2700 cert=FC2SWRP9vs07HiyMJb2GpnbM0SuUwU4jvAm3Vhn4yDkCv09CEYcb06kxTL+CwvLNAA80GA iat-mode=0
+#Bridge obfs4 138.68.248.141:9443 7A2D88112DE84F2104EC1318829EF6690609A680 cert=xB/39djjYA57S9AO3FyLo2hcshmFB4G5wTU8jJOjcH0/HEz6yo5Sy38V68Pn3tDAzELbFQ iat-mode=0
+#Bridge obfs4 38.229.33.144:37701 892CF98FB2151BA4C1AD519E63B1F84C48238616 cert=MDUsB9+1vVhTlE4ysonb55m4sxdJoe0YkeyYUK/K/yoen0VU0mnAy4q5AsLKnD0r+z7xRQ iat-mode=1
+#Bridge obfs4 52.17.245.227:9443 5F9DC0B2D626B978764AA3EE3D338E384C053683 cert=GYIsHxXSkyMhEHMYrNCavsnYOvQdpYujH6Mvg7S4Vzx6940uCUMgO6ylSgcUxw/kEG08Gg iat-mode=0
+#Bridge obfs4 52.22.81.102:9443 65B5BC528DCAD55840D1DC9538C20A252F2ABBB2 cert=A7Z91rypCS+fyOwSBFEpeb/XZVP/5LK1jEtTyQp8wd8VSBWGxSV53aHmaAQMevs6CsD0GQ iat-mode=0
+#Bridge obfs4 52.29.88.83:9443 D70A6918BAB62C994BE72DD95DA21B7EB9D3E033 cert=OdBMCdYLooWoWuwxFqp1FYTQbAdwknmsKsIrjGZOuso6E42tQfaCesVnHbhtQ2d4AzGNAQ iat-mode=0
+#Bridge obfs4 95.85.44.38:9443 55933C4C522CAD440C175FA198D10D92AE38AE88 cert=XQrcr2iAEwlDU4itZMEse1ESqFsNlR9145hwE1iKpPAshidVzpgMn2ZL1xr+/Ff296h+Yw iat-mode=0
+
+##
+## Bridges with ScrambleSuit transport
+##
+#Bridge scramblesuit 192.36.31.244:45798 326713FC766696AA72985D8813F82C9DB4FD173D password=R4ACQQHCNRHVN4FHEPHHMWDFMZEUZO5N
+#Bridge scramblesuit 192.36.31.251:37727 08077A0B1248B8FC1E7C114771D3C7A9A3954D71 password=ZKIRXYNZQW6Y75CTE6GHFTQ5HGSHQGAN
+#Bridge scramblesuit 192.36.31.59:57098 6238B2E17D9064FE48C6FAF7C3B32D30906418CC password=6SA2EUH6FU6NPYTEWJ7UXRJCE4AKERUE
+#Bridge scramblesuit 192.36.31.63:45102 C9F9365EE25094BF8E5216BDEF96E2F8876B85FE password=WPAFGR3JBZFFDWPCJELTJOIAC2NZAGB6
+#Bridge scramblesuit 50.53.10.182:59509 93BBD8F80D5F5A8A55829A3168278327BABC14D7 password=SOZ53CJV27Z2CXOYHX63IGENCMJKJRW5
+#Bridge scramblesuit 94.242.249.2:33266 E53EEA7DE6E170328F0A2C4338EE4E4DC2398218 password=UQMHBGFHJZSR5O33N2AOHF5HIUCSPRFP
+#Bridge scramblesuit 94.242.249.2:42867 039C0803213355DCC9961876B5650B0BE5691915 password=SAQUDDU35C4EUHTHD7RP57KBBXQVY6CJ
+
+##############################################################################
+##
+##  Additional configuration
+##
+##############################################################################
+
+##
+## Uncomment this if you want to block ads and trackers on SOCKS proxy
+##
+#%include /data/data/com.termux/files/usr/etc/tor/addons/adblock.torrc
+
+##
+## Uncomment this if you want to run hidden services
+## After enabling this line, you need to enable needed hidden services
+## in 'addons/hidden_services.torrc'
+##
+#%include /data/data/com.termux/files/usr/etc/tor/addons/hidden_services.torrc
+
+##
+## Uncomment this if you want to run a relay
+##
+#%include /data/data/com.termux/files/usr/etc/tor/addons/relay.torrc

@@ -1,0 +1,6 @@
+*
+!.gitignore
+!jupyter
+!nginx
+!transfersh
+!v3_extensions.cnf

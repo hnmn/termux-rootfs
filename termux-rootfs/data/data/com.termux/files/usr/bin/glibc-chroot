@@ -1,0 +1,7 @@
+#!/data/data/com.termux/files/usr/bin/sh
+##
+##  Go to glibc rootfs
+##
+
+export MOUNT_HOST_FS=1
+exec fakechroot "${PREFIX}/opt/glibc-rootfs" bash -l

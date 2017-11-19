@@ -1,0 +1,7 @@
+/* Generated automatically. */
+static const char configuration_arguments[] = "/var/tmp/portage/sys-devel/gcc-5.4.0-r3/work/gcc-5.4.0/configure --host=aarch64-unknown-linux-gnu --build=aarch64-unknown-linux-gnu --prefix=/usr --bindir=/usr/aarch64-unknown-linux-gnu/gcc-bin/5.4.0 --includedir=/usr/lib/gcc/aarch64-unknown-linux-gnu/5.4.0/include --datadir=/usr/share/gcc-data/aarch64-unknown-linux-gnu/5.4.0 --mandir=/usr/share/gcc-data/aarch64-unknown-linux-gnu/5.4.0/man --infodir=/usr/share/gcc-data/aarch64-unknown-linux-gnu/5.4.0/info --with-gxx-include-dir=/usr/lib/gcc/aarch64-unknown-linux-gnu/5.4.0/include/g++-v5 --with-python-dir=/share/gcc-data/aarch64-unknown-linux-gnu/5.4.0/python --enable-languages=c,c++,fortran --enable-obsolete --enable-secureplt --disable-werror --with-system-zlib --enable-nls --without-included-gettext --enable-checking=release --with-bugurl=https://bugs.gentoo.org/ --with-pkgversion='Gentoo 5.4.0-r3 p1.3, pie-0.6.5' --enable-libstdcxx-time --enable-shared --enable-threads=posix --enable-__cxa_atexit --enable-clocale=gnu --enable-multilib --disable-altivec --disable-fixed-point --disable-libgcj --enable-libgomp --disable-libmudflap --disable-libssp --disable-libcilkrts --disable-libmpx --disable-vtable-verify --disable-libvtv --enable-lto --without-isl --enable-libsanitizer";
+static const char thread_model[] = "posix";
+
+static const struct {
+  const char *name, *value;
+} configure_default_options[] = { { NULL, NULL} };

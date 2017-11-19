@@ -1,0 +1,26 @@
+Metadata-Version: 2.0
+Name: jupyter-fortran-kernel
+Version: 0.1.0
+Summary: Minimalistic Fortran kernel for Jupyter
+Home-page: https://github.com/ZedThree/jupyter-fortran-kernel/
+Author: Peter Hill
+Author-email: peter@fusionplasma.co.uk
+License: MIT
+Download-URL: https://github.com/ZedThree/jupyter-fortran-kernel/tarball/0.1.0
+Keywords: jupyter,kernel,fortran
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Framework :: IPython
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Fortran
+
+UNKNOWN
+
+

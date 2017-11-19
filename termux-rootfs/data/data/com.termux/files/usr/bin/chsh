@@ -1,0 +1,71 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+if [ -e "${HOME}/.termux" ] && [ ! -d "${HOME}/.termux" ]; then
+    ## ~/.termux must be a directory
+    rm -f "${HOME}/.termux" > /dev/null 2>&1
+fi
+
+if [ ! -e "${HOME}/.termux" ]; then
+    if ! mkdir -p "${HOME}/.termux" > /dev/null 2>&1; then
+        echo "[!] Failed to create directory '~/.termux'."
+        exit 1
+    fi
+fi
+
+show_usage(){
+    echo "Usage: chsh [-s shell]"
+    echo "Change the login shell."
+}
+
+set_shell(){
+    NEW_SHELL="${PREFIX}/bin/${1}"
+
+    if [ -x "${NEW_SHELL}" ] && [ ! -d "${NEW_SHELL}" ]; then
+        if ! ln -f -s "${NEW_SHELL}" "${HOME}/.termux/shell" > /dev/null 2>&1; then
+            echo "[!] Failed to change a login shell."
+            exit 1
+        fi
+    else
+        echo "[!] '${NEW_SHELL}' is not an executable file."
+        exit 1
+    fi
+}
+
+O=`getopt -l help -- hs: "$@"`
+eval set -- "$O"
+while true; do
+    case "$1" in
+        -h|--help) show_usage; exit 0;;
+        -s) set_shell "${2}"; exit 0;;
+        --) shift; break;;
+        *) echo Error; show_usage; exit 1;;
+    esac
+done
+
+DEFAULT_SHELL="bash"
+
+echo "Changing the login shell."
+echo "Enter the new value, or press ENTER for the default."
+echo
+echo -n "Login Shell [${DEFAULT_SHELL}]: "
+read CHOSEN_SHELL
+
+if [ -z "${CHOSEN_SHELL}" ]; then
+    CHOSEN_SHELL="${DEFAULT_SHELL}"
+else
+    IS_SHELL_VALID=false
+
+    for shell in ash bash csh dash fish sh tcsh zsh; do
+        if [ "${CHOSEN_SHELL}" = "${shell}" ]; then
+            IS_SHELL_VALID=true
+            break
+        fi
+    done
+
+    if ! ${IS_SHELL_VALID}; then
+        echo "[!] Invalid shell chosen (${CHOSEN_SHELL})."
+        echo "    Setting 'bash' as login shell."
+        CHOSEN_SHELL="bash"
+    fi
+fi
+set_shell "${CHOSEN_SHELL}"

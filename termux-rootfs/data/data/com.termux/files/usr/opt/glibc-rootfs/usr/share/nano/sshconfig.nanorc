@@ -1,0 +1,47 @@
+##
+##  Syntax highlighting for ssh_config sshd_config, ~/.ssh/config
+##
+
+syntax "sshconfig" "ssh_config$" "sshd_config$" "\.ssh/config$"
+comment "#"
+
+# default color
+color white ".*"
+
+# Option values
+color brightwhite "[[:space:]].*"
+
+# ssh server option names
+color brightred "\<(AcceptEnv|AddressFamily|AllowAgentForwarding|AllowGroups|AllowStreamLocalForwarding)\>"
+color brightred "\<(AllowTcpForwarding|AllowUsers|AuthenticationMethods|AuthorizedKeysCommand|AuthorizedKeysCommandUser)\>"
+color brightred "\<(AuthorizedKeysFile|AuthorizedPrincipalsCommand|AuthorizedPrincipalsCommandUser|AuthorizedPrincipalsFile)\>"
+color brightred "\<(Banner|ChallengeResponseAuthentication|ChrootDirectory|Ciphers|ClientAliveCountMax|ClientAliveInterval)\>"
+color brightred "\<(Compression|DenyGroups|DenyUsers|DisableForwarding|FingerprintHash|ForceCommand|GatewayPorts)\>"
+color brightred "\<(GSSAPIAuthentication|GSSAPICleanupCredentials|GSSAPIStrictAcceptorCheck|HostbasedAcceptedKeyTypes)\>"
+color brightred "\<(HostbasedAuthentication|HostbasedUsesNameFromPacketOnly|HostCertificate|HostKey|HostKeyAgent)\>"
+color brightred "\<(HostKeyAlgorithms|IgnoreRhosts|IgnoreUserKnownHosts|IPQoS|KbdInteractiveAuthentication|KerberosAuthentication)\>"
+color brightred "\<(KerberosGetAFSToken|KerberosOrLocalPasswd|KerberosTicketCleanup|KexAlgorithms|ListenAddress|LoginGraceTime)\>"
+color brightred "\<(LogLevel|MACs|Match|MaxAuthTries|MaxSessions|MaxStartups|PasswordAuthentication|PermitEmptyPasswords|PermitOpen)\>"
+color brightred "\<(PermitRootLogin|PermitTTY|PermitTunnel|PermitUserEnvironment|PermitUserRC|PidFile|Port|PrintLastLog|PrintMotd)\>"
+color brightred "\<(PubkeyAcceptedKeyTypes|PubkeyAuthentication|RekeyLimit|RevokedKeys|StreamLocalBindMask|StreamLocalBindUnlink)\>"
+color brightred "\<(StrictModes|Subsystem|SyslogFacility|TCPKeepAlive|TrustedUserCAKeys|UseDNS|UsePAM|UsePrivilegeSeparation)\>"
+color brightred "\<(VersionAddendum|X11DisplayOffset|X11Forwarding|X11UseLocalhost|XAuthLocation)\>"
+
+# ssh client option names
+color brightred "\<(Host|Match|AddKeysToAgent|AddressFamily|BatchMode|BindAddress|CanonicalDomains|CanonicalizeFallbackLocal)\>"
+color brightred "\<(CanonicalizeHostname|CanonicalizeMaxDots|CanonicalizePermittedCNAMEs|CertificateFile|ChallengeResponseAuthentication)\>"
+color brightred "\<(CheckHostIP|Cipher|Ciphers|ClearAllForwardings|Compression|CompressionLevel|ConnectionAttempts|ConnectTimeout)\>"
+color brightred "\<(ControlMaster|ControlPath|ControlPersist|DynamicForward|EnableSSHKeysign|EscapeChar|ExitOnForwardFailure)\>"
+color brightred "\<(FingerprintHash|ForwardAgent|ForwardX11|ForwardX11Timeout|ForwardX11Trusted|GatewayPorts|GlobalKnownHostsFile)\>"
+color brightred "\<(GSSAPIAuthentication|GSSAPIDelegateCredentials|HashKnownHosts|HostbasedAuthentication|HostbasedKeyTypes)\>"
+color brightred "\<(HostKeyAlgorithms|HostKeyAlias|HostName|IdentitiesOnly|IdentityAgent|IdentityFile|IgnoreUnknown|Include|IPQoS)\>"
+color brightred "\<(KbdInteractiveAuthentication|KbdInteractiveDevices|KexAlgorithms|LocalCommand|LocalForward|LogLevel|MACs)\>"
+color brightred "\<(NoHostAuthenticationForLocalhost|NumberOfPasswordPrompts|PasswordAuthentication|PermitLocalCommand)\>"
+color brightred "\<(PKCS11Provider|Port|PreferredAuthentications|Protocol|ProxyCommand|ProxyJump|ProxyUseFdpass|PubkeyAcceptedKeyTypes)\>"
+color brightred "\<(PubkeyAuthentication|RekeyLimit|RemoteForward|RequestTTY|RevokedHostKeys|RhostsRSAAuthentication|RSAAuthentication)\>"
+color brightred "\<(SendEnv|ServerAliveCountMax|ServerAliveInterval|StreamLocalBindMask|StreamLocalBindUnlink|StrictHostKeyChecking)\>"
+color brightred "\<(TCPKeepAlive|Tunnel|TunnelDevice|UpdateHostKeys|UsePrivilegedPort|User|UserKnownHostsFile|VerifyHostKeyDNS)\>"
+color brightred "\<(VisualHostKey|XAuthLocation)\>"
+
+# comments
+color brightcyan "^([[:space:]]*)?#.*"

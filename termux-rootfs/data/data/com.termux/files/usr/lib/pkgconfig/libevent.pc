@@ -1,0 +1,4 @@
+Name: libevent
+Description: libevent is an asynchronous notification event loop library
+Version: 2.1.8-stable
+Libs: -levent

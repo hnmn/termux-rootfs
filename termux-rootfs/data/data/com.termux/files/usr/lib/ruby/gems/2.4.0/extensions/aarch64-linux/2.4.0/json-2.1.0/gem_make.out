@@ -1,0 +1,13 @@
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/json-2.1.0/ext/json
+/data/data/com.termux/files/usr/bin/ruby -r ./siteconf20170913-29614-cwwegw.rb extconf.rb
+creating Makefile
+
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/json-2.1.0/ext/json
+make "DESTDIR=" clean
+
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/json-2.1.0/ext/json
+make "DESTDIR="
+make: Nothing to be done for 'all'.
+
+current directory: /data/data/com.termux/files/usr/lib/ruby/gems/2.4.0/gems/json-2.1.0/ext/json
+make "DESTDIR=" install

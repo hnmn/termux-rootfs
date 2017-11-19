@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8" />
+<title>Structs - Vala Reference Manual</title>
+<link rel="stylesheet" type="text/css" href="default.css"><meta name="viewport" content="initial-scale=1">
+</head>
+<body>
+<div class="o-fixedtop c-navbar"><div class="o-navbar">
+<span class="c-pageturner u-float-left"><a href="index.html">Contents</a></span><span>Vala Reference Manual</span><div class="u-float-right">
+<span class="c-pageturner o-inlinewidth-4"><a href="Generics.html">Prev</a></span><span class="c-pageturner o-inlinewidth-4"><a href="Enumerated_types__Enums_.html">Next</a></span>
+</div>
+</div></div>
+<h2>13. Structs</h2>
+<ul class="page_toc">
+<li><a href="Structs.html#Struct_declaration">13.1 Struct declaration</a></li>
+<li><a href="Structs.html#Controlling_instantiation">13.2 Controlling instantiation</a></li>
+<li><a href="Structs.html#Struct_fields">13.3 Struct fields</a></li>
+<li><a href="Structs.html#Struct_constants">13.4 Struct constants</a></li>
+<li><a href="Structs.html#Struct_methods">13.5 Struct methods</a></li>
+<li><a href="Structs.html#Examples">13.6 Examples</a></li>
+</ul>
+<p>A struct is a data type that can contain fields, constants, and methods. </p>
+<p>The simplest struct declaration looks like this: </p>
+<pre class="o-box c-program"><span class="c-program-token">struct</span> <span class="c-program-methodname">StructName</span> {
+        <span class="c-program-token">int</span> <span class="c-program-methodname">some_field</span>;
+}
+</pre>
+<p>A struct must have at least one field, except in either one of the following cases: </p>
+<ul>
+<li><p>It's external </p></li>
+<li><p>It has either one of <code>[BooleanType]</code>, <code>[IntegerType]</code> or <code>[FloatingType]</code> attributes </p></li>
+<li><p>It inherits from another struct </p></li>
+</ul>
+
+<h3 id="Struct_declaration">13.1 Struct declaration</h3>
+<blockquote class="o-box c-rules">struct-declaration:
+	[ access-modifier ] <span class="literal">struct</span> qualified-struct-name [ <span class="literal">:</span> super-struct ] <span class="literal">{</span> [ struct-members ] <span class="literal">}</span>
+
+qualified-struct-name:
+	[ qualified-namespace-name <span class="literal">.</span> ] struct-name
+
+struct-name:
+	identifier
+
+struct-members:
+	struct-member [ struct-members ]
+
+struct-member:
+	struct-creation-method-declaration:
+	struct-field-declaration
+	struct-constant-declaration
+	struct-method-declaration
+
+</blockquote>
+<p>If a super-struct is given, the struct-name becomes an alias for that struct. </p>
+
+<h3 id="Controlling_instantiation">13.2 Controlling instantiation</h3>
+<blockquote class="o-box c-rules">struct-creation-method-declaration:
+	[ struct-access-modifier ] struct-name [ <span class="literal">.</span> creation-method-name ] <span class="literal">(</span> param-list <span class="literal">)</span><span class="literal">{</span> statement-list <span class="literal">}</span>
+
+struct-name:
+	identifier
+
+</blockquote>
+<p>Unlike in a class, any code can go in this method. </p>
+
+<h3 id="Struct_fields">13.3 Struct fields</h3>
+<p>Documentation </p>
+<blockquote class="o-box c-rules">struct-field-declaration:
+	[ access-modifier ] [struct-field-type-modifier] qualified-type-name field-name [ <span class="literal">=</span> expression ] ;
+
+struct-field-type-modifier:
+	<span class="literal">static</span>
+
+</blockquote>
+
+<h3 id="Struct_constants">13.4 Struct constants</h3>
+<blockquote class="o-box c-rules">class-constant-declaration:
+	[ class-access-modifier ] <span class="literal">const</span> qualified-type-name constant-name <span class="literal">=</span> expression ;
+
+</blockquote>
+
+<h3 id="Struct_methods">13.5 Struct methods</h3>
+<p>See <a href="Methods.html#">Methods</a>, See <a href="Classes.html#Class_methods">Classes/Class methods</a> </p>
+<blockquote class="o-box c-rules">struct-method-declaration:
+	[ access-modifier ] [ struct-method-type-modifier ] return-type method-name <span class="literal">(</span> [ params-list ] <span class="literal">)</span> method-contracts [ <span class="literal">throws</span> exception-list ] <span class="literal">{</span> statement-list <span class="literal">}</span>
+
+struct-method-type-modifier:
+	<span class="literal">static</span>
+
+</blockquote>
+
+<h3 id="Examples">13.6 Examples</h3>
+<p>Demonstrating... </p>
+<pre class="o-box c-program"><span class="c-program-comment">// ...</span>
+<span class="c-program-comment"></span>
+</pre>
+</body>
+</html>
