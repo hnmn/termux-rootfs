@@ -190,6 +190,12 @@ vcs:
   git, mercurial, tig
 ```
 
+X11:
+```
+  libice, libsm, libx11, libxau, libxcb, libxext, libxmu, libxt, x11-proto, xauth,
+  xcbproto, xtrans
+```
+
 ## Useful links
 * Termux Home: https://termux.com/
 * Termux Help: https://termux.com/help.html

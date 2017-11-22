@@ -27,3 +27,6 @@ PrintMotd no
 
 ## SFTP
 Subsystem sftp /data/data/com.termux/files/usr/libexec/sftp-server
+
+## Enable X11 forwarding
+X11Forwarding yes
