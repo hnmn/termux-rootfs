@@ -10,7 +10,7 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 4. Neither the name of the University nor the names of its contributors
+ * 3. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
  *
@@ -27,10 +27,13 @@
  * SUCH DAMAGE.
  *
  *	@(#)tftp.h	8.1 (Berkeley) 6/2/93
+ * $FreeBSD$
  */
 
-#ifndef _ARPA_TFTP_H
-#define	_ARPA_TFTP_H 1
+#ifndef _ARPA_TFTP_H_
+#define	_ARPA_TFTP_H_
+
+#include <sys/cdefs.h>
 
 /*
  * Trivial File Transfer Protocol (IEN-133)
@@ -40,32 +43,27 @@
 /*
  * Packet types.
  */
-#define	RRQ	01				/* read request */
-#define	WRQ	02				/* write request */
-#define	DATA	03				/* data packet */
-#define	ACK	04				/* acknowledgement */
-#define	ERROR	05				/* error code */
+#define	RRQ	01			/* read request */
+#define	WRQ	02			/* write request */
+#define	DATA	03			/* data packet */
+#define	ACK	04			/* acknowledgement */
+#define	ERROR	05			/* error code */
+#define	OACK	06			/* option acknowledgement */
 
-struct	tftphdr {
-	short	th_opcode;			/* packet type */
+struct tftphdr {
+	unsigned short	th_opcode;		/* packet type */
 	union {
-		char	tu_padding[3];		/* sizeof() compat */
-		struct {
-			union {
-				unsigned short	tu_block;	/* block # */
-				short	tu_code;		/* error code */
-			} __attribute__ ((__packed__)) th_u3;
-			char tu_data[0];	/* data or error string */
-		} __attribute__ ((__packed__)) th_u2;
-		char	tu_stuff[0];		/* request packet stuff */
-	} __attribute__ ((__packed__)) th_u1;
-} __attribute__ ((__packed__));
+		unsigned short	tu_block;	/* block # */
+		unsigned short	tu_code;	/* error code */
+		char	tu_stuff[1];	/* request packet stuff */
+	} __packed th_u;
+	char	th_data[1];		/* data or error string */
+} __packed;
 
-#define	th_block	th_u1.th_u2.th_u3.tu_block
-#define	th_code		th_u1.th_u2.th_u3.tu_code
-#define	th_stuff	th_u1.tu_stuff
-#define	th_data		th_u1.th_u2.tu_data
-#define	th_msg		th_u1.th_u2.tu_data
+#define	th_block	th_u.tu_block
+#define	th_code		th_u.tu_code
+#define	th_stuff	th_u.tu_stuff
+#define	th_msg		th_data
 
 /*
  * Error codes.
@@ -78,5 +76,6 @@ struct	tftphdr {
 #define	EBADID		5		/* unknown transfer ID */
 #define	EEXISTS		6		/* file already exists */
 #define	ENOUSER		7		/* no such user */
+#define	EOPTNEG		8		/* option negotiation failed */
 
-#endif /* arpa/tftp.h */
+#endif /* !_TFTP_H_ */

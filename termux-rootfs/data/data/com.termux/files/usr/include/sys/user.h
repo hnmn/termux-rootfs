@@ -102,6 +102,10 @@ struct user {
   int u_debugreg[8];
 };
 
+#define UPAGES 1
+#define HOST_TEXT_START_ADDR (u.start_code)
+#define HOST_STACK_END_ADDR (u.start_stack + u.u_ssize * PAGE_SIZE)
+
 /* Needed by binutils on x86 */
 /* http://osxr.org/android/source/bionic/libc/kernel/arch-x86/asm/user_32.h#0089 */
 #define NBPG PAGE_SIZE

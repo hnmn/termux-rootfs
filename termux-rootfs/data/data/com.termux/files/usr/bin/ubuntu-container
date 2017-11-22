@@ -19,17 +19,6 @@ usage()
     echo
 }
 
-## Disable LD_PRELOAD in prooted environment
-unset LD_PRELOAD
-
-## Set right temporary directory for proot
-export PROOT_TMP_DIR="${TMPDIR}"
-
-if [[ $(getenforce | tr '[[:upper:]]' '[[:lower:]]') = "enforcing" ]]; then
-    export PROOT_NO_SECCOMP=1
-    export USE_LINK2SYMLINK=true
-fi
-
 if [ ! -z "${1}" ]; then
     if [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
         usage

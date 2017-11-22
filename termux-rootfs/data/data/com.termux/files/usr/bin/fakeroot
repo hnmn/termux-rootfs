@@ -18,6 +18,11 @@ unset LD_PRELOAD
 ## Set right temporary directory for proot
 export PROOT_TMP_DIR="${TMPDIR}"
 
+if [[ $(getenforce | tr '[[:upper:]]' '[[:lower:]]') = "enforcing" ]]; then
+    export PROOT_NO_SECCOMP=1
+    export USE_LINK2SYMLINK=true
+fi
+
 ## Don't run fakeroot under termux-chroot
 if [ -e "${ROOTFS}/.termux-chroot" ]; then
     echo "[!] Don't run fakeroot under termux-chrooted environment."
@@ -41,11 +46,6 @@ else
     if [ ${#} -lt 1 ]; then
         set -- "${SHELL}" '-l'
     fi
-fi
-
-if [[ $(getenforce | tr '[[:upper:]]' '[[:lower:]]') = "enforcing" ]]; then
-    export PROOT_NO_SECCOMP=1
-    export USE_LINK2SYMLINK=true
 fi
 
 export PROOTED_SHELL=true

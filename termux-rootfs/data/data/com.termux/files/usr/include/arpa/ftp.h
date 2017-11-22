@@ -10,7 +10,7 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 4. Neither the name of the University nor the names of its contributors
+ * 3. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
  *
@@ -27,10 +27,12 @@
  * SUCH DAMAGE.
  *
  *	@(#)ftp.h	8.1 (Berkeley) 6/2/93
+ *
+ * $FreeBSD$
  */
 
-#ifndef _ARPA_FTP_H
-#define	_ARPA_FTP_H 1
+#ifndef _ARPA_FTP_H_
+#define	_ARPA_FTP_H_
 
 /* Definitions for FTP; see RFC-765. */
 
@@ -102,4 +104,4 @@ char *modenames[] =  {"0", "Stream", "Block", "Compressed" };
 
 #define	BLK_BYTECOUNT	2	/* Bytes in this block */
 
-#endif /* arpa/ftp.h */
+#endif /* !_FTP_H_ */

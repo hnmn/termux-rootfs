@@ -18,6 +18,11 @@ unset LD_PRELOAD
 ## Set right temporary directory for proot
 export PROOT_TMP_DIR="${TMPDIR}"
 
+if [[ $(getenforce | tr '[[:upper:]]' '[[:lower:]]') = "enforcing" ]]; then
+    export PROOT_NO_SECCOMP=1
+    export USE_LINK2SYMLINK=1
+fi
+
 ## Enable root UID if needed
 ENABLE_ROOT_ID=false
 if grep -qP '^-.*$' <<< "${1}"; then
@@ -125,7 +130,7 @@ elif [ -x "/system/xbin/su" ]; then
 fi
 
 ## Use link2symlink on SELinux-enabled devices
-${USE_LINK2SYMLINK} && set -- '--link2symlink' "${@}"
+[ ! -z "${USE_LINK2SYMLINK}" ] && set -- '--link2symlink' "${@}"
 
 ## Create lock file to avoid running nested proot
 if ! touch "${ROOTFS}/.termux-chroot" > /dev/null 2>&1; then
@@ -133,11 +138,6 @@ if ! touch "${ROOTFS}/.termux-chroot" > /dev/null 2>&1; then
 fi
 
 touch "${ROOTFS}/DONT_PUT_FILES_IN_ROOT_DIR"
-
-if [[ $(getenforce | tr '[[:upper:]]' '[[:lower:]]') = "enforcing" ]]; then
-    export PROOT_NO_SECCOMP=1
-    export USE_LINK2SYMLINK=true
-fi
 
 ## Remove lock file on exit
 on_exit()

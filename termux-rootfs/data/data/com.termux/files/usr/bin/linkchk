@@ -82,7 +82,7 @@ if [ "${#LIBRARIES_NOT_FOUND[*]}" = 0 ]; then
     echo
     exit 0
 else
-    echo "=== ${#LIBRARIES_NOT_FOUND[*]} libraries not found:"
+    echo "=== libraries not found:"
     ( for lib in ${LIBRARIES_NOT_FOUND[*]}; do
         echo " * ${lib}"
     done ) | sort | uniq

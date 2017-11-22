@@ -7,6 +7,6 @@ export CLASSPATH="${PREFIX}/share/dex/dx.dex"
 
 unset LD_LIBRARY_PATH
 unset LD_PRELOAD
-exec /system/bin/app_process -Djava.io.tmpdir="${TMPDIR}" -Xmx512m             \
-                             "${PREFIX}/bin" com.android.dx.command.Main "$@"  \
+exec /system/bin/app_process -Djava.io.tmpdir="${TMPDIR}" -Xmx512m     \
+                             "${PREFIX}/bin" dx.dx.command.Main "$@"   \
                              | sed '/MdfppReflectionUtils/d'; exit ${PIPESTATUS}

@@ -36,11 +36,10 @@
 
 __BEGIN_DECLS
 
-
-int openpty(int*, int*, char*, const struct termios*, const struct winsize*);
-int forkpty(int*, char*, const struct termios*, const struct winsize*);
-
+/* In Termux these are implemented in the libutil package to support android-21. */
+int openpty(int* __master_fd, int* __slave_fd, char* __slave_name, const struct termios* __termios_ptr, const struct winsize* __winsize_ptr);
+int forkpty(int* __master_fd, char* __slave_name, const struct termios* __termios_ptr, const struct winsize* __winsize_ptr);
 
 __END_DECLS
 
-#endif /* _PTY_H */
+#endif

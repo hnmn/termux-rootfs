@@ -36,7 +36,7 @@
 #define GCC_INSTALL_PREFIX ""
 
 /* Define if we have libxml2 */
-/* #undef CLANG_HAVE_LIBXML */
+#define CLANG_HAVE_LIBXML 1
 
 /* Define if we have z3 and want to build it */
 /* #undef CLANG_ANALYZER_WITH_Z3 */

@@ -37,10 +37,10 @@ __BEGIN_DECLS
 
 
 #if __ANDROID_API__ >= 18
-unsigned long int getauxval(unsigned long int type) __INTRODUCED_IN(18);
+unsigned long int getauxval(unsigned long int __type) __INTRODUCED_IN(18);
 #endif /* __ANDROID_API__ >= 18 */
 
 
 __END_DECLS
 
-#endif /* _SYS_AUXV_H_ */
+#endif

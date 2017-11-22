@@ -29,6 +29,10 @@ For optimal experience, you need to use the following modified Termux apps:
 * Termux:API
   APK is located at ${PREFIX}/share/doc/termux-rootfs/TermuxAPI.apk
 
+You can use NeoTerm instead of Termux. Patched apk is located at:
+
+  ${PREFIX}/share/doc/termux-rootfs/NeoTerm.apk
+
 If you need to use a QEMU emulator for running an operating system, the best
 way is to use a Limbo (QEMU x86) Android application which located at:
 
@@ -91,9 +95,9 @@ development:
   astyle, autoconf, automake, bash-bats, binutils, bison, cargo, cccc,
   cfr, cgdb, cmake, clang, cppi, cpplint, cproto, cscope, ctags, diff2html,
   diffstat, ecj, elfutils, expect, fasm, fasmarm, flex, indent, jack, gcc,
-  gdb, go, gperf, llvm, ltrace, lua, m4, make, micropython, ninja, nodejs,
-  openjdk7-jre, patchelf, perl, pforth, python2, python3, ruby, rust, tcl,
-  texinfo, unifdef, valac, yasm
+  java-8-jdk, gdb, go, gperf, llvm, ltrace, lua, m4, make, micropython, ninja,
+  nodejs, patchelf, perl, pforth, python2, python3, ruby, rust, tcl, texinfo,
+  unifdef, valac, yasm
 
 encryption:
   aespipe, codecrypt, cryptsetup, encfs, gnupg, gnutls, openssl, scrypt,
@@ -175,8 +179,8 @@ servers:
   tor (with obfs4 & meek), transfer.sh
 
 special/custom:
-  fakechroot, fakeroot, login, linkchk, myip, passwd, service-manager, su, sudo,
-  termux-backup, termux-container, termux-gensslcerts, testport, ubuntu-container,
+  fakechroot, fakeroot, glibc-container, login, linkchk, myip, passwd, service-manager,
+  su, sudo, termux-backup, termux-container, termux-gensslcerts, testport, ubuntu-container,
   update-config-guess, wifi-dump, wifi-jam, wttr.in
 
 vcs:

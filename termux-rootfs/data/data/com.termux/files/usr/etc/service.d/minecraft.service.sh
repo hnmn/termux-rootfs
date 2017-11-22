@@ -22,13 +22,13 @@ start_service()
     local CURRENT_PID
     local EULA_PROCESSED
 
-    CURRENT_PID=$(pgrep -u "${TERMUX_UID}" -f "^${PREFIX}/opt/openjdk/bin/java .+ ${PREFIX}/var/lib/minecraft")
+    CURRENT_PID=$(pgrep -u "${TERMUX_UID}" -f "^${PREFIX}/opt/java-8-jdk/bin/java .+ ${PREFIX}/var/lib/minecraft")
 
     ## Prepare server directory
     export HOME="${PREFIX}/var/lib/minecraft"
-    if [ ! -e "${HOME}/minecraft_server.jar" ]; then
+    if [[ ! -e $(realpath "${HOME}/minecraft_server.jar") ]]; then
         echo -n "== Creating link to the server's jar file... "
-        if ln -sf "${PREFIX}/opt/openjdk/share/java/minecraft_server_v1.11.2.jar" "${HOME}/minecraft_server.jar" > /dev/null 2>&1; then
+        if ln -sf "${PREFIX}/share/java/exe/minecraft_server_v1.11.2.jar" "${HOME}/minecraft_server.jar" > /dev/null 2>&1; then
             echo "OK"
         else
             echo "FAIL"
@@ -69,7 +69,7 @@ stop_service()
 {
     local CURRENT_PID
 
-    CURRENT_PID=$(pgrep -u "${TERMUX_UID}" -f "^${PREFIX}/opt/openjdk/bin/java .+ ${PREFIX}/var/lib/minecraft")
+    CURRENT_PID=$(pgrep -u "${TERMUX_UID}" -f "^${PREFIX}/opt/java-8-jdk/bin/java .+ ${PREFIX}/var/lib/minecraft")
 
     if [ ! -z "${CURRENT_PID}" ]; then
         echo -n "== Stopping Minecraft server... "
@@ -77,7 +77,7 @@ stop_service()
 
         if kill -TERM "${CURRENT_PID}" > /dev/null 2>&1; then
             while true; do
-                CURRENT_PID=$(pgrep -u "${TERMUX_UID}" -f "^${PREFIX}/opt/openjdk/bin/java .+ ${PREFIX}/var/lib/minecraft")
+                CURRENT_PID=$(pgrep -u "${TERMUX_UID}" -f "^${PREFIX}/opt/java-8-jdk/bin/java .+ ${PREFIX}/var/lib/minecraft")
                 if [ -z "${CURRENT_PID}" ]; then
                     break
                 fi
@@ -98,7 +98,7 @@ service_status()
 {
     local CURRENT_PID
 
-    CURRENT_PID=$(pgrep -u "${TERMUX_UID}" -f "^${PREFIX}/opt/openjdk/bin/java .+ ${PREFIX}/var/lib/minecraft")
+    CURRENT_PID=$(pgrep -u "${TERMUX_UID}" -f "^${PREFIX}/opt/java-8-jdk/bin/java .+ ${PREFIX}/var/lib/minecraft")
 
     if [ ! -z "${CURRENT_PID}" ]; then
         echo "== Minecraft server is running, pid ${CURRENT_PID}."

@@ -47,8 +47,8 @@ struct group {
 
 __BEGIN_DECLS
 
-struct group* getgrgid(gid_t);
-struct group* getgrnam(const char*);
+struct group* getgrgid(gid_t __gid);
+struct group* getgrnam(const char* __name);
 
 /* Note: Android has thousands and thousands of ids to iterate through. */
 
@@ -58,9 +58,9 @@ static void endgrent(void) {}
 static int getgrgid_r(gid_t gid, struct group * grp, char * buf, size_t buflen, struct group ** result) { *result = 0; return 0; }
 static int  getgrnam_r(const char * name, struct group * grp, char * buf, size_t buflen, struct group ** result) { *result = 0; return 0; }
 
-int getgrouplist (const char*, gid_t, gid_t*, int*);
-int initgroups (const char*, gid_t);
+int getgrouplist(const char* __user, gid_t __group, gid_t* __groups, int* __group_count);
+int initgroups(const char* __user, gid_t __group);
 
 __END_DECLS
 
-#endif /* !_GRP_H_ */
+#endif

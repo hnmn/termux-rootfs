@@ -4,4 +4,4 @@
 ##
 
 HEAPSIZE="512M"
-exec java -Xmx"${HEAPSIZE}" -jar "${PREFIX}/opt/openjdk/share/java/smali-2.1.3.jar" "${@}"
+exec java -Xmx"${HEAPSIZE}" -jar "${PREFIX}/share/java/exe/smali-2.1.3.jar" "${@}"

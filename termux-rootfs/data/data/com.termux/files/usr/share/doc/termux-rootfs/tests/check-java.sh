@@ -53,7 +53,7 @@ fi
             exit 1
         fi
 
-        echo -n "[*] OpenJDK JRE test: "
+        echo -n "[*] Java 8 JRE test: "
         if [[ $(java "${PROG_CLASS_NAME}") = "The sum is 499500" ]]; then
             echo "PASSED"
         else

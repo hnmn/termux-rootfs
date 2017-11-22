@@ -100,15 +100,15 @@ struct lconv* localeconv(void) __INTRODUCED_IN(21) __VERSIONER_NO_GUARD;
 
 
 #if __ANDROID_API__ >= 21
-locale_t duplocale(locale_t) __INTRODUCED_IN(21);
-void freelocale(locale_t) __INTRODUCED_IN(21);
-locale_t newlocale(int, const char*, locale_t) __INTRODUCED_IN(21);
+locale_t duplocale(locale_t __l) __INTRODUCED_IN(21);
+void freelocale(locale_t __l) __INTRODUCED_IN(21);
+locale_t newlocale(int __category_mask, const char* __locale_name, locale_t __base) __INTRODUCED_IN(21);
 #endif /* __ANDROID_API__ >= 21 */
 
-char* setlocale(int, const char*);
+char* setlocale(int __category, const char* __locale_name);
 
 #if __ANDROID_API__ >= 21
-locale_t uselocale(locale_t) __INTRODUCED_IN(21);
+locale_t uselocale(locale_t __l) __INTRODUCED_IN(21);
 #endif /* __ANDROID_API__ >= 21 */
 
 
@@ -116,4 +116,4 @@ locale_t uselocale(locale_t) __INTRODUCED_IN(21);
 
 __END_DECLS
 
-#endif /* _LOCALE_H_ */
+#endif

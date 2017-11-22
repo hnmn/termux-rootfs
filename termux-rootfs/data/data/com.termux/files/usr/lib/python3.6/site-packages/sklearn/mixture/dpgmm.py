@@ -20,11 +20,13 @@ from __future__ import print_function
 import numpy as np
 from scipy.special import digamma as _digamma, gammaln as _gammaln
 from scipy import linalg
+from scipy.linalg import pinvh
 from scipy.spatial.distance import cdist
 
 from ..externals.six.moves import xrange
 from ..utils import check_random_state, check_array, deprecated
-from ..utils.extmath import logsumexp, pinvh, squared_norm
+from ..utils.fixes import logsumexp
+from ..utils.extmath import squared_norm, stable_cumsum
 from ..utils.validation import check_is_fitted
 from .. import cluster
 from .gmm import _GMMBase
@@ -45,7 +47,7 @@ def gammaln(x):
 @deprecated("The function log_normalize is deprecated in 0.18 and "
             "will be removed in 0.20.")
 def log_normalize(v, axis=0):
-    """Normalized probabilities from unnormalized log-probabilites"""
+    """Normalized probabilities from unnormalized log-probabilities"""
     v = np.rollaxis(v, axis)
     v = v.copy()
     v -= v.max(axis=0)
@@ -146,14 +148,14 @@ class _DPGMMBase(_GMMBase):
 
     Parameters
     ----------
-    n_components: int, default 1
+    n_components : int, default 1
         Number of mixture components.
 
-    covariance_type: string, default 'diag'
+    covariance_type : string, default 'diag'
         String describing the type of covariance parameters to
         use.  Must be one of 'spherical', 'tied', 'diag', 'full'.
 
-    alpha: float, default 1
+    alpha : float, default 1
         Real number representing the concentration parameter of
         the dirichlet process. Intuitively, the Dirichlet Process
         is as likely to start a new cluster for a point as it is
@@ -462,7 +464,7 @@ class _DPGMMBase(_GMMBase):
         dg1 = digamma(self.gamma_.T[1]) - dg12
         dg2 = digamma(self.gamma_.T[2]) - dg12
 
-        cz = np.cumsum(z[:, ::-1], axis=-1)[:, -2::-1]
+        cz = stable_cumsum(z[:, ::-1], axis=-1)[:, -2::-1]
         logprior = np.sum(cz * dg2[:-1]) + np.sum(z * dg1)
         del cz  # Save memory
         z_non_zeros = z[z > np.finfo(np.float32).eps]
@@ -670,18 +672,18 @@ class VBGMM(_DPGMMBase):
     Initialization is with normally-distributed means and identity
     covariance, for proper convergence.
 
-    Read more in the :ref:`User Guide <vbgmm>`.
+    Read more in the :ref:`User Guide <bgmm>`.
 
     Parameters
     ----------
-    n_components: int, default 1
+    n_components : int, default 1
         Number of mixture components.
 
-    covariance_type: string, default 'diag'
+    covariance_type : string, default 'diag'
         String describing the type of covariance parameters to
         use.  Must be one of 'spherical', 'tied', 'diag', 'full'.
 
-    alpha: float, default 1
+    alpha : float, default 1
         Real number representing the concentration parameter of
         the dirichlet distribution. Intuitively, the higher the
         value of alpha the more likely the variational mixture of

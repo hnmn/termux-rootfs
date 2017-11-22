@@ -2,7 +2,7 @@
 #define __NETTLE_STDINT_H 1
 #ifndef _GENERATED_STDINT_H
 #define _GENERATED_STDINT_H " "
-/* generated using gnu compiler aarch64-linux-android-gcc (GCC) 4.9.x 20150123 (prerelease) */
+/* generated using gnu compiler Android clang version 5.0.300080  (based on LLVM 5.0.300080) */
 #define _STDINT_HAVE_STDINT_H 1
 
 /* ................... shortcircuit part ........................... */

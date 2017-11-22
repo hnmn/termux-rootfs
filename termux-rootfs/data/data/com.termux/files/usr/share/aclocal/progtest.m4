@@ -40,7 +40,7 @@ fi
 # Find out how to test for executable files. Don't use a zero-byte file,
 # as systems may use methods other than mode bits to determine executability.
 cat >conf$$.file <<_ASEOF
-#! /data/data/com.termux/files/usr/bin/sh
+#! /bin/sh
 exit 0
 _ASEOF
 chmod +x conf$$.file

@@ -38,7 +38,7 @@
 
 /* Enable multithreading support. */
 #ifndef MULTITHREADED
-#define MULTITHREADED 1
+/* #undef MULTITHREADED */
 #endif
 
 /* Use fixedpoint. */

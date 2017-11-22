@@ -96,12 +96,13 @@ struct utmp
 
 __BEGIN_DECLS
 
-int utmpname(const char*);
+int utmpname(const char* __path);
 void setutent(void);
 struct utmp* getutent(void);
 void endutent(void);
 
-int login_tty(int);
+/* In Termux login_tty() is implemented in the libutil package to support android-21. */
+int login_tty(int __fd);
 
 __END_DECLS
 

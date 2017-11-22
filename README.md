@@ -30,6 +30,8 @@ For optimal experience, you need to use the following modified Termux apps:
 * [Termux](./Termux.apk) (Termux:Boot, Termux:Styling, Termux:Widget are integrated)
 * [Termux:API](./TermuxAPI.apk)
 
+You can use NeoTerm instead of Termux. Patched apk is available [here](./NeoTerm.apk).
+
 If you need to use a QEMU emulator for running an operating system, the best way is to use
 a [Limbo (QEMU x86)](./Limbo_x86.apk) Android application.
 
@@ -83,9 +85,9 @@ development:
   astyle, autoconf, automake, bash-bats, binutils, bison, cargo, cccc,
   cfr, cgdb, cmake, clang, cppi, cpplint, cproto, cscope, ctags, diff2html,
   diffstat, ecj, elfutils, expect, fasm, fasmarm, flex, indent, jack, gcc,
-  gdb, go, gperf, llvm, ltrace, lua, m4, make, micropython, ninja, nodejs,
-  openjdk7-jre, patchelf, perl, pforth, python2, python3, ruby, rust, tcl,
-  texinfo, unifdef, valac, yasm
+  java-8-jdk, gdb, go, gperf, llvm, ltrace, lua, m4, make, micropython, ninja,
+  nodejs, patchelf, perl, pforth, python2, python3, ruby, rust, tcl, texinfo,
+  unifdef, valac, yasm
 ```
 encryption:
 ```
@@ -179,8 +181,8 @@ servers:
 ```
 special/custom:
 ```
-  fakechroot, fakeroot, login, linkchk, myip, passwd, service-manager, su, sudo,
-  termux-backup, termux-container, termux-gensslcerts, testport, ubuntu-container,
+  fakechroot, fakeroot, glibc-container, login, linkchk, myip, passwd, service-manager,
+  su, sudo, termux-backup, termux-container, termux-gensslcerts, testport, ubuntu-container,
   update-config-guess, wifi-dump, wifi-jam, wttr.in
 ```
 vcs:

@@ -28,7 +28,7 @@ export PROOT_TMP_DIR="${TMPDIR}"
 
 if [[ $(getenforce | tr '[[:upper:]]' '[[:lower:]]') = "enforcing" ]]; then
     export PROOT_NO_SECCOMP=1
-    export USE_LINK2SYMLINK=true
+    export USE_LINK2SYMLINK=1
 fi
 
 if [ ! -z "${1}" ]; then
@@ -143,7 +143,7 @@ fi
 set -- '--cwd=/data/data/com.termux/files/home' "${@}"
 
 ## Use link2symlink on SELinux-enabled devices
-${USE_LINK2SYMLINK} && set -- '--link2symlink' "${@}"
+[ ! -z "${USE_LINK2SYMLINK}" ] && set -- '--link2symlink' "${@}"
 
 ## Exit if container is running
 if [ -e "${ROOTFS}/.running" ]; then

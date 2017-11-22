@@ -54,12 +54,12 @@ __BEGIN_DECLS
 #define bzero(b, len) (void)(__builtin_memset((b), '\0', (len)))
 #endif
 
-
-#if (defined(__LP64__)) || (defined(__mips__)) || (defined(__arm__)) || (defined(__i386__) && __ANDROID_API__ >= 18)
-int ffs(int) __INTRODUCED_IN_X86(18);
-#endif /* (defined(__LP64__)) || (defined(__mips__)) || (defined(__arm__)) || (defined(__i386__) && __ANDROID_API__ >= 18) */
-
+#if !defined(__i386__) || __ANDROID_API__ >= __ANDROID_API_J_MR2__
+int ffs(int __i) __INTRODUCED_IN_X86(18);
+#endif
 
 __END_DECLS
 
-#endif /* !defined(_STRINGS_H_) */
+#include <android/legacy_strings_inlines.h>
+
+#endif

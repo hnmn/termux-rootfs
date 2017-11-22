@@ -1,1 +1,1 @@
-gcc/aarch64-linux-android/6.3.0/libgfortran.spec
+gcc/aarch64-linux-android/7.2.0/libgfortran.spec

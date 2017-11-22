@@ -41,11 +41,11 @@ typedef struct prop_info prop_info;
 #define PROP_VALUE_MAX  92
 
 /*
- * Sets system property `key` to `value`, creating the system property if it doesn't already exist.
+ * Sets system property `name` to `value`, creating the system property if it doesn't already exist.
  */
 
 #if __ANDROID_API__ >= 12
-int __system_property_set(const char* key, const char* value) __INTRODUCED_IN(12);
+int __system_property_set(const char* __name, const char* __value) __INTRODUCED_IN(12);
 #endif /* __ANDROID_API__ >= 12 */
 
 
@@ -55,16 +55,16 @@ int __system_property_set(const char* key, const char* value) __INTRODUCED_IN(12
  *
  * Property lookup is expensive, so it can be useful to cache the result of this function.
  */
-const prop_info* __system_property_find(const char* name);
+const prop_info* __system_property_find(const char* __name);
 
 /*
  * Calls `callback` with a consistent trio of name, value, and serial number for property `pi`.
  */
 
 #if __ANDROID_API__ >= 26
-void __system_property_read_callback(const prop_info *pi,
-    void (*callback)(void* cookie, const char *name, const char *value, uint32_t serial),
-    void* cookie) __INTRODUCED_IN(26);
+void __system_property_read_callback(const prop_info* __pi,
+    void (*__callback)(void* __cookie, const char* __name, const char* __value, uint32_t __serial),
+    void* __cookie) __INTRODUCED_IN(26);
 #endif /* __ANDROID_API__ >= 26 */
 
 
@@ -76,7 +76,7 @@ void __system_property_read_callback(const prop_info *pi,
  */
 
 #if __ANDROID_API__ >= 19
-int __system_property_foreach(void (*propfn)(const prop_info* pi, void* cookie), void* cookie)
+int __system_property_foreach(void (*__callback)(const prop_info* __pi, void* __cookie), void* __cookie)
   __INTRODUCED_IN(19);
 #endif /* __ANDROID_API__ >= 19 */
 
@@ -96,10 +96,7 @@ int __system_property_foreach(void (*propfn)(const prop_info* pi, void* cookie),
 struct timespec;
 
 #if __ANDROID_API__ >= 26
-bool __system_property_wait(const prop_info* pi,
-                            uint32_t old_serial,
-                            uint32_t* new_serial_ptr,
-                            const struct timespec* relative_timeout)
+bool __system_property_wait(const prop_info* __pi, uint32_t __old_serial, uint32_t* __new_serial_ptr, const struct timespec* __relative_timeout)
     __INTRODUCED_IN(26);
 #endif /* __ANDROID_API__ >= 26 */
 
@@ -107,11 +104,11 @@ bool __system_property_wait(const prop_info* pi,
 /* Deprecated. In Android O and above, there's no limit on property name length. */
 #define PROP_NAME_MAX   32
 /* Deprecated. Use __system_property_read_callback instead. */
-int __system_property_read(const prop_info* pi, char* name, char* value);
+int __system_property_read(const prop_info* __pi, char* __name, char* __value);
 /* Deprecated. Use __system_property_read_callback instead. */
-int __system_property_get(const char* name, char* value);
+int __system_property_get(const char* __name, char* __value);
 /* Deprecated. Use __system_property_foreach instead. */
-const prop_info* __system_property_find_nth(unsigned n);
+const prop_info* __system_property_find_nth(unsigned __n);
 
 __END_DECLS
 

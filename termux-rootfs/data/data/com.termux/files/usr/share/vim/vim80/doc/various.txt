@@ -309,6 +309,7 @@ g8			Print the hex values of the bytes used in the
    *+ARP*		Amiga only: ARP support included
 B  *+arabic*		|Arabic| language support
 N  *+autocmd*		|:autocmd|, automatic commands
+H  *+autoservername*	Automatically enable |clientserver|
 m  *+balloon_eval*	|balloon-eval| support. Included when compiling with
 			supported GUI (Motif, GTK, GUI) and either
 			Netbeans/Sun Workshop integration or |+eval| feature.
@@ -447,7 +448,7 @@ N  *+visualextra*	extra Visual mode commands |blockwise-operators|
 N  *+vreplace*		|gR| and |gr|
 N  *+wildignore*	|'wildignore'|
 N  *+wildmenu*		|'wildmenu'|
-   *+windows*		more than one window; Always enabled sinde 8.0.1118.
+   *+windows*		more than one window; Always enabled since 8.0.1118.
 m  *+writebackup*	|'writebackup'| is default on
 m  *+xim*		X input method |xim|
    *+xfontset*		X fontset support |xfontset|

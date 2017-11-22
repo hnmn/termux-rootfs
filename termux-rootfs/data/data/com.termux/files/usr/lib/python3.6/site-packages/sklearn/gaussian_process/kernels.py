@@ -127,7 +127,7 @@ class Kernel(six.with_metaclass(ABCMeta)):
 
         Parameters
         ----------
-        deep: boolean, optional
+        deep : boolean, optional
             If True, will return the parameters for this estimator and
             contained subobjects that are estimators.
 
@@ -405,7 +405,7 @@ class CompoundKernel(Kernel):
 
         Parameters
         ----------
-        deep: boolean, optional
+        deep : boolean, optional
             If True, will return the parameters for this estimator and
             contained subobjects that are estimators.
 
@@ -542,7 +542,7 @@ class KernelOperator(Kernel):
 
         Parameters
         ----------
-        deep: boolean, optional
+        deep : boolean, optional
             If True, will return the parameters for this estimator and
             contained subobjects that are estimators.
 
@@ -806,7 +806,7 @@ class Exponentiation(Kernel):
 
         Parameters
         ----------
-        deep: boolean, optional
+        deep : boolean, optional
             If True, will return the parameters for this estimator and
             contained subobjects that are estimators.
 
@@ -1512,7 +1512,8 @@ class ExpSineSquared(StationaryKernelMixin, NormalizedKernelMixin, Kernel):
     parameter periodicity>0. Only the isotropic variant where l is a scalar is
     supported at the moment. The kernel given by:
 
-    k(x_i, x_j) = exp(-2 sin(\pi / periodicity * d(x_i, x_j)) / length_scale)^2
+    k(x_i, x_j) =
+    exp(-2 (sin(\pi / periodicity * d(x_i, x_j)) / length_scale) ^ 2)
 
     .. versionadded:: 0.18
 

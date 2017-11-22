@@ -43,10 +43,10 @@
 #define	_PATH_MOUNTED	"/proc/mounts"
 #define	_PATH_TTY	"/dev/tty"
 
-#define _PATH_STDPATH _PATH_DEFPATH
-#define _PATH_TMP "/data/data/com.termux/files/usr/tmp/"
-#define _PATH_VARDB "/data/data/com.termux/files/usr/var/db/"
-#define _PATH_VARRUN "/data/data/com.termux/files/usr/var/run/"
-#define _PATH_VARTMP "/data/data/com.termux/files/usr/var/tmp/"
+#define	_PATH_STDPATH	_PATH_DEFPATH
+#define	_PATH_TMP	"/data/data/com.termux/files/usr/tmp/"
+#define	_PATH_VARDB	"/data/data/com.termux/files/usr/var/db/"
+#define	_PATH_VARRUN	"/data/data/com.termux/files/usr/var/run/"
+#define	_PATH_VARTMP	"/data/data/com.termux/files/usr/var/tmp/"
 
 #endif /* !_PATHS_H_ */
