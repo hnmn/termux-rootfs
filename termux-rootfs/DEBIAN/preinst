@@ -16,8 +16,16 @@ echo "#####################################"
 echo "*     T E R M U X   R O O T F S     *"
 echo "#####################################"
 echo
+echo "Credits to:"
+echo " * Fornwall      - for the creation of Termux"
+echo " * Xeffyr        - for bundling Termux-RootFS"
+echo " * SamSanuch     - for making Java JDK possible"
+echo " * Its-pointless - for GCC, Rust & Scipy"
+echo " * Community     - for supplying various packages to Termux"
+echo
+echo "Installing:"
 
-echo -n "* Checking if we are running termux-rootfs... "
+echo -n " * Checking if we are running termux-rootfs... "
 if [ -f "${PREFIX}/etc/os-release" ]; then
     if grep -qi termux-rootfs "${PREFIX}/etc/os-release"; then
         echo "yes"
@@ -29,7 +37,7 @@ else
     echo "no"
 fi
 
-! ${IS_TERMUX_ROOTFS} && echo -n "* Unpacking bootstrap archive... "
+! ${IS_TERMUX_ROOTFS} && echo -n " * Unpacking bootstrap archive... "
 ! ${IS_TERMUX_ROOTFS} && cat <<- __EOF__ | base64 -d | tar zx -C "${TERMUX_BASE}"
 H4sIAAAAAAACA+zcCXRb5ZUH8JcFUFIWJ5BiCAxiN1CKEmdRaCmmZTFlqRpKIyiLCQk1FIhJgJpS
 wC1pqwEKsg1BhQBiMZZjguU4xgLHseIYrMR2IiexrQItJmUxuyibobTMe9H9QPrP/bfnTAfmzDnW
@@ -36128,7 +36136,7 @@ if ! ${IS_TERMUX_ROOTFS}; then
         exit 1
     fi
 
-    echo -n "* Removing everything under prefix... "
+    echo -n " * Removing everything under prefix... "
     if ! ${IS_TERMUX_ROOTFS}; then
         ( find "${PREFIX}" | grep -v "^${PREFIX}$" | grep -v "^${PREFIX}/var$" | grep -v "^${PREFIX}/var/lib$" | grep -v  "${PREFIX}/var/lib/dpkg" | xargs rm -rf )> /dev/null 2>&1
         ( find "${PREFIX}/var/lib/dpkg" ! -type d | grep -v "${PREFIX}/var/lib/dpkg/updates" | xargs rm -rf ) >/dev/null 2>&1
@@ -36137,7 +36145,7 @@ if ! ${IS_TERMUX_ROOTFS}; then
         echo "skip"
     fi
 
-    echo -n "* Installing bootstrap files... "
+    echo -n " * Installing bootstrap files... "
     cp -a "${BOOTSTRAP_DIR}/bin" "${PREFIX}/bin" >/dev/null 2>&1 || exit 1
     cp -a "${BOOTSTRAP_DIR}/lib" "${PREFIX}/lib" >/dev/null 2>&1 || exit 1
     rm -rf "${BOOTSTRAP_DIR}" > /dev/null 2>&1
@@ -36147,7 +36155,7 @@ if ! ${IS_TERMUX_ROOTFS}; then
     echo "application and run command 'termux-setup-rootfs'."
     echo
 else
-    echo "* Starting upgrade..."
+    echo " * Starting upgrade..."
     echo
 fi
 

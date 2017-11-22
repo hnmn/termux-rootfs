@@ -3,3 +3,10 @@
  +      W E L C O M E   T O   T E R M U X      +
  +                                             +
  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+ Credits to:
+  * Fornwall      - for the creation of Termux
+  * Xeffyr        - for bundling Termux-RootFS
+  * SamSanuch     - for making Java JDK possible
+  * Its-pointless - for GCC, Rust & Scipy
+  * Community     - for supplying various packages
