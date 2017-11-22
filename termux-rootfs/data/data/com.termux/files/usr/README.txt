@@ -113,8 +113,8 @@ games:
 generic utilities:
   ag, bash, busybox, coreutils, dash, diffutils, file, findutils, fish, fzf,
   gawk, gettext, global, grep, inetutils, info, less, man, mapscii, mktorrent,
-  patch, procps, pv, pwgen, ranpwd, rhash, rsync, tree, tasksh, taskwarrior,
-  timewarrior, units, util-linux, xdelta3, zsh
+  patch, procps, pv, pwgen, ranpwd, rhash, rsync, translate-shell, tree, tasksh,
+  taskwarrior, timewarrior, units, util-linux, xdelta3, zsh
 
 libraries:
   apr, apr-util, boost, cairo, c-ares, db, expat, fftw, flac, fontconfig,
