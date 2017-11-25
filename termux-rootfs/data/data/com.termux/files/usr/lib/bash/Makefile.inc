@@ -37,10 +37,10 @@ datarootdir = ${prefix}/share
 loadablesdir = ${libdir}/bash
 headersdir = $(includedir)/$(PACKAGE_NAME)
 
-topdir = /home/fornwall/.termux-build/bash/src
-BUILD_DIR = /home/fornwall/.termux-build/bash/build
-srcdir = /home/fornwall/.termux-build/bash/src/examples/loadables
-VPATH = /home/fornwall/.termux-build/bash/src/examples/loadables
+topdir = /home/builder/.termux-build/bash/src
+BUILD_DIR = /home/builder/.termux-build/bash/build
+srcdir = /home/builder/.termux-build/bash/src/examples/loadables
+VPATH = /home/builder/.termux-build/bash/src/examples/loadables
 
 # Support an alternate destination root directory for package building
 DESTDIR =
@@ -61,7 +61,7 @@ host_os = linux-android
 host_cpu = aarch64
 host_vendor = unknown
 
-CFLAGS =  -Os -Wno-parentheses -Wno-format-security
+CFLAGS =  -Oz -fstack-protector-strong --param ssp-buffer-size=4 -Wno-parentheses -Wno-format-security
 LOCAL_CFLAGS = 
 DEFS = -DHAVE_CONFIG_H
 LOCAL_DEFS = -DSHELL

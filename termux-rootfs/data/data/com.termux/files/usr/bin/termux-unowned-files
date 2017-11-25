@@ -1,0 +1,6 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##  Find rootfs files that not owned by any package
+##
+
+comm -23 <(find "${PREFIX}" -xdev | sort) <(sort $(find "${PREFIX}/var/lib/dpkg/info" -type f -iname \*.list))

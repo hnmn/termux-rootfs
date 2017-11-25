@@ -10,5 +10,5 @@ Requires:
 Requires.private: libswresample >= 2.7.100, libavutil >= 55.58.100
 Conflicts:
 Libs: -L${libdir}  -lavcodec 
-Libs.private: -liconv -lxvidcore -L/data/data/com.termux/files/usr/lib -lx265 -L/data/data/com.termux/files/usr/lib -lx264 -L/data/data/com.termux/files/usr/lib -lvpx -lm -L/data/data/com.termux/files/usr/lib -lvpx -lm -L/data/data/com.termux/files/usr/lib -lvpx -lm -L/data/data/com.termux/files/usr/lib -lvpx -lm -lvorbisenc -lvorbis -logg -L/data/data/com.termux/files/usr/lib -lopus -lmp3lame -L/data/data/com.termux/files/usr/lib -lgnutls -lm -lbz2 -lz -pthread
+Libs.private: -liconv -L/data/data/com.termux/files/usr/lib -lxcb -L/data/data/com.termux/files/usr/lib -lxcb-shm -L/data/data/com.termux/files/usr/lib -lxcb-xfixes -L/data/data/com.termux/files/usr/lib -lxcb-shape -lxvidcore -L/data/data/com.termux/files/usr/lib -lx265 -L/data/data/com.termux/files/usr/lib -lx264 -L/data/data/com.termux/files/usr/lib -lvpx -lm -L/data/data/com.termux/files/usr/lib -lvpx -lm -L/data/data/com.termux/files/usr/lib -lvpx -lm -L/data/data/com.termux/files/usr/lib -lvpx -lm -lvorbisenc -lvorbis -logg -L/data/data/com.termux/files/usr/lib -lopus -lmp3lame -L/data/data/com.termux/files/usr/lib -lgnutls -lm -lbz2 -lz -pthread -landroid-glob
 Cflags: -I${includedir}

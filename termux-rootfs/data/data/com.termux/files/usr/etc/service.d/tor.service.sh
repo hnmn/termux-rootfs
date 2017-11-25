@@ -124,12 +124,20 @@ stop_service()
 
         echo -n "== Stopping TOR... "
         kill -TERM "${TOR_PID}" > /dev/null 2>&1
+        TIMER=0
         while true; do
+            if [ ${TIMER} -gt 14 ]; then
+                echo "FAIL"
+                rm -f "${TOR_PIDFILE}" > /dev/null 2>&1
+                exit 1
+            fi
+
             if [ ! -e "${TOR_PIDFILE}" ]; then
                 echo "OK"
                 break
             else
                 sleep 1
+                TIMER=$((TIMER + 1))
             fi
         done
     else

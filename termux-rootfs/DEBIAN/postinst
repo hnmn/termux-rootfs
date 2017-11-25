@@ -46,7 +46,35 @@ if [ ! -e "/data/data/com.termux/files/usr/var/lib/termux-rootfs/termux-rootfs_c
     echo "run command 'termux-setup-rootfs'."
     echo
 else
-    makewhatis > /dev/null 2>&1
+    echo
+    echo "Doing post-installation steps:"
+
+    JDK_MODULES_GZ="/data/data/com.termux/files/usr/lib/jvm/openjdk-9/lib/modules.gz"
+    JDK_MODULES="/data/data/com.termux/files/usr/lib/jvm/openjdk-9/lib/modules"
+    if [ $(md5sum "${JDK_MODULES}" 2>/dev/null | awk '{ print $1 }') != "4a3646d977784863c21f368d539423c1" ]; then
+        echo -n " * Unpacking OpenJDK modules... "
+        if zcat "${JDK_MODULES_GZ}" > "${JDK_MODULES}" 2>/dev/null; then
+            echo "OK"
+        else
+            echo "FAIL"
+        fi
+    fi
+    unset JDK_MODULES JDK_MODULES_GZ
+
+    echo -n " * Updating man database..."
+    if makewhatis > /dev/null 2>&1; then
+        echo "OK"
+    else
+        echo "FAIL"
+    fi
+
+    echo -n " * Updating font cache..."
+    if fc-cache > /dev/null 2>&1; then
+        echo "OK"
+    else
+        echo "FAIL"
+    fi
+
     echo
     echo "You need to restart Termux application."
     echo

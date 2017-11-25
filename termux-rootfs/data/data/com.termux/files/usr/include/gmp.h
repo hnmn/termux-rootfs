@@ -2317,7 +2317,7 @@ enum
 
 /* Define CC and CFLAGS which were used to build this version of GMP */
 #define __GMP_CC "aarch64-linux-android-clang"
-#define __GMP_CFLAGS " -Os"
+#define __GMP_CFLAGS " -Oz -fstack-protector-strong --param ssp-buffer-size=4"
 
 /* Major version number is the value of __GNU_MP__ too, above. */
 #define __GNU_MP_VERSION            6

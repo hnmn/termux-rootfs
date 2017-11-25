@@ -19,11 +19,10 @@ echo
 echo "Credits to:"
 echo " * Fornwall      - for the creation of Termux"
 echo " * Xeffyr        - for bundling Termux-RootFS"
-echo " * SamSanuch     - for making Java JDK possible"
 echo " * Its-pointless - for GCC, Rust & Scipy"
 echo " * Community     - for supplying various packages to Termux"
 echo
-echo "Installing:"
+echo "Doing pre-installation steps:"
 
 echo -n " * Checking if we are running termux-rootfs... "
 if [ -f "${PREFIX}/etc/os-release" ]; then

@@ -38,7 +38,9 @@ a [Limbo (QEMU x86)](./Limbo_x86.apk) Android application.
 ## Password login protection
 You can prevent using of termux by unwanted users by setting password with
 command 'passwd'. If you want to use a such feature, you must use a patched
-Termux app (./Termux.apk) to prevent login bypassing with a 'failsafe' shell.<br><br>
+Termux app (./Termux.apk) to prevent login bypassing with a 'failsafe' shell.
+If you are using NeoTerm instead of Termux, you should know that password login
+protection can be bypassed in it.<br><br>
 To remove password login, run command 'rmpasswd'.
 
 ## Available software
@@ -85,7 +87,7 @@ development:
   astyle, autoconf, automake, bash-bats, binutils, bison, cargo, cccc,
   cfr, cgdb, cmake, clang, cppi, cpplint, cproto, cscope, ctags, diff2html,
   diffstat, ecj, elfutils, expect, fasm, fasmarm, flex, indent, jack, gcc,
-  java-8-jdk, gdb, go, gperf, llvm, ltrace, lua, m4, make, micropython, ninja,
+  gdb, go, gperf, llvm, ltrace, lua, m4, make, micropython, ninja, openjdk-9,
   nodejs, patchelf, perl, pforth, python2, python3, ruby, rust, tcl, texinfo,
   unifdef, valac, yasm
 ```
@@ -192,8 +194,10 @@ vcs:
 
 X11:
 ```
-  libice, libsm, libx11, libxau, libxcb, libxext, libxmu, libxt, x11-proto, xauth,
-  xcbproto, xtrans
+  fontutil, libfontenc, libice, libsm, libx11, libxau, libxaw, libxcb, libxcursor, libxdmcp,
+  libxext, libxfixes, libxfont2, libxft, libxkbfile, libxmu, libxpm, libxrender, libxt, tigervnc,
+  x11-proto, xcbproto, xclock, xkeyboard-config, xorg-server, xorg-util-macros, xorg-xauth,
+  xorg-xkbcomp, xtrans
 ```
 
 ## Useful links

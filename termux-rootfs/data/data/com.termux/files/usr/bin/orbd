@@ -1,0 +1,10 @@
+#!/data/data/com.termux/files/usr/bin/bash
+##
+##  A wrapper for tool 'orbd' form OpenJDK 9
+##
+
+unset LD_PRELOAD
+export JAVA_HOME="${PREFIX}/lib/jvm/openjdk-9"
+export LD_LIBRARY_PATH="${JAVA_HOME}/lib:${JAVA_HOME}/lib/jli:${LD_LIBRARY_PATH}"
+
+exec "${JAVA_HOME}/bin/orbd" "$@" 2> >(sed "/OpenJDK 64-Bit Server VM warning: Can't detect initial thread stack location - find_vma failed/d")

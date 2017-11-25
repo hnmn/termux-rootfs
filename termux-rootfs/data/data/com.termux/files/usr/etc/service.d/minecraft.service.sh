@@ -22,7 +22,7 @@ start_service()
     local CURRENT_PID
     local EULA_PROCESSED
 
-    CURRENT_PID=$(pgrep -u "${TERMUX_UID}" -f "^${PREFIX}/opt/java-8-jdk/bin/java .+ ${PREFIX}/var/lib/minecraft")
+    CURRENT_PID=$(pgrep -u "${TERMUX_UID}" -f "^${PREFIX}/lib/jvm/openjdk-9/bin/java .+ ${PREFIX}/var/lib/minecraft")
 
     ## Prepare server directory
     export HOME="${PREFIX}/var/lib/minecraft"
@@ -69,15 +69,16 @@ stop_service()
 {
     local CURRENT_PID
 
-    CURRENT_PID=$(pgrep -u "${TERMUX_UID}" -f "^${PREFIX}/opt/java-8-jdk/bin/java .+ ${PREFIX}/var/lib/minecraft")
+    CURRENT_PID=$(pgrep -u "${TERMUX_UID}" -f "^${PREFIX}/lib/jvm/openjdk-9/bin/java .+ ${PREFIX}/var/lib/minecraft")
 
     if [ ! -z "${CURRENT_PID}" ]; then
         echo -n "== Stopping Minecraft server... "
         sync
 
-        if kill -TERM "${CURRENT_PID}" > /dev/null 2>&1; then
+        ## Java 9 currently can be stopped only by signal 'KILL'
+        if kill -KILL "${CURRENT_PID}" > /dev/null 2>&1; then
             while true; do
-                CURRENT_PID=$(pgrep -u "${TERMUX_UID}" -f "^${PREFIX}/opt/java-8-jdk/bin/java .+ ${PREFIX}/var/lib/minecraft")
+                CURRENT_PID=$(pgrep -u "${TERMUX_UID}" -f "^${PREFIX}/lib/jvm/openjdk-9/bin/java .+ ${PREFIX}/var/lib/minecraft")
                 if [ -z "${CURRENT_PID}" ]; then
                     break
                 fi
@@ -98,7 +99,7 @@ service_status()
 {
     local CURRENT_PID
 
-    CURRENT_PID=$(pgrep -u "${TERMUX_UID}" -f "^${PREFIX}/opt/java-8-jdk/bin/java .+ ${PREFIX}/var/lib/minecraft")
+    CURRENT_PID=$(pgrep -u "${TERMUX_UID}" -f "^${PREFIX}/lib/jvm/openjdk-9/bin/java .+ ${PREFIX}/var/lib/minecraft")
 
     if [ ! -z "${CURRENT_PID}" ]; then
         echo "== Minecraft server is running, pid ${CURRENT_PID}."

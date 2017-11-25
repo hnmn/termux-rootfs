@@ -450,9 +450,9 @@
 /* #undef SYS_TIME_H_DEFINES_STRUCT_TIMESPEC */
 /* #undef PTHREAD_H_DEFINES_STRUCT_TIMESPEC */
 
-/* #undef TYPEOF_STRUCT_STAT_ST_ATIM_IS_STRUCT_TIMESPEC */
+#define TYPEOF_STRUCT_STAT_ST_ATIM_IS_STRUCT_TIMESPEC 1
 /* #undef HAVE_STRUCT_STAT_ST_ATIMESPEC_TV_NSEC */
-#define HAVE_STRUCT_STAT_ST_ATIMENSEC 1
+/* #undef HAVE_STRUCT_STAT_ST_ATIMENSEC */
 /* #undef HAVE_STRUCT_STAT_ST_ATIM_ST__TIM_TV_NSEC */
 
 /* Characteristics of definitions in the system header files. */
@@ -574,7 +574,7 @@
 /* #undef HAVE_BZERO */
 
 /* Define if you have the chown function.  */
-/* #undef HAVE_CHOWN */
+#define HAVE_CHOWN 1
 
 /* Define if you have the confstr function.  */
 /* #undef HAVE_CONFSTR */
@@ -1142,7 +1142,7 @@
 #define HAVE_MALLOC_H 1
 
 /* Define if you have the <stdio_ext.h> header file. */
-/* #undef HAVE_STDIO_EXT_H */
+#define HAVE_STDIO_EXT_H 1
 
 /* Define if you have the `dcgettext' function. */
 #define HAVE_DCGETTEXT 1

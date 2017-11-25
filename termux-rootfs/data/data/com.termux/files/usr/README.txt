@@ -52,6 +52,9 @@ command 'passwd'. If you want to use a such feature, you must use a patched
 Termux app (${PREFIX}/share/doc/termux-rootfs/Termux.apk) to prevent login
 bypassing with a 'failsafe' shell.
 
+If you are using NeoTerm instead of Termux, you should know that password login
+protection can be bypassed in it.
+
 To remove password login, run command 'rmpasswd' or delete file 'login.pwd'
 that located in '${PREFIX}/etc'.
 
@@ -187,8 +190,10 @@ vcs:
   git, mercurial, tig
 
 X11:
-  libice, libsm, libx11, libxau, libxcb, libxext, libxmu, libxt, x11-proto, xauth,
-  xcbproto, xtrans
+  fontutil, libfontenc, libice, libsm, libx11, libxau, libxaw, libxcb, libxcursor, libxdmcp,
+  libxext, libxfixes, libxfont2, libxft, libxkbfile, libxmu, libxpm, libxrender, libxt, tigervnc,
+  x11-proto, xcbproto, xclock, xkeyboard-config, xorg-server, xorg-util-macros, xorg-xauth,
+  xorg-xkbcomp, xtrans
 
 ###############################################################################
 ##

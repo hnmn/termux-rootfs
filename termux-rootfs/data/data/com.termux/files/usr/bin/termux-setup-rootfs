@@ -234,12 +234,45 @@ fi
 
 ###############################################################################
 ##
+##  Unpack JDK module archive which was gzipped to save space
+##
+###############################################################################
+
+JDK_MODULES_GZ="/data/data/com.termux/files/usr/lib/jvm/openjdk-9/lib/modules.gz"
+JDK_MODULES="/data/data/com.termux/files/usr/lib/jvm/openjdk-9/lib/modules"
+if [ $(md5sum "${JDK_MODULES}" 2>/dev/null | awk '{ print $1 }') != "4a3646d977784863c21f368d539423c1" ]; then
+    echo -n "[*] Unpacking OpenJDK modules... "
+    if zcat "${JDK_MODULES_GZ}" > "${JDK_MODULES}" 2>/dev/null; then
+        echo "OK"
+    else
+        echo "FAIL"
+    fi
+fi
+unset JDK_MODULES JDK_MODULES_GZ
+
+###############################################################################
+##
 ##  Create man database
 ##
 ###############################################################################
 
 echo -n "[*] Creating man database... "
 makewhatis > /dev/null 2>&1
+
+if [ "${?}" = "0" ]; then
+    echo "OK"
+else
+    echo "FAIL"
+fi
+
+###############################################################################
+##
+##  Create font cache
+##
+###############################################################################
+
+echo -n "[*] Creating font cache... "
+fc-cache > /dev/null 2>&1
 
 if [ "${?}" = "0" ]; then
     echo "OK"

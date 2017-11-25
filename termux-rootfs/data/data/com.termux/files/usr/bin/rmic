@@ -1,15 +1,10 @@
 #!/data/data/com.termux/files/usr/bin/bash
 ##
-##  This is a wrapper for Java 8 JDK tool 'rmic'
+##  A wrapper for tool 'rmic' form OpenJDK 9
 ##
 
 unset LD_PRELOAD
-unset LD_LIBRARY_PATH
+export JAVA_HOME="${PREFIX}/lib/jvm/openjdk-9"
+export LD_LIBRARY_PATH="${JAVA_HOME}/lib:${JAVA_HOME}/lib/jli:${LD_LIBRARY_PATH}"
 
-[ -z "${HOME}" ] && export HOME=/data/data/com.termux/files/home
-
-export BASE_DIR="/data/data/com.termux/files/usr"
-export JAVA_HOME="${BASE_DIR}/opt/java-8-jdk"
-export JAVA_TOOL_OPTIONS="-Duser.home=${HOME}"
-
-exec "${JAVA_HOME}/bin/rmic" "${@}" 2> >(sed '/Picked up JAVA_TOOL_OPTIONS:/d')
+exec "${JAVA_HOME}/bin/rmic" "$@" 2> >(sed "/OpenJDK 64-Bit Server VM warning: Can't detect initial thread stack location - find_vma failed/d")

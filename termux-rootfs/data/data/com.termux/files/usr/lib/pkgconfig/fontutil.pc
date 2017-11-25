@@ -1,0 +1,11 @@
+prefix=/data/data/com.termux/files/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+datarootdir=${prefix}/share
+datadir=${datarootdir}
+fontrootdir=/data/data/com.termux/files/usr/share/fonts
+mapdir=/data/data/com.termux/files/usr/share/fonts/util
+ 
+Name: FontUtil
+Description: Font utilities dirs
+Version: 1.3.1

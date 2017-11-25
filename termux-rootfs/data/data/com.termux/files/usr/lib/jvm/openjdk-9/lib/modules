@@ -1,0 +1,5 @@
+dummy file
+==========
+
+The content from modules.gz should replace this file
+when running 'termux-setup-rootfs' or updating termux-rootfs
